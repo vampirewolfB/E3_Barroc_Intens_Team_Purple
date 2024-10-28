@@ -14,6 +14,9 @@
     <WindowsSdkPackageVersion>10.0.19041.38</WindowsSdkPackageVersion>
     <ApplicationIcon>Logo5_klein.ico</ApplicationIcon>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="SalesWindow.xaml" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -47,6 +50,11 @@
   -->
   <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
     <ProjectCapability Include="Msix" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="SalesWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <!--
