@@ -21,17 +21,16 @@ namespace BarrocIntens
     /// <summary>
     /// An empty window that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainWindow : Window
+    public sealed partial class FinanceWindow : Window
     {
-        public MainWindow()
+        public FinanceWindow()
         {
             this.InitializeComponent();
+            ContentFrame.Navigate(typeof(LogoPage));
         }
-
-        private void myButton_Click(object sender, RoutedEventArgs e)
+        private void NavigationChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
-            FinanceWindow financeWindow = new FinanceWindow();
-            financeWindow.Activate();
+
         }
     }
 }
