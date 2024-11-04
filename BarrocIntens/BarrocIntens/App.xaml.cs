@@ -1,4 +1,7 @@
-﻿using Microsoft.UI.Xaml;
+using BarrocIntens.Uttility;
+using BarrocIntens.Uttility.Database;
+using Microsoft.Extensions.Configuration;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
@@ -41,10 +44,18 @@ namespace BarrocIntens
         /// <param name="args">Details about the launch request and process.</param>
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
-            //m_window = new MainWindow();
-            //m_window.Activate();
-            SalesWindow salesWindow = new SalesWindow();
-            salesWindow.Activate();
+            new AppSettingLoader();
+            if (AppSettingLoader.Configuration.GetValue<bool>("BuildDatabase"))
+            {
+                using (AppDbContext db = new AppDbContext())
+                {
+                    db.Database.EnsureDeleted();
+                    db.Database.EnsureCreated();
+                }
+            }
+
+            m_window = new MainWindow();
+            m_window.Activate();
         }
 
         private Window m_window;
