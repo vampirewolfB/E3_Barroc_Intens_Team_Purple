@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     >
-    <Grid>
+    <Grid Background="#212121">
         <NavigationView PaneDisplayMode="Left"
                 x:Name="navigation"
                 >
@@ -16,7 +16,7 @@
                 <Style BasedOn="{StaticResource PaneToggleButtonStyle}" 
                TargetType="Button">
                     <Setter Property="Foreground" 
-                    Value="black"/>
+                    Value="#212121"/>
                 </Style>
             </NavigationView.PaneToggleButtonStyle>
             <NavigationView.Resources>
@@ -35,13 +35,13 @@
                 </NavigationViewItem>
                 <NavigationViewItem Tag="Home" 
                             Icon="Home"
-                            Foreground="Black">
+                            Foreground="#212121">
                     <TextBlock TextWrapping="Wrap"
                        Text="Home"/>
                 </NavigationViewItem>
                 <NavigationViewItem Tag="MYOverview" 
                             Icon="Emoji"
-                            Foreground="Black">
+                            Foreground="#212121">
                     <TextBlock TextWrapping="Wrap"
                         Text="Customers"/>
                 </NavigationViewItem>
