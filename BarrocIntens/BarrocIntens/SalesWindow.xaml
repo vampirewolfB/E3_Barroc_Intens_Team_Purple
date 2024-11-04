@@ -9,15 +9,50 @@
     mc:Ignorable="d"
     >
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.2*"/>
-            <ColumnDefinition Width="0.8*"/>
-        </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0" Background="#ffd700">
+        <NavigationView PaneDisplayMode="Left"
+                x:Name="navigation"
+                >
+            <NavigationView.PaneToggleButtonStyle>
+                <Style BasedOn="{StaticResource PaneToggleButtonStyle}" 
+               TargetType="Button">
+                    <Setter Property="Foreground" 
+                    Value="black"/>
+                </Style>
+            </NavigationView.PaneToggleButtonStyle>
+            <NavigationView.Resources>
+                <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" 
+                         Color="#ffd700"/>
+                <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" 
+                         Color="#ffd700" />
+            </NavigationView.Resources>
 
-        </StackPanel>
-        <StackPanel Grid.Column="1" Background="#212121">
 
-        </StackPanel>
+            <NavigationView.MenuItems>
+                <NavigationViewItem>
+                    <Image Source="/Assets/Logo6_klein.png"
+                   MinWidth="20"
+                    MaxWidth="100"/>
+                </NavigationViewItem>
+                <NavigationViewItem Tag="Home" 
+                            Icon="Home"
+                            Foreground="Black">
+                    <TextBlock TextWrapping="Wrap"
+                       Text="Home"/>
+                </NavigationViewItem>
+                <NavigationViewItem Tag="MYOverview" 
+                            Icon="Emoji"
+                            Foreground="Black">
+                    <TextBlock TextWrapping="Wrap"
+                        Text="Customers"/>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+            <NavigationView.Content>
+                <ScrollViewer Background="#212121">
+                    <Frame x:Name="ContentFrame"
+                   Padding="26"
+                   HorizontalAlignment="Center"/>
+                </ScrollViewer>
+            </NavigationView.Content>
+        </NavigationView>
     </Grid>
 </Window>
