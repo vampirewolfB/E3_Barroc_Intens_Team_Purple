@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
@@ -19,6 +19,7 @@
     <Content Remove="Assets\Logo6_klein.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="BlankPage1.xaml" />
     <None Remove="SalesWindow.xaml" />
   </ItemGroup>
 
@@ -62,6 +63,9 @@
     <None Update="Assets\Logo6_klein.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Page Update="BlankPage1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="SalesWindow.xaml">
