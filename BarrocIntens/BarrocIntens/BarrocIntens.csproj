@@ -15,17 +15,14 @@
     <ApplicationIcon>Logo5_klein.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="FinancePage.xaml" />
-    <None Remove="LoginPage.xaml" />
-
     <Content Remove="Assets\Logo6_groot.png" />
     <Content Remove="Assets\Logo6_klein.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="BlankPage1.xaml" />
     <None Remove="SalesWindow.xaml" />
     <None Remove="FinanceWindow.xaml" />
     <None Remove="LogoPage.xaml" />
+    <None Remove="Finance/FinancePage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -69,7 +66,6 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Page Update="FinancePage.xaml">
     <None Update="Assets\Logo6_groot.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -78,24 +74,15 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="BlankPage1.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
     <Page Update="LogoPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    </ItemGroep>
-   <ItemGroep>
-    <Page Update="LoginPage.xaml">
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="FinanceWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Finance\" />
-  </ItemGroup>
-
   <!--
     Defining the "HasPackageAndPublishMenuAddedByProject" property here allows the Solution
     Explorer "Package and Publish" context menu entry to be enabled for this project even if
