@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
@@ -15,14 +15,18 @@
     <ApplicationIcon>Logo5_klein.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Content Remove="Assets\Logo6_grootm.png" />
+    <Content Remove="Assets\Logo6_kleinm.png" />
     <Content Remove="Assets\Logo6_groot.png" />
     <Content Remove="Assets\Logo6_klein.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="MaintenancePage.xaml" />
+    <None Remove="MaintenanceWindow.xaml" />
+    <None Remove="BlankPage1.xaml" />
     <None Remove="SalesWindow.xaml" />
     <None Remove="FinanceWindow.xaml" />
     <None Remove="LogoPage.xaml" />
-    <None Remove="Finance/FinancePage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -74,6 +78,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="BlankPage1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
     <Page Update="LogoPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -83,6 +92,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+
   <!--
     Defining the "HasPackageAndPublishMenuAddedByProject" property here allows the Solution
     Explorer "Package and Publish" context menu entry to be enabled for this project even if

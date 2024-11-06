@@ -9,8 +9,8 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-        <Image Source="/Assets/Logo6_groot.png" 
+    <Grid Background="#212121">
+        <Image Source="\Assets\Logo6_groot.png" 
                Width="450"
                HorizontalAlignment="Center"
                VerticalAlignment="Center"/>
