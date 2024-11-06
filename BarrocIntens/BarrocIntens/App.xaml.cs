@@ -53,6 +53,13 @@ namespace BarrocIntens
                     db.Database.EnsureCreated();
                 }
             }
+            else
+            {
+                using (AppDbContext db = new AppDbContext())
+                {
+                    db.Database.EnsureCreated();
+                }
+            }
 
             m_window = new MainWindow();
             m_window.Activate();
