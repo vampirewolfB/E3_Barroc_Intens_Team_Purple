@@ -1,4 +1,5 @@
 using BarrocIntens.Models;
+using BarrocIntens.Purchase;
 using BarrocIntens.Sales;
 using BarrocIntens.Uttility.Database;
 using BCrypt.Net;
@@ -75,8 +76,7 @@ namespace BarrocIntens
                     this.Frame.Navigate(typeof(SalesPage));
                     break;
                 case "inkoop":
-                    ErrorTextBox.Text = "Er is een probleem opgetreden probeer opnieuw.";
-                    ErrorTextBox.Visibility = Visibility.Visible;
+                    this.Frame.Navigate(typeof(PurchasePage));
                     break;
                 case "maintenance":
                     this.Frame.Navigate(typeof(MaintenancePage));

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="BarrocIntens.Purchase.PurchasePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BarrocIntens.Purchase"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <NavigationView
+         x:Name="navigation"
+         AlwaysShowHeader="False"
+         IsBackButtonVisible="Collapsed"
+         IsSettingsVisible="False"
+         OpenPaneLength="175"
+         PaneDisplayMode="Left"
+         SelectionChanged="NavigationChanged">
+            <NavigationView.PaneToggleButtonStyle>
+                <Style BasedOn="{StaticResource PaneToggleButtonStyle}" TargetType="Button">
+                    <Setter Property="Foreground" Value="#212121" />
+                </Style>
+            </NavigationView.PaneToggleButtonStyle>
+            <NavigationView.Resources>
+                <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="#ffd700" />
+                <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="#ffd700" />
+            </NavigationView.Resources>
+
+
+            <NavigationView.MenuItems>
+                <NavigationViewItem>
+                    <Image
+                     MinWidth="20"
+                     MaxWidth="100"
+                     Source="/Assets/Logo6_klein.png" />
+                </NavigationViewItem>
+                <NavigationViewItem
+                 Foreground="#212121"
+                 Icon="Home"
+                 Tag="Home">
+                    <TextBlock Text="Home" TextWrapping="Wrap" />
+                </NavigationViewItem>
+                <NavigationViewItem
+                 Foreground="#212121"
+                 Icon="Shop"
+                 Tag="MYOverview">
+                    <TextBlock Text="Product overview" TextWrapping="Wrap" />
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+            <NavigationView.Content>
+                <ScrollViewer Background="#212121">
+                    <Frame
+                     x:Name="ContentFrame"
+                     Padding="26"
+                     HorizontalAlignment="Center" />
+                </ScrollViewer>
+            </NavigationView.Content>
+        </NavigationView>
+    </Grid>
+</Page>
