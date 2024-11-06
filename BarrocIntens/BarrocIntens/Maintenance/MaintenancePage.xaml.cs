@@ -19,11 +19,11 @@ using Microsoft.UI.Xaml.Navigation;
 namespace BarrocIntens
 {
     /// <summary>
-    /// An empty window that can be used on its own or navigated to within a Frame.
+    /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MaintenanceWindow : Window
+    public sealed partial class MaintenancePage : Page
     {
-        public MaintenanceWindow()
+        public MaintenancePage()
         {
             this.InitializeComponent();
             ContentFrame.Navigate(typeof(LogoPage));

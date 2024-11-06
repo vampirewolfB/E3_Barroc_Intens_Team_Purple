@@ -19,6 +19,7 @@
     <Content Remove="Assets\Logo6_kleinm.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="MaintenancePage.xaml" />
     <None Remove="MaintenanceWindow.xaml" />
   </ItemGroup>
 
@@ -54,6 +55,11 @@
   -->
   <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
     <ProjectCapability Include="Msix" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="MaintenancePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="MaintenanceWindow.xaml">
