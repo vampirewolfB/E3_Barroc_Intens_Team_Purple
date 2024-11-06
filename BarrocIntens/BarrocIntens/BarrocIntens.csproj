@@ -67,8 +67,6 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
-    <Page Update="MaintenancePage.xaml">
-
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -90,7 +88,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="MaintenanceWindow.xaml">
     <Page Update="FinanceWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
