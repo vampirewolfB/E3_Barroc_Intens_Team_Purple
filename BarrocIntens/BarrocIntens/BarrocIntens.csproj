@@ -17,10 +17,16 @@
   <ItemGroup>
     <Content Remove="Assets\Logo6_grootm.png" />
     <Content Remove="Assets\Logo6_kleinm.png" />
+    <Content Remove="Assets\Logo6_groot.png" />
+    <Content Remove="Assets\Logo6_klein.png" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="MaintenancePage.xaml" />
     <None Remove="MaintenanceWindow.xaml" />
+    <None Remove="BlankPage1.xaml" />
+    <None Remove="SalesWindow.xaml" />
+    <None Remove="FinanceWindow.xaml" />
+    <None Remove="LogoPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,11 +42,15 @@
 
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="Bogus" Version="35.6.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.756" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.240923002" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
@@ -58,11 +68,30 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="MaintenancePage.xaml">
+
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\Logo6_groot.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\Logo6_klein.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="BlankPage1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="LogoPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="MaintenanceWindow.xaml">
+    <Page Update="FinanceWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
