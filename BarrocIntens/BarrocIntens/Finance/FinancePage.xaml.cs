@@ -19,15 +19,16 @@ using Windows.Foundation.Collections;
 namespace BarrocIntens
 {
     /// <summary>
-    /// An empty window that can be used on its own or navigated to within a Frame.
+    /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class FinanceWindow : Window
+    public sealed partial class FinancePage : Page
     {
-        public FinanceWindow()
+        public FinancePage()
         {
             this.InitializeComponent();
             ContentFrame.Navigate(typeof(LogoPage));
         }
+
         private void NavigationChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
 

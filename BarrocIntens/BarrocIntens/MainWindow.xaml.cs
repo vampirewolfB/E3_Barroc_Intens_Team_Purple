@@ -26,12 +26,8 @@ namespace BarrocIntens
         public MainWindow()
         {
             this.InitializeComponent();
-        }
 
-        private void myButton_Click(object sender, RoutedEventArgs e)
-        {
-            FinanceWindow financeWindow = new FinanceWindow();
-            financeWindow.Activate();
+            contentFrame.Navigate(typeof(LoginPage));
         }
     }
 }

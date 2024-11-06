@@ -15,8 +15,8 @@
     <ApplicationIcon>Logo5_klein.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="FinanceWindow.xaml" />
-    <None Remove="LogoPage.xaml" />
+    <None Remove="FinancePage.xaml" />
+    <None Remove="LoginPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -57,19 +57,56 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
+    <Content Update="Assets\Fonts\Roboto-Black.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Assets\Fonts\Roboto-BlackItalic.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Assets\Fonts\Roboto-Bold.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Assets\Fonts\Roboto-BoldItalic.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Assets\Fonts\Roboto-Italic.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Assets\Fonts\Roboto-Light.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Assets\Fonts\Roboto-LightItalic.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Assets\Fonts\Roboto-Medium.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Assets\Fonts\Roboto-MediumItalic.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Assets\Fonts\Roboto-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Assets\Fonts\Roboto-Thin.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Assets\Fonts\Roboto-ThinItalic.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="LogoPage.xaml">
+    <Page Update="FinancePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="LoginPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="FinanceWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+    <Folder Include="Finance\" />
   </ItemGroup>
 
   <!--
