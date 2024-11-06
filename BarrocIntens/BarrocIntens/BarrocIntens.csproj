@@ -19,10 +19,10 @@
     <Content Remove="Assets\Logo6_klein.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="BlankPage1.xaml" />
     <None Remove="SalesWindow.xaml" />
     <None Remove="FinanceWindow.xaml" />
     <None Remove="LogoPage.xaml" />
+    <None Remove="Finance/FinancePage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -74,11 +74,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="BlankPage1.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
     <Page Update="LogoPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -88,7 +83,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-
   <!--
     Defining the "HasPackageAndPublishMenuAddedByProject" property here allows the Solution
     Explorer "Package and Publish" context menu entry to be enabled for this project even if
