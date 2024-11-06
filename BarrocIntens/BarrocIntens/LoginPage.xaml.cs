@@ -1,4 +1,5 @@
 using BarrocIntens.Models;
+using BarrocIntens.Sales;
 using BarrocIntens.Uttility.Database;
 using BCrypt.Net;
 using Microsoft.EntityFrameworkCore;
@@ -71,12 +72,18 @@ namespace BarrocIntens
                     this.Frame.Navigate(typeof(FinancePage));
                     break;
                 case "sales":
+                    this.Frame.Navigate(typeof(SalesPage));
                     break;
                 case "inkoop":
+                    ErrorTextBox.Text = "Er is een probleem opgetreden probeer opnieuw.";
+                    ErrorTextBox.Visibility = Visibility.Visible;
                     break;
                 case "maintenance":
+                    this.Frame.Navigate(typeof(MaintenancePage));
                     break;
                 case "customer":
+                    ErrorTextBox.Text = "Er is een probleem opgetreden probeer opnieuw.";
+                    ErrorTextBox.Visibility = Visibility.Visible;
                     break;
                 default:
                     ErrorTextBox.Text = "Er is een probleem opgetreden probeer opnieuw.";

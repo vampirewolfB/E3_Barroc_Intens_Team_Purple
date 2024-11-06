@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
@@ -21,12 +21,11 @@
     <Content Remove="Assets\Logo6_klein.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="MaintenancePage.xaml" />
-    <None Remove="MaintenanceWindow.xaml" />
-    <None Remove="BlankPage1.xaml" />
-    <None Remove="SalesWindow.xaml" />
-    <None Remove="FinanceWindow.xaml" />
-    <None Remove="LogoPage.xaml" />
+    <None Remove="Maintenance/MaintenancePage.xaml" />
+    <None Remove="Finance/FinancePage.xaml" />
+    <None Remove="Sales/SalesPage.xaml" />
+	<None Remove="LoginPage.xaml"/>
+    <None Remove="LogoPage.xaml"/>
   </ItemGroup>
 
   <ItemGroup>
@@ -78,17 +77,19 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="BlankPage1.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
     <Page Update="LogoPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="FinanceWindow.xaml">
+	<Page Update="Finance/FinancePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+	<Page Update="Maintenance/MaintenancePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+	<Page Update="Sales/SalesPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+	<Page Update="LoginPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
