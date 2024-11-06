@@ -23,9 +23,10 @@
   <ItemGroup>
     <None Remove="Maintenance/MaintenancePage.xaml" />
     <None Remove="Finance/FinancePage.xaml" />
+    <None Remove="Purchase\PurchasePage.xaml" />
     <None Remove="Sales/SalesPage.xaml" />
-	<None Remove="LoginPage.xaml"/>
-    <None Remove="LogoPage.xaml"/>
+	<None Remove="LoginPage.xaml" />
+    <None Remove="LogoPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -75,6 +76,9 @@
     <None Update="Assets\Logo6_klein.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Page Update="Purchase\PurchasePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="LogoPage.xaml">
