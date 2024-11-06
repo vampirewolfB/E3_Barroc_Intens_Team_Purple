@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
@@ -17,6 +17,15 @@
   <ItemGroup>
     <None Remove="FinancePage.xaml" />
     <None Remove="LoginPage.xaml" />
+
+    <Content Remove="Assets\Logo6_groot.png" />
+    <Content Remove="Assets\Logo6_klein.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="BlankPage1.xaml" />
+    <None Remove="SalesWindow.xaml" />
+    <None Remove="FinanceWindow.xaml" />
+    <None Remove="LogoPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -57,50 +66,28 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
-    <Content Update="Assets\Fonts\Roboto-Black.ttf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-    <Content Update="Assets\Fonts\Roboto-BlackItalic.ttf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-    <Content Update="Assets\Fonts\Roboto-Bold.ttf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-    <Content Update="Assets\Fonts\Roboto-BoldItalic.ttf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-    <Content Update="Assets\Fonts\Roboto-Italic.ttf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-    <Content Update="Assets\Fonts\Roboto-Light.ttf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-    <Content Update="Assets\Fonts\Roboto-LightItalic.ttf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-    <Content Update="Assets\Fonts\Roboto-Medium.ttf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-    <Content Update="Assets\Fonts\Roboto-MediumItalic.ttf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-    <Content Update="Assets\Fonts\Roboto-Regular.ttf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-    <Content Update="Assets\Fonts\Roboto-Thin.ttf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-    <Content Update="Assets\Fonts\Roboto-ThinItalic.ttf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Page Update="FinancePage.xaml">
+    <None Update="Assets\Logo6_groot.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\Logo6_klein.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="BlankPage1.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="LogoPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    </ItemGroep>
+   <ItemGroep>
     <Page Update="LoginPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

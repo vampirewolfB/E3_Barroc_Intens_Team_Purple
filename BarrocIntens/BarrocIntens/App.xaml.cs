@@ -1,4 +1,4 @@
-﻿using BarrocIntens.Uttility;
+using BarrocIntens.Uttility;
 using BarrocIntens.Uttility.Database;
 using Microsoft.Extensions.Configuration;
 using Microsoft.UI.Xaml;
