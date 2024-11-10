@@ -1,3 +1,7 @@
+using BarrocIntens.Purchase;
+using BarrocIntens.Sales;
+using BarrocIntens.Uttility;
+using Microsoft.Extensions.Configuration;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -7,6 +11,8 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -23,11 +29,62 @@ namespace BarrocIntens
     /// </summary>
     public sealed partial class MainWindow : Window
     {
+
         public MainWindow()
         {
-            this.InitializeComponent();
+            this.InitializeComponent();            
+            this.SetTitleBar(AppTitleBar);
+
+            if (AppSettingLoader.Configuration["AppEnviorment"].ToLower() == "local")
+            {
+                AppTitle.Text = "Baroc Intents Dev";
+
+                ObservableCollection<string> menu = [
+                    "Login",
+                    "Finance", 
+                    "Sales", 
+                    "Inkoop", 
+                    "Maintenance", 
+                    "Customer"
+                    ];
+
+                MenuSelectComboBox.ItemsSource = menu;
+                MenuSelectComboBox.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                AppTitle.Text = "Baroc Intents";
+                MenuSelectComboBox.Visibility = Visibility.Collapsed;
+            }
 
             contentFrame.Navigate(typeof(LoginPage));
+        }
+
+        private void MenuSelectComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox comboBox = sender as ComboBox; 
+            switch (comboBox.SelectedItem.ToString().ToLower())
+            {
+                case "login":
+                    contentFrame.Navigate(typeof(LoginPage));
+                    break;
+                case "finance":
+                    contentFrame.Navigate(typeof(FinancePage));
+                    break;
+                case "sales":
+                    contentFrame.Navigate(typeof(SalesPage));
+                    break;
+                case "inkoop":
+                    contentFrame.Navigate(typeof(PurchasePage));
+                    break;
+                case "maintenance":
+                    contentFrame.Navigate(typeof(MaintenancePage));
+                    break;
+                case "customer":
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

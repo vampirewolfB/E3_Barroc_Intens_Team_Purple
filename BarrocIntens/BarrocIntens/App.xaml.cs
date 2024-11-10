@@ -62,6 +62,7 @@ namespace BarrocIntens
             }
 
             m_window = new MainWindow();
+            m_window.ExtendsContentIntoTitleBar = true;
             m_window.Activate();
         }
 
