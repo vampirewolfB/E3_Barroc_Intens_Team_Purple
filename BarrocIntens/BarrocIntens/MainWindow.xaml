@@ -8,9 +8,26 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <StackPanel HorizontalAlignment="Center"
-        VerticalAlignment="Center"
-        Orientation="Horizontal">
-        <Button x:Name="myButton" Click="myButton_Click">Click Me</Button>
-    </StackPanel>
+    <Grid RowDefinitions="Auto,*"
+          Background="#212121">
+        <Border x:Name="AppTitleBar"
+                Grid.Row="0"
+                VerticalAlignment="Top"
+                Margin="12,8,0,0">
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Stretch">
+                <Image Source="/Assets/Logo6_klein.png"
+                       Width="50"
+                       VerticalAlignment="Center"/>
+                <TextBlock x:Name="AppTitle"
+                           VerticalAlignment="Center"
+                           Margin="12,0,0,0"/>
+                <ComboBox x:Name="MenuSelectComboBox"
+                          SelectionChanged="MenuSelectComboBox_SelectionChanged"
+                          VerticalAlignment="Center"
+                          Margin="12,0,0,0"/>
+            </StackPanel>
+        </Border>
+        <Frame x:Name="contentFrame" Grid.Row="1" />
+    </Grid>
 </Window>
