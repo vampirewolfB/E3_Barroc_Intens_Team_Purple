@@ -9,8 +9,10 @@ namespace BarrocIntens.Uttility
 {
     internal class AppSettingLoader
     {
+        // Variable waar alle appsettings in zitten.
         public static IConfigurationRoot Configuration { get; set; }
 
+        // Laad de variablen uit het bestand en stops ze in configuration.
         public AppSettingLoader() 
         {
             ConfigurationBuilder builder = new ConfigurationBuilder();

@@ -14,6 +14,7 @@ namespace BarrocIntens.Uttility.Database
 {
     internal class AppDbContext : DbContext
     {
+        // Alle tabelen in de databse
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<Models.Company> Companies { get; set; }
@@ -24,6 +25,7 @@ namespace BarrocIntens.Uttility.Database
         public DbSet<Product> Products { get; set; }
         public DbSet<CustomInvoiceProduct> CustomInvoiceProducts { get; set; }
 
+        // Aanmaken van een connectie met de database.
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseMySql(
@@ -36,6 +38,7 @@ namespace BarrocIntens.Uttility.Database
                 );
         }
 
+        // Seeden van data in de database.
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -192,6 +195,7 @@ namespace BarrocIntens.Uttility.Database
             }
         }
 
+        // Functie om een lijst met rollen aan te maken.
         private List<Role> SeedRoles()
         {
             return [

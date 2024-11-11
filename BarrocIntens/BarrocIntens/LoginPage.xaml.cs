@@ -37,6 +37,7 @@ namespace BarrocIntens
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
+            // Zet de error textbox zichtbaarheid op collapsed en checkt of de velden zijn ingevuld
             ErrorTextBox.Visibility = Visibility.Collapsed;
             if (String.IsNullOrEmpty(UserNameTextBox.Text) || String.IsNullOrEmpty(PasswordTextBox.Password.ToString()))
             {
@@ -45,6 +46,7 @@ namespace BarrocIntens
                 return;
             }
 
+            // Ophalen van juiste gebruiker.
             User user;
             using (AppDbContext dbContext = new AppDbContext())
             {
@@ -54,6 +56,7 @@ namespace BarrocIntens
                     .FirstOrDefault();
             }
 
+            // Check of de gebruiker bestaat en het wachtwoord correct is.
             if (user is null)
             {
                 ErrorTextBox.Text = "Gebruikersnaam of wachtwoord incorect.";
@@ -67,6 +70,7 @@ namespace BarrocIntens
                 return;
             }
 
+            // Doorsturen van de gebruiker naar de juiste dashboard
             switch (user.Role.Name.ToLower())
             {
                 case "finance":

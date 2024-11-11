@@ -35,6 +35,9 @@ namespace BarrocIntens
             this.InitializeComponent();            
             this.SetTitleBar(AppTitleBar);
 
+            // Check de enviorment en zet de menu correct.
+            // Als het local is toon de dev titlebar.
+            // Zo niet toon de noramele app bar.
             if (AppSettingLoader.Configuration["AppEnviorment"].ToLower() == "local")
             {
                 AppTitle.Text = "Baroc Intents Dev";
@@ -57,9 +60,11 @@ namespace BarrocIntens
                 MenuSelectComboBox.Visibility = Visibility.Collapsed;
             }
 
+            // Navigeer naar de eerste frame.
             contentFrame.Navigate(typeof(LoginPage));
         }
 
+        // Development tool om snel tussen pagina's te gaan zonder inloggen.
         private void MenuSelectComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox comboBox = sender as ComboBox; 
