@@ -41,7 +41,7 @@
                 </NavigationViewItem>
                 <NavigationViewItem Tag="Home" 
                     Icon="Home"
-                    Foreground="Black">
+                    Foreground="#212121">
                     <TextBlock TextWrapping="Wrap"
                Text="Home"/>
                 </NavigationViewItem>
