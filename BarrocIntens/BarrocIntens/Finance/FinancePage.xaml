@@ -51,6 +51,12 @@
                     <TextBlock TextWrapping="Wrap"
                                 Text="Month/Year Overview"/>
                 </NavigationViewItem>
+                <NavigationViewItem Tag="CreateInvoice"
+                                    Icon="OpenFile"
+                                    Foreground="Black">
+                    <TextBlock TextWrapping="Wrap" 
+                               Text="Create Invoice"/>
+                </NavigationViewItem>
             </NavigationView.MenuItems>
             <NavigationView.Content>
                 <ScrollViewer Background="#212121">

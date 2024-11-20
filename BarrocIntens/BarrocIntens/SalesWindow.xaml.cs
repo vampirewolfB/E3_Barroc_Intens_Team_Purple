@@ -26,7 +26,7 @@ namespace BarrocIntens
         public SalesWindow()
         {
             this.InitializeComponent();
-            ContentFrame.Navigate(typeof(BlankPage1));
+            ContentFrame.Navigate(typeof(LogoPage));
         }
     }
 }
