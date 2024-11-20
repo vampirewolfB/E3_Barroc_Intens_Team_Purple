@@ -22,8 +22,9 @@
     <Content Remove="Assets\Logo6_klein.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Finance\FinancePage.xaml" />
+    <None Remove="Finance\LeaseContractsPage.xaml" />
     <None Remove="Maintenance/MaintenancePage.xaml" />
-    <None Remove="Finance/FinancePage.xaml" />
     <None Remove="Purchase\PurchasePage.xaml" />
     <None Remove="Sales/SalesPage.xaml" />
 	<None Remove="LoginPage.xaml" />
@@ -77,6 +78,12 @@
     <None Update="Assets\Logo6_klein.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Page Update="Finance\FinancePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Finance\LeaseContractsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Purchase\PurchasePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

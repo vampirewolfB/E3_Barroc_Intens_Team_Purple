@@ -1,3 +1,4 @@
+using BarrocIntens.Finance;
 using BarrocIntens.Purchase;
 using BarrocIntens.Sales;
 using BarrocIntens.Uttility;
@@ -61,7 +62,7 @@ namespace BarrocIntens
             }
 
             // Navigeer naar de eerste frame.
-            contentFrame.Navigate(typeof(LoginPage));
+            rootFrame.Navigate(typeof(LoginPage));
         }
 
         // Development tool om snel tussen pagina's te gaan zonder inloggen.
@@ -71,19 +72,19 @@ namespace BarrocIntens
             switch (comboBox.SelectedItem.ToString().ToLower())
             {
                 case "login":
-                    contentFrame.Navigate(typeof(LoginPage));
+                    rootFrame.Navigate(typeof(LoginPage));
                     break;
                 case "finance":
-                    contentFrame.Navigate(typeof(FinancePage));
+                    rootFrame.Navigate(typeof(FinancePage));
                     break;
                 case "sales":
-                    contentFrame.Navigate(typeof(SalesPage));
+                    rootFrame.Navigate(typeof(SalesPage));
                     break;
                 case "inkoop":
-                    contentFrame.Navigate(typeof(PurchasePage));
+                    rootFrame.Navigate(typeof(PurchasePage));
                     break;
                 case "maintenance":
-                    contentFrame.Navigate(typeof(MaintenancePage));
+                    rootFrame.Navigate(typeof(MaintenancePage));
                     break;
                 case "customer":
                     break;
