@@ -14,6 +14,7 @@ namespace BarrocIntens.Uttility.Database
 {
     internal class AppDbContext : DbContext
     {
+        // Alle tabelen in de databse
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<Models.Company> Companies { get; set; }
@@ -24,6 +25,7 @@ namespace BarrocIntens.Uttility.Database
         public DbSet<Product> Products { get; set; }
         public DbSet<CustomInvoiceProduct> CustomInvoiceProducts { get; set; }
 
+        // Aanmaken van een connectie met de database.
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseMySql(
@@ -36,6 +38,7 @@ namespace BarrocIntens.Uttility.Database
                 );
         }
 
+        // Seeden van data in de database.
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -59,6 +62,46 @@ namespace BarrocIntens.Uttility.Database
                     .RuleFor(u => u.RoleId, f => f.Random.ListItem<Role>(roles).Id);
 
                 List<User> users = userFaker.Generate(250);
+                users.Add(new User
+                {
+                    Id = userId++,
+                    Name = "adminf",
+                    UserName = "adminf",
+                    Password = BCrypt.Net.BCrypt.EnhancedHashPassword("admin"),
+                    RoleId = 1,
+                });
+                users.Add(new User
+                {
+                    Id = userId++,
+                    Name = "admins",
+                    UserName = "admins",
+                    Password = BCrypt.Net.BCrypt.EnhancedHashPassword("admin"),
+                    RoleId = 2,
+                });
+                users.Add(new User
+                {
+                    Id = userId++,
+                    Name = "admini",
+                    UserName = "admini",
+                    Password = BCrypt.Net.BCrypt.EnhancedHashPassword("admin"),
+                    RoleId = 3,
+                });
+                users.Add(new User
+                {
+                    Id = userId++,
+                    Name = "adminm",
+                    UserName = "adminm",
+                    Password = BCrypt.Net.BCrypt.EnhancedHashPassword("admin"),
+                    RoleId = 4,
+                });
+                users.Add(new User
+                {
+                    Id = userId++,
+                    Name = "adminc",
+                    UserName = "adminc",
+                    Password = BCrypt.Net.BCrypt.EnhancedHashPassword("admin"),
+                    RoleId = 5,
+                });
                 modelBuilder.Entity<User>().HasData(users);
 
                 // Company Seeder
@@ -152,6 +195,7 @@ namespace BarrocIntens.Uttility.Database
             }
         }
 
+        // Functie om een lijst met rollen aan te maken.
         private List<Role> SeedRoles()
         {
             return [
@@ -166,7 +210,7 @@ namespace BarrocIntens.Uttility.Database
         private List<ProductCategory> SeedProductCategoriesSeeder()
         {
             return [
-                new ProductCategory { Id = 1, Name = "Boonen", IsEmployeeOnly = false},
+                new ProductCategory { Id = 1, Name = "CoffeeBeans", IsEmployeeOnly = false},
                 new ProductCategory { Id = 2, Name = "Machine", IsEmployeeOnly = true}
                 ];
         }

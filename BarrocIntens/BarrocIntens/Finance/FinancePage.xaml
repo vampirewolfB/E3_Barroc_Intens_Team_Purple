@@ -1,55 +1,52 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Page
     x:Class="BarrocIntens.FinancePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:BarrocIntens"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:BarrocIntens"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Background="#212121">
+    Background="#212121"
+    mc:Ignorable="d">
 
     <Grid>
-        <NavigationView PaneDisplayMode="Left"
-                        x:Name="navigation"
-                        SelectionChanged="NavigationChanged"
-                        IsSettingsVisible="False"
-                        IsBackButtonVisible="Collapsed"
-                        AlwaysShowHeader="False"
-                        OpenPaneLength="175"
-                        >
+        <NavigationView
+            x:Name="navigation"
+            AlwaysShowHeader="False"
+            IsBackButtonVisible="Collapsed"
+            IsSettingsVisible="False"
+            OpenPaneLength="175"
+            PaneDisplayMode="Left"
+            SelectionChanged="NavigationChanged">
             <NavigationView.PaneToggleButtonStyle>
-                <Style BasedOn="{StaticResource PaneToggleButtonStyle}" 
-                       TargetType="Button">
-                    <Setter Property="Foreground" 
-                            Value="black"/>
+                <Style BasedOn="{StaticResource PaneToggleButtonStyle}" TargetType="Button">
+                    <Setter Property="Foreground" Value="black" />
                 </Style>
             </NavigationView.PaneToggleButtonStyle>
             <NavigationView.Resources>
-                <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" 
-                                 Color="#ffd700"/>
-                <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" 
-                                 Color="#ffd700" />
+                <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="#ffd700" />
+                <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="#ffd700" />
             </NavigationView.Resources>
 
 
             <NavigationView.MenuItems>
                 <NavigationViewItem>
-                    <Image Source="/Assets/Logo6_klein.png"
-                           MinWidth="20"
-                            MaxWidth="100"/>
+                    <Image
+                        MinWidth="20"
+                        MaxWidth="100"
+                        Source="/Assets/Logo6_klein.png" />
                 </NavigationViewItem>
-                <NavigationViewItem Tag="Home" 
-                                    Icon="Home"
-                                    Foreground="Black">
-                    <TextBlock TextWrapping="Wrap"
-                               Text="Home"/>
+                <NavigationViewItem
+                    Foreground="Black"
+                    Icon="Home"
+                    Tag="Home">
+                    <TextBlock Text="Home" TextWrapping="Wrap" />
                 </NavigationViewItem>
-                <NavigationViewItem Tag="MYOverview" 
-                                    Icon="Calendar"
-                                    Foreground="Black">
-                    <TextBlock TextWrapping="Wrap"
-                                Text="Month/Year Overview"/>
+                <NavigationViewItem
+                    Foreground="Black"
+                    Icon="Calendar"
+                    Tag="MYOverview">
+                    <TextBlock Text="Month/Year Overview" TextWrapping="Wrap" />
                 </NavigationViewItem>
                 <NavigationViewItem Tag="CreateInvoice"
                                     Icon="OpenFile"
@@ -60,9 +57,10 @@
             </NavigationView.MenuItems>
             <NavigationView.Content>
                 <ScrollViewer Background="#212121">
-                    <Frame x:Name="ContentFrame"
-                           Padding="26"
-                           HorizontalAlignment="Center"/>
+                    <Frame
+                        x:Name="ContentFrame"
+                        Padding="26"
+                        HorizontalAlignment="Center" />
                 </ScrollViewer>
             </NavigationView.Content>
         </NavigationView>

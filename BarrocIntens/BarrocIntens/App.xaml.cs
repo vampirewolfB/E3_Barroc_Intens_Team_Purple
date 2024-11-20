@@ -44,7 +44,11 @@ namespace BarrocIntens
         /// <param name="args">Details about the launch request and process.</param>
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
+            // Haal de settings op
             new AppSettingLoader();
+
+            // Check of de database geseed moet worden of niet.
+            // Zo ja verwijder eerst en dan maak aan en seed het.
             if (AppSettingLoader.Configuration.GetValue<bool>("BuildDatabase"))
             {
                 using (AppDbContext db = new AppDbContext())
@@ -53,8 +57,17 @@ namespace BarrocIntens
                     db.Database.EnsureCreated();
                 }
             }
+            else
+            {
+                using (AppDbContext db = new AppDbContext())
+                {
+                    db.Database.EnsureCreated();
+                }
+            }
 
+            // Start de mainwindow en zet de apptitlebar extend op true.
             m_window = new MainWindow();
+            m_window.ExtendsContentIntoTitleBar = true;
             m_window.Activate();
         }
 

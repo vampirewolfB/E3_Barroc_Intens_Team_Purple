@@ -13,6 +13,7 @@
     <EnableMsixTooling>true</EnableMsixTooling>
     <WindowsSdkPackageVersion>10.0.19041.38</WindowsSdkPackageVersion>
     <ApplicationIcon>Logo5_klein.ico</ApplicationIcon>
+	  <CsWinRTAotOptimizerEnabled>false</CsWinRTAotOptimizerEnabled>
   </PropertyGroup>
   <ItemGroup>
     <Content Remove="Assets\Logo4_groot.png" />
@@ -22,12 +23,12 @@
     <Content Remove="Assets\Logo6_klein.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Finance\CreateInvoicePage.xaml" />
-    <None Remove="MaintenancePage.xaml" />
-    <None Remove="MaintenanceWindow.xaml" />
+	<None Remove="Finance\CreateInvoicePage.xaml" />
+	<None Remove="MaintenancePage.xaml" />
     <None Remove="BlankPage1.xaml" />
-    <None Remove="SalesWindow.xaml" />
-    <None Remove="FinanceWindow.xaml" />
+    <None Remove="Salespage.xaml" />
+	<None Remove="LoginPage.xaml" />
+    <None Remove="FinancePage.xaml" />
     <None Remove="LogoPage.xaml" />
   </ItemGroup>
 
@@ -82,9 +83,9 @@
     <None Update="Assets\Logo6_klein.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Page Update="Finance\CreateInvoicePage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+	  <Page Update="Finance\CreateInvoicePage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+	  </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="BlankPage1.xaml">
@@ -95,9 +96,16 @@
     <Page Update="LogoPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="FinanceWindow.xaml">
+	<Page Update="Finance/FinancePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+	<Page Update="Maintenance/MaintenancePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+	<Page Update="Sales/SalesPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+	<Page Update="LoginPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

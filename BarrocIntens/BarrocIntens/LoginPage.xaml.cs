@@ -1,4 +1,6 @@
 using BarrocIntens.Models;
+using BarrocIntens.Purchase;
+using BarrocIntens.Sales;
 using BarrocIntens.Uttility.Database;
 using BCrypt.Net;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +37,7 @@ namespace BarrocIntens
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
+            // Zet de error textbox zichtbaarheid op collapsed en checkt of de velden zijn ingevuld
             ErrorTextBox.Visibility = Visibility.Collapsed;
             if (String.IsNullOrEmpty(UserNameTextBox.Text) || String.IsNullOrEmpty(PasswordTextBox.Password.ToString()))
             {
@@ -43,6 +46,7 @@ namespace BarrocIntens
                 return;
             }
 
+            // Ophalen van juiste gebruiker.
             User user;
             using (AppDbContext dbContext = new AppDbContext())
             {
@@ -52,6 +56,7 @@ namespace BarrocIntens
                     .FirstOrDefault();
             }
 
+            // Check of de gebruiker bestaat en het wachtwoord correct is.
             if (user is null)
             {
                 ErrorTextBox.Text = "Gebruikersnaam of wachtwoord incorect.";
@@ -65,18 +70,24 @@ namespace BarrocIntens
                 return;
             }
 
+            // Doorsturen van de gebruiker naar de juiste dashboard
             switch (user.Role.Name.ToLower())
             {
                 case "finance":
                     this.Frame.Navigate(typeof(FinancePage));
                     break;
                 case "sales":
+                    this.Frame.Navigate(typeof(SalesPage));
                     break;
                 case "inkoop":
+                    this.Frame.Navigate(typeof(PurchasePage));
                     break;
                 case "maintenance":
+                    this.Frame.Navigate(typeof(MaintenancePage));
                     break;
                 case "customer":
+                    ErrorTextBox.Text = "Er is een probleem opgetreden probeer opnieuw.";
+                    ErrorTextBox.Visibility = Visibility.Visible;
                     break;
                 default:
                     ErrorTextBox.Text = "Er is een probleem opgetreden probeer opnieuw.";

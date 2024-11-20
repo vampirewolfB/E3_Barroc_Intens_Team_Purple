@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Page
-    x:Class="BarrocIntens.MaintenancePage"
+    x:Class="BarrocIntens.Sales.SalesPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="using:BarrocIntens"
+    xmlns:local="using:BarrocIntens.Sales"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="#212121"
     mc:Ignorable="d">
@@ -20,7 +20,7 @@
             SelectionChanged="NavigationChanged">
             <NavigationView.PaneToggleButtonStyle>
                 <Style BasedOn="{StaticResource PaneToggleButtonStyle}" TargetType="Button">
-                    <Setter Property="Foreground" Value="black" />
+                    <Setter Property="Foreground" Value="#212121" />
                 </Style>
             </NavigationView.PaneToggleButtonStyle>
             <NavigationView.Resources>
@@ -34,20 +34,19 @@
                     <Image
                         MinWidth="20"
                         MaxWidth="100"
-                        Source="\Assets\Logo6_klein.png" />
+                        Source="/Assets/Logo6_klein.png" />
                 </NavigationViewItem>
                 <NavigationViewItem
-                    Foreground="Black"
+                    Foreground="#212121"
                     Icon="Home"
-                    Foreground="#212121">
-                    <TextBlock TextWrapping="Wrap"
-               Text="Home"/>
+                    Tag="Home">
+                    <TextBlock Text="Home" TextWrapping="Wrap" />
                 </NavigationViewItem>
-                <NavigationViewItem Tag="Calender"
-                            Icon="Calendar"
-                            Foreground="#212121">
-                    <TextBlock TextWrapping="NoWrap" 
-                       Text="Calender"/>
+                <NavigationViewItem
+                    Foreground="#212121"
+                    Icon="Emoji"
+                    Tag="MYOverview">
+                    <TextBlock Text="Customers" TextWrapping="Wrap" />
                 </NavigationViewItem>
             </NavigationView.MenuItems>
             <NavigationView.Content>
