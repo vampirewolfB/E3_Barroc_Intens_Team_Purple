@@ -1,3 +1,4 @@
+using BarrocIntens.Finance;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -31,7 +32,20 @@ namespace BarrocIntens
 
         private void NavigationChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
-
+            if (args.SelectedItem is NavigationViewItem selectedItem)
+            {
+                string selectedTag = selectedItem.Tag.ToString();
+                // Navigate to the appropriate page based on the selected tag
+                switch (selectedTag)
+                {
+                    case "Home":
+                        ContentFrame.Navigate(typeof(LogoPage));
+                        break;
+                    case "CreateInvoice":
+                        ContentFrame.Navigate(typeof(CreateInvoicePage));
+                        break;
+                }
+            }
         }
     }
 }

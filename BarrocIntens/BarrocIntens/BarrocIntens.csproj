@@ -16,17 +16,19 @@
 	  <CsWinRTAotOptimizerEnabled>false</CsWinRTAotOptimizerEnabled>
   </PropertyGroup>
   <ItemGroup>
+    <Content Remove="Assets\Logo4_groot.png" />
     <Content Remove="Assets\Logo6_grootm.png" />
     <Content Remove="Assets\Logo6_kleinm.png" />
     <Content Remove="Assets\Logo6_groot.png" />
     <Content Remove="Assets\Logo6_klein.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Maintenance/MaintenancePage.xaml" />
-    <None Remove="Finance/FinancePage.xaml" />
-    <None Remove="Purchase\PurchasePage.xaml" />
-    <None Remove="Sales/SalesPage.xaml" />
+	<None Remove="Finance\CreateInvoicePage.xaml" />
+	<None Remove="MaintenancePage.xaml" />
+    <None Remove="BlankPage1.xaml" />
+    <None Remove="Salespage.xaml" />
 	<None Remove="LoginPage.xaml" />
+    <None Remove="FinancePage.xaml" />
     <None Remove="LogoPage.xaml" />
   </ItemGroup>
 
@@ -55,6 +57,7 @@
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.756" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.240923002" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
+    <PackageReference Include="QuestPDF" Version="2022.12.12" />
     <PackageReference Include="System.Text.Json" Version="8.0.5" />
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
@@ -71,13 +74,21 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Assets\Logo4_groot.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Assets\Logo6_groot.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Assets\Logo6_klein.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Page Update="Purchase\PurchasePage.xaml">
+	  <Page Update="Finance\CreateInvoicePage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+	  </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="BlankPage1.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
