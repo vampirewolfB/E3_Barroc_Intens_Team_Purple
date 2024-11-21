@@ -47,13 +47,6 @@
                             Foreground="#212121">
                     <TextBlock TextWrapping="NoWrap" 
                        Text="Calender"/>
-                    <TextBlock Text="Home" TextWrapping="Wrap" />
-                </NavigationViewItem>
-                <NavigationViewItem
-                    Foreground="Black"
-                    Icon="Calendar"
-                    Tag="Calender">
-                    <TextBlock Text="Calender" TextWrapping="NoWrap" />
                 </NavigationViewItem>
             </NavigationView.MenuItems>
             <NavigationView.Content>
