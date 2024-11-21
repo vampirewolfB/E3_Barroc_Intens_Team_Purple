@@ -37,16 +37,16 @@
                         Source="\Assets\Logo6_klein.png" />
                 </NavigationViewItem>
                 <NavigationViewItem
-                    Foreground="Black"
                     Icon="Home"
-                    Tag="Home">
-                    <TextBlock Text="Home" TextWrapping="Wrap" />
+                    Foreground="#212121">
+                    <TextBlock TextWrapping="Wrap"
+               Text="Home"/>
                 </NavigationViewItem>
-                <NavigationViewItem
-                    Foreground="Black"
-                    Icon="Calendar"
-                    Tag="Calender">
-                    <TextBlock Text="Calender" TextWrapping="NoWrap" />
+                <NavigationViewItem Tag="Calender"
+                            Icon="Calendar"
+                            Foreground="#212121">
+                    <TextBlock TextWrapping="NoWrap" 
+                       Text="Calender"/>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
             <NavigationView.Content>

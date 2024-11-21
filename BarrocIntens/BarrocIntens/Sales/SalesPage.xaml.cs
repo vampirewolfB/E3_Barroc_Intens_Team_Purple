@@ -28,7 +28,6 @@ namespace BarrocIntens.Sales
             this.InitializeComponent();
             ContentFrame.Navigate(typeof(LogoPage));
         }
-
         private void NavigationChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
 
