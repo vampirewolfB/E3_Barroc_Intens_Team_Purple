@@ -9,6 +9,7 @@ using BarrocIntens.Uttility;
 using BarrocIntens.Models;
 using BCrypt.Net;
 using Bogus.DataSets;
+using static BarrocIntens.Models.Contract;
 
 namespace BarrocIntens.Uttility.Database
 {
@@ -20,6 +21,7 @@ namespace BarrocIntens.Uttility.Database
         public DbSet<Models.Company> Companies { get; set; }
         public DbSet<Note> Notes { get; set; }
         public DbSet<MaintenaceAppointment> MaintenaceAppointments { get; set; }
+        public DbSet<Contract> Contracts { get; set; }
         public DbSet<CustomInvoice> CustomInvoices { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<Product> Products { get; set; }
@@ -144,6 +146,24 @@ namespace BarrocIntens.Uttility.Database
 
                 List<MaintenaceAppointment> maintenaceAppointments = maintenaceAppointmentFaker.Generate(25);
                 modelBuilder.Entity<MaintenaceAppointment>().HasData(maintenaceAppointments);
+
+                // Contracts Seeder
+                int contractId = 1;
+                Faker<Contract> contractFaker = new Faker<Contract>("nl")
+                    .RuleFor(c => c.Id, f => contractId++)
+                    .RuleFor(c => c.StartDate, f => f.Date.Between(
+                            new DateTime(2015, 1, 1),
+                            new DateTime(2023, 12, 31)
+                        ))
+                    .RuleFor(c => c.EndDate, f => f.Date.Between(
+                            new DateTime(2020, 1, 1),
+                            new DateTime(2030, 12, 31)
+                        ))
+                    .RuleFor(c => c.Type, f => f.PickRandom<PaymentTypes>())
+                    .RuleFor(c => c.CompanyId, f => f.Random.ListItem<Models.Company>(companies).Id);
+
+                List<Contract> contracts = contractFaker.Generate(50);
+                modelBuilder.Entity<Contract>().HasData(contracts);
 
                 // Custom invoice seeder
                 int customInvoiceId = 1;

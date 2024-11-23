@@ -28,6 +28,6 @@
                           Margin="12,0,0,0"/>
             </StackPanel>
         </Border>
-        <Frame x:Name="contentFrame" Grid.Row="1" />
+        <Frame x:Name="rootFrame" Grid.Row="1" />
     </Grid>
 </Window>

@@ -1,3 +1,4 @@
+using BarrocIntens.Finance;
 using BarrocIntens.Models;
 using BarrocIntens.Purchase;
 using BarrocIntens.Sales;
@@ -97,3 +98,4 @@ namespace BarrocIntens
         }
     }
 }
+

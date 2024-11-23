@@ -17,7 +17,7 @@ using Windows.Foundation.Collections;
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace BarrocIntens
+namespace BarrocIntens.Finance
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -27,23 +27,43 @@ namespace BarrocIntens
         public FinancePage()
         {
             this.InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
             ContentFrame.Navigate(typeof(LogoPage));
         }
 
-        private void NavigationChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        // Finance navigation view controller
+        private void NavigationViewControl_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
-            if (args.SelectedItem is NavigationViewItem selectedItem)
+            NavigationViewItemBase selectedItem = args.SelectedItemContainer;
+            if (selectedItem == Home)
             {
-                string selectedTag = selectedItem.Tag.ToString();
-                // Navigate to the appropriate page based on the selected tag
-                switch (selectedTag)
+                if (ContentFrame.CurrentSourcePageType != typeof(LogoPage))
                 {
-                    case "Home":
-                        ContentFrame.Navigate(typeof(LogoPage));
-                        break;
-                    case "CreateInvoice":
-                        ContentFrame.Navigate(typeof(CreateInvoicePage));
-                        break;
+                    ContentFrame.Navigate(typeof(LogoPage));
+                }
+            }
+            else if (selectedItem == LeaseContracts)
+            {
+                if (ContentFrame.CurrentSourcePageType != typeof(LeaseContractsPage))
+                {
+                    ContentFrame.Navigate(typeof(LeaseContractsPage));
+                }
+            }
+            else if (selectedItem == LeaseContractsCreate)
+            {  //Todo: add connection for creating lease contract page
+                //if (ContentFrame.CurrentSourcePageType != typeof())
+                //{
+                //    ContentFrame.Navigate(typeof());
+                //}
+            }
+            else if (selectedItem == CreateInvoice)
+            {
+                if (ContentFrame.CurrentSourcePageType != typeof(CreateInvoicePage))
+                {
+                    ContentFrame.Navigate(typeof(CreateInvoicePage));
                 }
             }
         }
