@@ -45,24 +45,24 @@ namespace BarrocIntens.Finance
             {
                 Debug.WriteLine($"{db.Products.Count()}");
                 products.ItemsSource = db.Products.ToList();
-                companies = db.Companies.
-                    Include(c => c.User).
-                    ToList();
-            }
-            
+                companies = db.Companies
+                    .Include(c => c.User)
+                    .ToList();
+            }            
         }
 
         private void Quantity_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
             args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
         }
+
         private void CompanyAutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
             if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
             {
                 // Filter companies based on user input
                 List<Company> filteredCompanies = companies
-                    .Where(c => c.Name.StartsWith(sender.Text, StringComparison.OrdinalIgnoreCase))
+                    .Where(c => c.Name.Contains(sender.Text, StringComparison.OrdinalIgnoreCase))
                     .ToList();
 
                 // Set the filtered companies as the suggestions
@@ -95,15 +95,15 @@ namespace BarrocIntens.Finance
                     // Use VisualTreeHelper to find the TextBox within the ListViewItem
                     TextBox textBox = GetTextBoxFromListViewItem(listViewItem);
 
-                    if (textBox != null && textBox.Tag?.ToString() == product.Id.ToString())
+                    if (String.IsNullOrEmpty(textBox.Text) && textBox.Tag?.ToString() == product.Id.ToString())
                     {
                          product.Price = product.Price * int.Parse(textBox.Text);
-                        
                     }
                 }
             }
             return list;
         }
+
         private TextBox GetTextBoxFromListViewItem(DependencyObject parent)
         {
             // Loop through each child in the visual tree
@@ -124,14 +124,16 @@ namespace BarrocIntens.Finance
             }
             return null;
         }
+
         private void Preview_PDF(object sender, RoutedEventArgs e)
         {
-            string filePath = $"C:\\Temp\\{chosenCompany.Name}_Preview.pdf";
+            string filePath = $"{Path.GetTempPath()}{chosenCompany.Name}_Preview.pdf";
             byte[] imageData = File.ReadAllBytes(AppDomain.CurrentDomain.BaseDirectory + "/Assets/Logo4_groot.png");
             InvoiceDocument document = new InvoiceDocument(chosenCompany, imageData, Get_Products());
             document.GeneratePdf(filePath);
             Process.Start("explorer.exe", filePath);
         }
+
         private void SavePDF_Click(object sender, RoutedEventArgs e)
         {
             int customId = 0;
@@ -161,9 +163,7 @@ namespace BarrocIntens.Finance
                                     {
                                         Debug.WriteLine("found this bitch");
                                         quantity = int.Parse(textBox.Text);
-                                        price = product.Price;
-                                        
-                                        
+                                        price = product.Price;                                       
                                     }
                                 }
                         }
@@ -173,11 +173,9 @@ namespace BarrocIntens.Finance
                 }
                 db.CustomInvoiceProducts.AddRange(customInvoiceProducts);
                 db.SaveChanges();
-            }
-            using (AppDbContext db = new AppDbContext())
-            {
+
                 CustomInvoice invoice = db.CustomInvoices.Include(i => i.Company).ThenInclude(c => c.User).FirstOrDefault(ci => ci.Id == customId);
-                string filePath = $"C:\\Temp\\{chosenCompany.Name}_{invoice.Id}.pdf";
+                string filePath = $"{Path.GetTempPath()}{chosenCompany.Name}_{invoice.Id}.pdf";
                 byte[] imageData = File.ReadAllBytes(AppDomain.CurrentDomain.BaseDirectory + "/Assets/Logo4_groot.png");
                 InvoiceDocument document = new InvoiceDocument(invoice, imageData);
                 document.GeneratePdf(filePath);
