@@ -94,10 +94,18 @@ namespace BarrocIntens.Finance
                 {
                     // Use VisualTreeHelper to find the TextBox within the ListViewItem
                     TextBox textBox = GetTextBoxFromListViewItem(listViewItem);
-
+                    int quantity = 0;
                     if (String.IsNullOrEmpty(textBox.Text) && textBox.Tag?.ToString() == product.Id.ToString())
                     {
-                         product.Price = product.Price * int.Parse(textBox.Text);
+                        if (textBox.Text == "" || textBox.Text == null)
+                        {
+                            quantity = 1;
+                        }
+                        else
+                        {
+                            quantity = int.Parse(textBox.Text);
+                        }
+                        product.Price = product.Price * quantity;
                     }
                 }
             }
@@ -169,8 +177,15 @@ namespace BarrocIntens.Finance
 
                                     if (textBox != null && textBox.Tag?.ToString() == product.Id.ToString())
                                     {
-                                        Debug.WriteLine("found this bitch");
-                                        quantity = int.Parse(textBox.Text);
+                                        if (textBox.Text == "" || textBox.Text == null)
+                                        {
+                                            quantity = 1;
+                                        }
+                                        else
+                                        {
+                                            quantity = int.Parse(textBox.Text);
+                                        }
+                                        
                                         price = product.Price;
                                     }
                                 }
