@@ -64,10 +64,14 @@
                             Background="#ffd700"
                             Padding="3"
                             CornerRadius="5"
-              VerticalAlignment="Center">
+              VerticalAlignment="Center"
+                        Orientation="Vertical">
                 <TextBlock Text="Products:"
                            VerticalAlignment="Center"
                            Foreground="#212121"/>
+                <TextBlock Text="please choose products to be bought.."
+                           x:Name="productError"
+                           Visibility="Collapsed"/>
             </StackPanel>
             <ListView x:Name="products"
                           SelectionMode="Multiple"
