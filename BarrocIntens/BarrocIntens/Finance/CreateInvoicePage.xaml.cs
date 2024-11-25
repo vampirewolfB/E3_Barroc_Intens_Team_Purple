@@ -94,19 +94,12 @@ namespace BarrocIntens.Finance
                 {
                     // Use VisualTreeHelper to find the TextBox within the ListViewItem
                     TextBox textBox = GetTextBoxFromListViewItem(listViewItem);
-                    int quantity = 0;
-                    if (String.IsNullOrEmpty(textBox.Text) && textBox.Tag?.ToString() == product.Id.ToString())
+                    int quantity = 1;
+                    if (!String.IsNullOrEmpty(textBox.Text) && textBox.Tag?.ToString() == product.Id.ToString())
                     {
-                        if (textBox.Text == "" || textBox.Text == null)
-                        {
-                            quantity = 1;
-                        }
-                        else
-                        {
-                            quantity = int.Parse(textBox.Text);
-                        }
-                        product.Price = product.Price * quantity;
+                        quantity = int.Parse(textBox.Text);
                     }
+                    product.Price = product.Price * quantity;
                 }
             }
             return list;
@@ -162,7 +155,7 @@ namespace BarrocIntens.Finance
                     customId = customInvoice.Id;
                     foreach (Product product in products.SelectedItems)
                     {
-                        int quantity = 0;
+                        int quantity = 1;
                         decimal price = 0;
                         foreach (CustomInvoiceProduct invoiceProduct in db.CustomInvoiceProducts)
                         {
@@ -175,19 +168,11 @@ namespace BarrocIntens.Finance
                                     // Use VisualTreeHelper to find the TextBox within the ListViewItem
                                     TextBox textBox = GetTextBoxFromListViewItem(listViewItem);
 
-                                    if (textBox != null && textBox.Tag?.ToString() == product.Id.ToString())
+                                    if (!String.IsNullOrEmpty(textBox.Text) && textBox.Tag?.ToString() == product.Id.ToString())
                                     {
-                                        if (textBox.Text == "" || textBox.Text == null)
-                                        {
-                                            quantity = 1;
-                                        }
-                                        else
-                                        {
-                                            quantity = int.Parse(textBox.Text);
-                                        }
-                                        
-                                        price = product.Price;
+                                        quantity = int.Parse(textBox.Text);                                                                       
                                     }
+                                    price = product.Price;
                                 }
                             }
 
