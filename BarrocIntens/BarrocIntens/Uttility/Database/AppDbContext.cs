@@ -26,6 +26,10 @@ namespace BarrocIntens.Uttility.Database
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<CustomInvoiceProduct> CustomInvoiceProducts { get; set; }
+        public DbSet<Expense> Expenses { get; set; }
+        public DbSet<ExpenseProduct> ExpenseProducts { get; set; }
+        public DbSet<Quote> Quotes { get; set; }
+        public DbSet<QuoteProduct> QuoteProducts { get; set; }
 
         // Aanmaken van een connectie met de database.
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -106,9 +110,12 @@ namespace BarrocIntens.Uttility.Database
                 });
                 modelBuilder.Entity<User>().HasData(users);
 
+                // List for diffrent user groups
+                List<User> sales = users.Where(u => u.RoleId == 2).ToList();
+                List<User> customers = users.Where(u => u.RoleId == 5).ToList();
+
                 // Company Seeder
                 int companyId = 1;
-                List<User> customers = users.Where(u => u.RoleId == 5).ToList();
                 Faker<Models.Company> companyFaker = new Faker<Models.Company>("nl")
                     .RuleFor(c => c.Id, f => companyId++)
                     .RuleFor(c => c.Name, f => f.Company.CompanyName())
@@ -125,7 +132,6 @@ namespace BarrocIntens.Uttility.Database
 
                 // Note seeder
                 int noteId = 1;
-                List<User> sales = users.Where(u => u.RoleId == 2).ToList();
                 Faker<Note> noteFaker = new Faker<Note>("nl")
                     .RuleFor(n => n.Id, f => noteId++)
                     .RuleFor(n => n.Notes, f => f.Lorem.Text())
@@ -199,11 +205,54 @@ namespace BarrocIntens.Uttility.Database
                     .RuleFor(c => c.Id, f => customInvoiceProductId++)
                     .RuleFor(c => c.CustomInvoiceId, f => f.Random.ListItem<CustomInvoice>(customInvoices).Id)
                     .RuleFor(c => c.ProductId, f => f.Random.ListItem<Product>(products).Id)
-                    .RuleFor(c => c.Amount, f => f.Random.Int(10, 1000))
+                    .RuleFor(c => c.Amount, f => f.Random.Int(1, 1000))
                     .RuleFor(c => c.PricePerProduct, f => f.Random.Decimal(0.01m, 10000.00m));
 
                 List<CustomInvoiceProduct> customInvoiceProducts = customInvoiceProductFaker.Generate(50);
                 modelBuilder.Entity<CustomInvoiceProduct>().HasData(customInvoiceProducts);
+
+                // Expense seeder
+                int exepenseId = 1;
+                Faker<Expense> expenseFaker = new Faker<Expense>("nl")
+                    .RuleFor(e => e.Id, f => exepenseId++)
+                    .RuleFor(e => e.Date, f => f.Date.Recent())
+                    .RuleFor(e => e.UserId, f => f.Random.ListItem<User>(sales).Id)
+                    .RuleFor(e => e.IsApproved, f => f.Random.Bool());
+
+                List<Expense> expenses = expenseFaker.Generate(50);
+                modelBuilder.Entity<Expense>().HasData(expenses);
+
+                // Expense Product seeder
+                int expenseProductId = 1;
+                Faker<ExpenseProduct> expenseProductFaker = new Faker<ExpenseProduct>("nl")
+                    .RuleFor(e => e.Id, f => expenseProductId++)
+                    .RuleFor(e => e.ProductId, f => f.Random.ListItem<Product>(products).Id)
+                    .RuleFor(e => e.ExpenseId, f => f.Random.ListItem<Expense>(expenses).Id)
+                    .RuleFor(e => e.Quantity, f => f.Random.Int(1, 1000));
+
+                List<ExpenseProduct> expenseProducts = expenseProductFaker.Generate(100);
+                modelBuilder.Entity<ExpenseProduct>().HasData(expenseProducts);
+
+                // Quote seeder
+                int quoteId = 1;
+                Faker<Quote> quoteFaker = new Faker<Quote>("nl")
+                    .RuleFor(q => q.Id, f => quoteId++)
+                    .RuleFor(q => q.Date, f => f.Date.Recent())
+                    .RuleFor(q => q.UserId, f => f.Random.ListItem<User>(customers).Id);
+
+                List<Quote> quotes = quoteFaker.Generate(50);
+                modelBuilder.Entity<Quote>().HasData(quotes);
+
+                // Quote product seeder
+                int quoteProductId = 1;
+                Faker<QuoteProduct> quoteProductFaker = new Faker<QuoteProduct>("nl")
+                    .RuleFor(q => q.Id, f => quoteProductId++)
+                    .RuleFor(q => q.ProductId, f => f.Random.ListItem<Product>(products).Id)
+                    .RuleFor(q => q.QuoteId, f => f.Random.ListItem<Quote>(quotes).Id)
+                    .RuleFor(q => q.Quantity, f => f.Random.Int(1, 1000));
+
+                List<QuoteProduct> quoteProducts = quoteProductFaker.Generate(100);
+                modelBuilder.Entity<QuoteProduct>().HasData(quoteProducts);
             }
             else
             {
