@@ -27,7 +27,7 @@ namespace BarrocIntens.Models
         public ICollection<CustomInvoiceProduct> CustomInvoiceProducts { get; set; }
 
         // Checks if paidAt is null if yes shows a diffrent text
-        public String SetText(DateTime? dateTime)
+        public string SetText(DateTime? dateTime)
         {
             if (dateTime is null)
             {

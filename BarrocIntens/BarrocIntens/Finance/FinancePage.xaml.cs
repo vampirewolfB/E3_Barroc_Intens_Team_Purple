@@ -8,6 +8,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -61,7 +62,7 @@ namespace BarrocIntens.Finance
             }
             else if (selectedItem == Invoices)
             {
-                if (ContentFrame.Navigate(typeof(InvoicesPage)))
+                if (ContentFrame.CurrentSourcePageType != (typeof(InvoicesPage)))
                 {
                     ContentFrame.Navigate(typeof(InvoicesPage));
                 }

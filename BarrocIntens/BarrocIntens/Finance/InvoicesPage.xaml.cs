@@ -48,14 +48,21 @@ namespace BarrocIntens.Finance
             InvoicesListView.ItemsSource = invoices;
         }
 
+        // Company search
         private void CompanySearch_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
-
+            if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
+            {
+                InvoicesListView.ItemsSource = invoices.Where(
+                    i => i.Company.Name.Contains(sender.Text, StringComparison.OrdinalIgnoreCase)
+                );
+            }
         }
 
         private void InvoicesListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-
+            CustomInvoice invoice = (CustomInvoice)e.ClickedItem;
+            this.Frame.Navigate(typeof(ShowInvoicePage), invoice);
         }
     }
 }
