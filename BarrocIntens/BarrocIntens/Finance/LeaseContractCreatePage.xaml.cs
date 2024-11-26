@@ -116,6 +116,8 @@ namespace BarrocIntens.Finance
                 db.Contracts.Add(newContract);
                 db.SaveChanges();
             }
+
+            Frame.Navigate(typeof(LeaseContractsPage));
         }
     }
 }
