@@ -59,6 +59,13 @@ namespace BarrocIntens.Finance
                 //    ContentFrame.Navigate(typeof());
                 //}
             }
+            else if (selectedItem == Invoices)
+            {
+                if (ContentFrame.Navigate(typeof(InvoicesPage)))
+                {
+                    ContentFrame.Navigate(typeof(InvoicesPage));
+                }
+            }
             else if (selectedItem == CreateInvoice)
             {
                 if (ContentFrame.CurrentSourcePageType != typeof(CreateInvoicePage))
