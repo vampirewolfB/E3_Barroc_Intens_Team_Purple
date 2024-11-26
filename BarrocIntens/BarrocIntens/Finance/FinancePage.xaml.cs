@@ -53,11 +53,11 @@ namespace BarrocIntens.Finance
                 }
             }
             else if (selectedItem == LeaseContractsCreate)
-            {  //Todo: add connection for creating lease contract page
-                //if (ContentFrame.CurrentSourcePageType != typeof())
-                //{
-                //    ContentFrame.Navigate(typeof());
-                //}
+            {
+                if (ContentFrame.CurrentSourcePageType != typeof(LeaseContractCreatePage))
+                {
+                    ContentFrame.Navigate(typeof(LeaseContractCreatePage));
+                }
             }
             else if (selectedItem == CreateInvoice)
             {

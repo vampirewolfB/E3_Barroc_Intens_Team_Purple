@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
@@ -23,6 +23,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Finance\FinancePage.xaml" />
+    <None Remove="Finance\LeaseContractCreatePage.xaml" />
     <None Remove="Finance\LeaseContractsPage.xaml" />
     <None Remove="Maintenance/MaintenancePage.xaml" />
     <None Remove="Purchase\PurchasePage.xaml" />
@@ -79,6 +80,9 @@
     <None Update="Assets\Logo6_klein.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Page Update="Finance\LeaseContractCreatePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Finance\FinancePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
