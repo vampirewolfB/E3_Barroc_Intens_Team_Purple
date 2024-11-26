@@ -37,7 +37,7 @@ namespace BarrocIntens.Finance
     /// </summary>
     public sealed partial class LeaseContractCreatePage : Page
     {
-        List<Company> companies;
+        private List<Company> companies;
         private Company chosenCompany;
         public LeaseContractCreatePage()
         {
@@ -94,12 +94,20 @@ namespace BarrocIntens.Finance
             // Parse the selected lease type to the corresponding enum
             if (!Enum.TryParse<Contract.PaymentTypes>(selectedLeaseType, out var paymentType))
             {
-                Debug.WriteLine($"Invalid lease type: {selectedLeaseType}");
                 return;
             }
 
-            // Get the end date from the DatePicker
-            DateTimeOffset? endDate = EndDatePicker?.Date;
+            // Check if the EndDate is set
+            DateTimeOffset endDate;
+            if (EndDatePicker?.Date >= DateTime.Now)
+            {
+                endDate = EndDatePicker.Date;
+            }
+            else
+            {
+                endDate = DateTimeOffset.Now.AddYears(1);
+            }
+
 
             // Create new contract
             var newContract = new Contract
@@ -107,7 +115,7 @@ namespace BarrocIntens.Finance
                 CompanyId = chosenCompany.Id,
                 Type = paymentType,
                 StartDate = DateTime.Now,
-                EndDate = endDate.Value.DateTime
+                EndDate = endDate.DateTime
             };
 
             // Save the contract to the database
