@@ -23,8 +23,9 @@
             <RowDefinition Height="20*"/>
             <RowDefinition Height="10*"/>
             <RowDefinition Height="20*"/>
-            <RowDefinition Height="18*"/>
-            <RowDefinition Height="32*"/>
+            <RowDefinition Height="15*"/>
+            <RowDefinition Height="15*"/>
+            <RowDefinition Height="10*"/>
         </Grid.RowDefinitions>
         
         <Image Source="/Assets/Logo6_klein.png"
@@ -49,6 +50,11 @@
                     </DataTemplate>
                 </AutoSuggestBox.ItemTemplate>
             </AutoSuggestBox>
+            <TextBlock x:Name="CompanyErrorTextBlock"
+                       Text="Please select a company."
+                       Foreground="Red"
+                       Visibility="Collapsed"
+                       FontSize="12"/>
         </StackPanel>
 
         <StackPanel x:Name="LeaseTypePanel"
@@ -59,14 +65,25 @@
             <RadioButton Content="Monthly" 
                          GroupName="Options" 
                          Margin="0,5,0,0"/>
+            <TextBlock x:Name="LeaseTypeErrorTextBlock"
+                       Text="Please select a lease type."
+                       Foreground="Red"
+                       Visibility="Collapsed"
+                       FontSize="12"
+                       Margin="0,5,0,0"/>
         </StackPanel>
-        
+
         <StackPanel Grid.Row="3">
-            <DatePicker x:Name="EndDatePicker"
-                        Header="Pick a end date" />
+            <DatePicker x:Name="StartDatePicker"
+                        Header="Pick a start date" />
         </StackPanel>
-        
+
         <StackPanel Grid.Row="4">
+            <DatePicker x:Name="EndDatePicker"
+                Header="Pick a end date" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="6">
             <Button Content="Create"
                     Background="#ffd700"
                     Foreground="#212121"
@@ -74,6 +91,6 @@
                     Padding="8"
                     Click="CreateLeaseContract"/>
         </StackPanel>
-        
+
     </Grid>
 </Page>
