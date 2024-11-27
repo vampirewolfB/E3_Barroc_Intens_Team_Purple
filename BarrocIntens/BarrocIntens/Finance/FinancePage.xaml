@@ -44,6 +44,11 @@
                                     Icon="Home"
                                     Tag="Home"
                                     Content="Home"/>
+                <NavigationViewItem x:Name="MonthYearOverView"
+                                    Foreground="Black"
+                                    Content="Month/Year Overview"
+                                    Icon="Calendar"
+                                    Tag="MYOvervView"/>
                 <NavigationViewItem x:Name="LeaseContracts"
                                     Foreground="Black"
                                     Content="Lease Contracts"
