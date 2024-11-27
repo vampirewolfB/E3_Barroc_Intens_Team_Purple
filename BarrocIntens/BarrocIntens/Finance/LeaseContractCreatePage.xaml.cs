@@ -39,6 +39,7 @@ namespace BarrocIntens.Finance
     {
         private List<Company> companies;
         private Company chosenCompany;
+
         public LeaseContractCreatePage()
         {
             this.InitializeComponent();
@@ -49,6 +50,7 @@ namespace BarrocIntens.Finance
                     .ToList();
             }
         }
+
         private void CompanyAutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
             if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
@@ -62,6 +64,7 @@ namespace BarrocIntens.Finance
                 sender.ItemsSource = filteredCompanies;
             }
         }
+
         private void CompanyAutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
         {
             if (args.SelectedItem is Company company)
@@ -72,28 +75,42 @@ namespace BarrocIntens.Finance
             }
         }
 
-
         private void CreateLeaseContract(object sender, RoutedEventArgs e)
         {
-            string selectedLeaseType = null;
+            bool isValid = true;
 
-            // Access the StackPanel that contains the RadioButtons
-            StackPanel leaseTypePanel = (StackPanel)FindName("LeaseTypePanel");
-            if (leaseTypePanel != null)
+            CompanyErrorTextBlock.Visibility = Visibility.Collapsed;
+            LeaseTypeErrorTextBlock.Visibility = Visibility.Collapsed;
+
+            if (chosenCompany == null)
             {
-                foreach (var control in leaseTypePanel.Children)
+                CompanyErrorTextBlock.Visibility = Visibility.Visible;
+                isValid = false;
+            }
+
+            // Validate lease type selection
+            string selectedLeaseType = null;
+            foreach (var control in LeaseTypePanel.Children)
+            {
+                if (control is RadioButton rb && rb.IsChecked == true)
                 {
-                    if (control is RadioButton rb && rb.IsChecked == true)
-                    {
-                        selectedLeaseType = rb.Content.ToString();
-                        break;
-                    }
+                    selectedLeaseType = rb.Content.ToString();
+                    break;
                 }
             }
 
-            // Parse the selected lease type to the corresponding enum
+            if (string.IsNullOrEmpty(selectedLeaseType))
+            {
+                LeaseTypeErrorTextBlock.Visibility = Visibility.Visible;
+                isValid = false;
+            }
+
+            if (!isValid) return;
+
+            // Parse lease type
             if (!Enum.TryParse<Contract.PaymentTypes>(selectedLeaseType, out var paymentType))
             {
+                LeaseTypeErrorTextBlock.Visibility = Visibility.Visible;
                 return;
             }
 
@@ -108,24 +125,36 @@ namespace BarrocIntens.Finance
                 endDate = DateTimeOffset.Now.AddYears(1);
             }
 
+            // Check if the StartDate is set
+            DateTimeOffset startDate;
+            if (StartDatePicker?.Date >= DateTime.Now)
+            {
+                startDate = StartDatePicker.Date;
+            }
+            else
+            {
+                startDate = DateTime.Now;
+            }
 
             // Create new contract
             var newContract = new Contract
             {
                 CompanyId = chosenCompany.Id,
                 Type = paymentType,
-                StartDate = DateTime.Now,
+                StartDate = startDate.DateTime,
                 EndDate = endDate.DateTime
             };
 
-            // Save the contract to the database
+            // Save contract to the database
             using (var db = new AppDbContext())
             {
                 db.Contracts.Add(newContract);
                 db.SaveChanges();
             }
 
+            // Navigate to the LeaseContractsPage
             Frame.Navigate(typeof(LeaseContractsPage));
         }
+
     }
 }
