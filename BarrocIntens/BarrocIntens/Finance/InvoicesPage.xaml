@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="BarrocIntens.Finance.InvoicesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:BarrocIntens.Finance"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:BarrocIntens.Models"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    mc:Ignorable="d">
+
+    <Grid RowDefinitions="Auto,*">
+        <TextBlock
+            Grid.Row="0"
+            Margin="0,0,10,0"
+            Style="{StaticResource TitleTextBlockStyle}"
+            Text="Lease Contracts" />
+        <StackPanel Grid.Row="1" Margin="0,25">
+            <StackPanel HorizontalAlignment="Left">
+                <AutoSuggestBox
+                    x:Name="CompanySearch"
+                    Width="300"
+                    PlaceholderText="Type a company name"
+                    QueryIcon="Find"
+                    TextChanged="CompanySearch_TextChanged" />
+            </StackPanel>
+            <ListView
+                x:Name="InvoicesListView"
+                IsItemClickEnabled="True"
+                ItemClick="InvoicesListView_ItemClick">
+                <ListView.Header>
+                    <Grid Padding="16,12" ColumnSpacing="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="150" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            Grid.Column="0"
+                            Style="{StaticResource BodyTextBlockStyle}"
+                            Text="Id" />
+                        <TextBlock
+                            Grid.Column="1"
+                            Style="{StaticResource BodyTextBlockStyle}"
+                            Text="Created On" />
+                        <TextBlock
+                            Grid.Column="2"
+                            Style="{StaticResource BodyTextBlockStyle}"
+                            Text="Company Name" />
+                        <TextBlock
+                            Grid.Column="3"
+                            Style="{StaticResource BodyTextBlockStyle}"
+                            Text="Payed On" />
+                    </Grid>
+                </ListView.Header>
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="models:CustomInvoice">
+                        <Border BorderBrush="#ffd700" BorderThickness="0,0,0,1">
+                            <Grid ColumnSpacing="16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="150" />
+                                    <ColumnDefinition Width="200" />
+                                    <ColumnDefinition Width="150" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    Grid.Column="0"
+                                    Text="{x:Bind Id}"
+                                    TextWrapping="WrapWholeWords" />
+                                <TextBlock
+                                    Grid.Column="1"
+                                    Text="{x:Bind Date}"
+                                    TextWrapping="WrapWholeWords" />
+                                <TextBlock
+                                    Grid.Column="2"
+                                    Text="{x:Bind Company.Name}"
+                                    TextWrapping="WrapWholeWords" />
+                                <TextBlock
+                                    Grid.Column="3"
+                                    Text="{x:Bind SetText(PaidAt), Mode=OneWay}"
+                                    TextWrapping="WrapWholeWords" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.ItemContainerStyle>
+                    <Style BasedOn="{StaticResource DefaultListViewItemStyle}" TargetType="ListViewItem">
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
+        </StackPanel>
+    </Grid>
+</Page>
