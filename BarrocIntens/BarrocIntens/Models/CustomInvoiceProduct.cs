@@ -25,5 +25,10 @@ namespace BarrocIntens.Models
         [Column(TypeName = "decimal(8, 2)")]
         [Required]
         public decimal PricePerProduct { get; set; }
+
+        public string TotalAmount(Decimal price, int amount)
+        {
+            return (price * amount).ToString();
+        }
     }
 }
