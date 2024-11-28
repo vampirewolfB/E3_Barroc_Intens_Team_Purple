@@ -61,12 +61,17 @@
                                             Content="Lease Contracts Create"/>
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
-                <NavigationViewItem x:Name="CreateInvoice"
-                                    Tag="CreateInvoice"
+                <NavigationViewItem x:Name="Invoices"
+                                    Tag="Invoices"
+                                    Foreground="Black"
                                     Icon="OpenFile"
-                                    Foreground="Black">
-                    <TextBlock TextWrapping="Wrap" 
-                               Text="Create Invoice"/>
+                                    Content="Invoices">
+                    <NavigationViewItem.MenuItems>
+                        <NavigationViewItem x:Name="CreateInvoice"
+                                            Tag="CreateInvoice"
+                                            Foreground="Black"
+                                            Content="Invoices Create"/>
+                    </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
         </NavigationView>

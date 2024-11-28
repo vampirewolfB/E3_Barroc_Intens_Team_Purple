@@ -25,5 +25,18 @@ namespace BarrocIntens.Models
         public int CompanyId { get; set; }
 
         public ICollection<CustomInvoiceProduct> CustomInvoiceProducts { get; set; }
+
+        // Checks if paidAt is null if yes shows a diffrent text
+        public string SetText(DateTime? dateTime)
+        {
+            if (dateTime is null)
+            {
+                return "Not paid yet";
+            }
+            else
+            {
+                return dateTime.ToString();
+            }
+        }
     }
 }

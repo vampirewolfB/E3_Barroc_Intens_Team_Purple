@@ -8,6 +8,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -53,11 +54,18 @@ namespace BarrocIntens.Finance
                 }
             }
             else if (selectedItem == LeaseContractsCreate)
-            {  //Todo: add connection for creating lease contract page
-                //if (ContentFrame.CurrentSourcePageType != typeof())
-                //{
-                //    ContentFrame.Navigate(typeof());
-                //}
+            {
+                if (ContentFrame.CurrentSourcePageType != typeof(LeaseContractCreatePage))
+                {
+                    ContentFrame.Navigate(typeof(LeaseContractCreatePage));
+                }
+            }
+            else if (selectedItem == Invoices)
+            {
+                if (ContentFrame.CurrentSourcePageType != (typeof(InvoicesPage)))
+                {
+                    ContentFrame.Navigate(typeof(InvoicesPage));
+                }
             }
             else if (selectedItem == CreateInvoice)
             {
