@@ -22,6 +22,7 @@ namespace BarrocIntens.Models
         [Column(TypeName = "tinyint")]
         public bool IsApproved { get; set; }
 
+        public ICollection<ExpenseProduct> ExpenseProducts { get; set; }
         public ICollection<Product> Products { get; set; }
     }
 }

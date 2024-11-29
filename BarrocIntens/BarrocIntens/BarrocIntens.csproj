@@ -26,6 +26,7 @@
     <None Remove="Finance\LeaseContractCreatePage.xaml" />
     <None Remove="Finance\InvoicesPage.xaml" />
     <None Remove="Finance\LeaseContractsPage.xaml" />
+    <None Remove="Finance\MonthYearOverviewPage.xaml" />
     <None Remove="Finance\ShowInvoicePage.xaml" />
     <None Remove="Maintenance/MaintenancePage.xaml" />
     <None Remove="Purchase\PurchasePage.xaml" />
@@ -48,6 +49,8 @@
 	<ItemGroup>
 		<PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
 		<PackageReference Include="Bogus" Version="35.6.1" />
+		<PackageReference Include="CSharpMarkup.WinUI.LiveChartsCore.SkiaSharpView" Version="2.4.18" />
+		<PackageReference Include="H.OxyPlot.WinUI" Version="0.9.30" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
 			<PrivateAssets>all</PrivateAssets>
@@ -60,6 +63,8 @@
 		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.240923002" />
 		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
 		<PackageReference Include="QuestPDF" Version="2022.12.12" />
+		<PackageReference Include="ScottPlot.WinUI" Version="5.0.47" />
+		<PackageReference Include="Syncfusion.Chart.WinUI" Version="26.2.8" />
 		<PackageReference Include="System.Text.Json" Version="8.0.5" />
 		<Manifest Include="$(ApplicationManifest)" />
 	</ItemGroup>
@@ -82,6 +87,9 @@
     <None Update="Assets\Logo6_klein.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Page Update="Finance\MonthYearOverviewPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Finance\LeaseContractCreatePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
