@@ -73,7 +73,7 @@
                            x:Name="productError"
                            Visibility="Collapsed"/>
             </StackPanel>
-            <ListView x:Name="products"
+            <ListView x:Name="productsListView"
                           SelectionMode="Multiple"
                           IsMultiSelectCheckBoxEnabled="True"
                           Grid.Row="1">

@@ -1,5 +1,6 @@
-using BarrocIntens.Uttility;
-using BarrocIntens.Uttility.Database;
+using BarrocIntens.Models;
+using BarrocIntens.Utility;
+using BarrocIntens.Utility.Database;
 using Microsoft.Extensions.Configuration;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -11,6 +12,7 @@ using Microsoft.UI.Xaml.Navigation;
 using Microsoft.UI.Xaml.Shapes;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -47,22 +49,19 @@ namespace BarrocIntens
             // Haal de settings op
             new AppSettingLoader();
 
+            using AppDbContext db = new AppDbContext();
+
             // Check of de database geseed moet worden of niet.
-            // Zo ja verwijder eerst en dan maak aan en seed het.
             if (AppSettingLoader.Configuration.GetValue<bool>("BuildDatabase"))
             {
-                using (AppDbContext db = new AppDbContext())
-                {
-                    db.Database.EnsureDeleted();
-                    db.Database.EnsureCreated();
-                }
+                // Fully rebuild the database from 0.
+                db.Database.EnsureDeleted();
+                db.Database.EnsureCreated();
             }
             else
             {
-                using (AppDbContext db = new AppDbContext())
-                {
-                    db.Database.EnsureCreated();
-                }
+                // Initialize the db
+                db.Add(new Role { Id = 99, Name = "Initer"});
             }
 
             // Start de mainwindow en zet de apptitlebar extend op true.

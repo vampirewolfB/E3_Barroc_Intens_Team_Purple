@@ -1,5 +1,5 @@
 using BarrocIntens.Models;
-using BarrocIntens.Uttility.Database;
+using BarrocIntens.Utility.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -42,7 +42,7 @@ namespace BarrocIntens.Finance
                 invoices = new ObservableCollection<CustomInvoice>(
                         dbContext.CustomInvoices
                                 .Include(c => c.Company)
-                    );
+                                .AsNoTracking());
             }
 
             InvoicesListView.ItemsSource = invoices;

@@ -2,7 +2,7 @@ using BarrocIntens.Finance;
 using BarrocIntens.Models;
 using BarrocIntens.Purchase;
 using BarrocIntens.Sales;
-using BarrocIntens.Uttility.Database;
+using BarrocIntens.Utility.Database;
 using BCrypt.Net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.UI.Xaml;
@@ -54,6 +54,7 @@ namespace BarrocIntens
                 user = dbContext.User
                     .Where(u => u.UserName == UserNameTextBox.Text.ToString())
                     .Include(u => u.Role)
+                    .AsNoTracking()
                     .FirstOrDefault();
             }
 

@@ -13,7 +13,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
-using BarrocIntens.Uttility.Database;
+using BarrocIntens.Utility.Database;
 using System.Diagnostics;
 using BarrocIntens.Models;
 using QuestPDF;
@@ -24,6 +24,8 @@ using QuestPDF.Previewer;
 using QuestPDF.Drawing;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
+using BarrocIntens.Utility;
+using System.Collections.ObjectModel;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -35,7 +37,8 @@ namespace BarrocIntens.Finance
     /// </summary>
     public sealed partial class CreateInvoicePage : Page
     {
-        List<Company> companies;
+        private ObservableCollection<Company> companies;
+        private ObservableCollection<Product> products;
         private Company chosenCompany;
        
         public CreateInvoicePage()
@@ -43,12 +46,13 @@ namespace BarrocIntens.Finance
             this.InitializeComponent();
             using (AppDbContext db = new AppDbContext())
             {
-                Debug.WriteLine($"{db.Products.Count()}");
-                products.ItemsSource = db.Products.ToList();
-                companies = db.Companies
-                    .Include(c => c.User)
-                    .ToList();
-            }            
+                products = new ObservableCollection<Product>(db.Products.AsNoTracking());
+                companies = new ObservableCollection<Company>(
+                        db.Companies
+                            .Include(c => c.User)
+                            .AsNoTracking());
+            }
+            productsListView.ItemsSource = products;
         }
 
         private void Quantity_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
@@ -83,13 +87,13 @@ namespace BarrocIntens.Finance
         private List<Product> Get_Products()
         {
             List<Product> list = new List<Product> ();
-            foreach (Product product in products.SelectedItems)
+            foreach (Product product in productsListView.SelectedItems)
             {
                 list.Add(product);
             }
             foreach (Product product in list)
             {
-                ListViewItem listViewItem = products.ContainerFromItem(product) as ListViewItem;
+                ListViewItem listViewItem = productsListView.ContainerFromItem(product) as ListViewItem;
                 if (listViewItem != null)
                 {
                     // Use VisualTreeHelper to find the TextBox within the ListViewItem
@@ -143,7 +147,7 @@ namespace BarrocIntens.Finance
 
         private void SavePDF_Click(object sender, RoutedEventArgs e)
         {
-            if (chosenCompany != null && products.SelectedItems.Count > 0)
+            if (chosenCompany != null && productsListView.SelectedItems.Count > 0)
             {
                 int customId = 0;
                 using (AppDbContext db = new AppDbContext())
@@ -153,7 +157,7 @@ namespace BarrocIntens.Finance
                     db.CustomInvoices.Add(customInvoice);
                     db.SaveChanges();
                     customId = customInvoice.Id;
-                    foreach (Product product in products.SelectedItems)
+                    foreach (Product product in productsListView.SelectedItems)
                     {
                         int quantity = 1;
                         decimal price = 0;
@@ -162,7 +166,7 @@ namespace BarrocIntens.Finance
 
                             if (invoiceProduct.ProductId != product.Id)
                             {
-                                ListViewItem listViewItem = products.ContainerFromItem(product) as ListViewItem;
+                                ListViewItem listViewItem = productsListView.ContainerFromItem(product) as ListViewItem;
                                 if (listViewItem != null)
                                 {
                                     // Use VisualTreeHelper to find the TextBox within the ListViewItem
@@ -196,7 +200,7 @@ namespace BarrocIntens.Finance
                 {
                     CompanyAutoSuggestBox.Text = "please be sure to choose a company...";
                 }
-                if (products.SelectedItems.Count <= 0)
+                if (productsListView.SelectedItems.Count <= 0)
                 {
                     productError.Visibility = Visibility.Visible;
                 }

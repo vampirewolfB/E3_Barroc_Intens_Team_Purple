@@ -13,7 +13,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
-using BarrocIntens.Uttility.Database;
+using BarrocIntens.Utility.Database;
 using System.Diagnostics;
 using BarrocIntens.Models;
 using QuestPDF;
@@ -26,6 +26,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
 using Windows.Security.ExchangeActiveSyncProvisioning;
 using static BarrocIntens.Models.Contract;
+using System.Collections.ObjectModel;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -37,7 +38,7 @@ namespace BarrocIntens.Finance
     /// </summary>
     public sealed partial class LeaseContractCreatePage : Page
     {
-        private List<Company> companies;
+        private ObservableCollection<Company> companies;
         private Company chosenCompany;
 
         public LeaseContractCreatePage()
@@ -45,9 +46,10 @@ namespace BarrocIntens.Finance
             this.InitializeComponent();
             using (AppDbContext db = new AppDbContext())
             {
-                companies = db.Companies
-                    .Include(c => c.User)
-                    .ToList();
+                companies = new ObservableCollection<Company>(
+                    db.Companies
+                        .Include(c => c.User)
+                        .AsNoTracking());
             }
         }
 

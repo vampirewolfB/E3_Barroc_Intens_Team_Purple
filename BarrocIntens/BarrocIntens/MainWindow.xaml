@@ -8,24 +8,26 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid RowDefinitions="Auto,*"
-          Background="#212121">
-        <Border x:Name="AppTitleBar"
-                Grid.Row="0"
-                VerticalAlignment="Top"
-                Margin="12,8,0,0">
-            <StackPanel Orientation="Horizontal"
-                        VerticalAlignment="Stretch">
-                <Image Source="/Assets/Logo6_klein.png"
-                       Width="50"
-                       VerticalAlignment="Center"/>
-                <TextBlock x:Name="AppTitle"
-                           VerticalAlignment="Center"
-                           Margin="12,0,0,0"/>
-                <ComboBox x:Name="MenuSelectComboBox"
-                          SelectionChanged="MenuSelectComboBox_SelectionChanged"
-                          VerticalAlignment="Center"
-                          Margin="12,0,0,0"/>
+    <Grid Background="#212121" RowDefinitions="Auto,*">
+        <Border
+            x:Name="AppTitleBar"
+            Grid.Row="0"
+            Margin="12,8,0,0"
+            VerticalAlignment="Top">
+            <StackPanel VerticalAlignment="Stretch" Orientation="Horizontal">
+                <Image
+                    Width="50"
+                    VerticalAlignment="Center"
+                    Source="/Assets/Logo6_klein.png" />
+                <TextBlock
+                    x:Name="AppTitle"
+                    Margin="12,0,0,0"
+                    VerticalAlignment="Center" />
+                <ComboBox
+                    x:Name="MenuSelectComboBox"
+                    Margin="12,0,0,0"
+                    VerticalAlignment="Center"
+                    SelectionChanged="MenuSelectComboBox_SelectionChanged" />
             </StackPanel>
         </Border>
         <Frame x:Name="rootFrame" Grid.Row="1" />
