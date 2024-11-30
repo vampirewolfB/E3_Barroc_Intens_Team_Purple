@@ -5,6 +5,7 @@ using BarrocIntens.Sales;
 using BarrocIntens.Utility.Database;
 using BCrypt.Net;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -36,7 +37,28 @@ namespace BarrocIntens
             this.InitializeComponent();
         }
 
+        private void UserNameTextBox_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                LoginUser();
+            }
+        }
+
+        private void PasswordTextBox_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                LoginUser();
+            }
+        }
+
         private void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            LoginUser();
+        }
+
+        private void LoginUser()
         {
             // Zet de error textbox zichtbaarheid op collapsed en checkt of de velden zijn ingevuld
             ErrorTextBox.Visibility = Visibility.Collapsed;

@@ -31,6 +31,8 @@ namespace BarrocIntens
     /// </summary>
     public partial class App : Application
     {
+        public static Window MainWindow;
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -65,11 +67,9 @@ namespace BarrocIntens
             }
 
             // Start de mainwindow en zet de apptitlebar extend op true.
-            m_window = new MainWindow();
-            m_window.ExtendsContentIntoTitleBar = true;
-            m_window.Activate();
+            MainWindow = new MainWindow();
+            MainWindow.ExtendsContentIntoTitleBar = true;
+            MainWindow.Activate();
         }
-
-        private Window m_window;
     }
 }

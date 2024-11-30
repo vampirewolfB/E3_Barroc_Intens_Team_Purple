@@ -23,10 +23,12 @@
                     Source="Assets/Logo6_groot.png" />
                 <TextBox
                     x:Name="UserNameTextBox"
+                    KeyDown="UserNameTextBox_KeyDown"
                     CornerRadius="5"
                     PlaceholderText="Username" />
                 <PasswordBox
                     x:Name="PasswordTextBox"
+                    KeyDown="PasswordTextBox_KeyDown"
                     CornerRadius="5"
                     IsPasswordRevealButtonEnabled="True"
                     PlaceholderText="Password" />

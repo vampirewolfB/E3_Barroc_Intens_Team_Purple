@@ -46,7 +46,9 @@
                             ClockIdentifier="24HourClock"
                             Header="Pick a time" />
                     </StackPanel>
-                    <TextBlock x:Name="errorTextBlock" Visibility="Collapsed" />
+                    <TextBlock x:Name="errorTextBlock"
+                               Foreground="Red"
+                               Visibility="Collapsed" />
                     <Button
                         x:Name="SetPaidButton"
                         Width="100"

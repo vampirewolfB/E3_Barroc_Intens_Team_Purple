@@ -31,7 +31,8 @@
             </NavigationView.Resources>
             <ScrollViewer Background="#212121">
                 <Frame x:Name="ContentFrame"
-                        Padding="26" />
+                       Navigated="ContentFrame_Navigated"
+                       Padding="26" />
             </ScrollViewer>
             <NavigationView.MenuItems>
                 <NavigationViewItem>
@@ -62,8 +63,8 @@
                                     Icon="OpenFile"
                                     Content="Invoices">
                     <NavigationViewItem.MenuItems>
-                        <NavigationViewItem x:Name="CreateInvoice"
-                                            Tag="CreateInvoice"
+                        <NavigationViewItem x:Name="InvoiceCreate"
+                                            Tag="InvoiceCreate"
                                             Foreground="Black"
                                             Content="Invoices Create"/>
                     </NavigationViewItem.MenuItems>
