@@ -45,6 +45,7 @@ namespace BarrocIntens
             }
         }
 
+        // Allow for enter to be used as input as well.
         private void PasswordTextBox_KeyDown(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
@@ -53,6 +54,7 @@ namespace BarrocIntens
             }
         }
 
+        // Allow for enter to be used as input
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             LoginUser();

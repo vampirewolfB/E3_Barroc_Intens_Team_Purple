@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using BarrocIntens.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -12,7 +11,7 @@ using Pomelo.EntityFrameworkCore.MySql.Storage.Internal;
 #pragma warning disable 219, 612, 618
 #nullable disable
 
-namespace Models
+namespace BarrocIntens.Models
 {
     internal partial class UserEntityType
     {

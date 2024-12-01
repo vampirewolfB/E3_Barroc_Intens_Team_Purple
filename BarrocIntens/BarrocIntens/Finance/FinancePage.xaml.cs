@@ -46,6 +46,13 @@ namespace BarrocIntens.Finance
                     ContentFrame.Navigate(typeof(LogoPage));
                 }
             }
+            else if (selectedItem == MonthYearOverView)
+            {
+                if (ContentFrame.CurrentSourcePageType != typeof(MonthYearOverviewPage))
+                {
+                    ContentFrame.Navigate(typeof(MonthYearOverviewPage));
+                }
+            }
             else if (selectedItem == LeaseContracts)
             {
                 if (ContentFrame.CurrentSourcePageType != typeof(LeaseContractsPage))
@@ -74,13 +81,6 @@ namespace BarrocIntens.Finance
                     ContentFrame.Navigate(typeof(InvoiceCreatePage));
                 }
             }
-            else if (selectedItem == MonthYearOverView)
-            {
-                if (ContentFrame.CurrentSourcePageType != typeof(MonthYearOverviewPage))
-                {
-                    ContentFrame.Navigate(typeof(MonthYearOverviewPage));
-                }
-            }
         }
 
         private void ContentFrame_Navigated(object sender, NavigationEventArgs e)
@@ -88,6 +88,10 @@ namespace BarrocIntens.Finance
             if (ContentFrame.SourcePageType == typeof(LogoPage))
             {
                 NavigationViewControl.SelectedItem = Home;
+            }
+            else if (ContentFrame.SourcePageType == typeof(MonthYearOverviewPage))
+            {
+                NavigationViewControl.SelectedItem = MonthYearOverView;
             }
             else if (ContentFrame.SourcePageType == typeof(LeaseContractsPage))
             {
