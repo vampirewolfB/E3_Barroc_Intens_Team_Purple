@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="BarrocIntens.Finance.MonthYearOverviewPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BarrocIntens.Finance"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:lvc="using:LiveChartsCore.SkiaSharpView.WinUI"
+    mc:Ignorable="d"
+    Background="#212121">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="80*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+            <TextBlock Text="Year"
+                       FontSize="20"
+                       Foreground="#ffd700"
+                       HorizontalAlignment="Center"/>
+            <TextBox x:Name="year"
+                     BeforeTextChanging="Year_BeforeTextChanging"
+                     TextChanged="year_TextChanged"
+                     HorizontalAlignment="Center"/>
+        </StackPanel>
+        <Grid CornerRadius="15"
+              Grid.Column="1"
+              BorderBrush="#ffd700"
+              BorderThickness="0,0,2,2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30*"/>
+                <RowDefinition Height="70*"/>
+            </Grid.RowDefinitions>
+            <Grid  Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="YEAR OVERVIEW"
+                           FontSize="30"
+                           Foreground="#ffd700"
+                           HorizontalAlignment="Center"
+                           Grid.Row="0"/>
+                <lvc:CartesianChart x:Name="ColumnChartView"
+                    Width="500"
+                    VerticalAlignment="Stretch"
+                    Grid.Row="1"/>
+            </Grid>
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="MONTHLY OVERVIEW"
+                           FontSize="30"
+                           Foreground="#ffd700"
+                           HorizontalAlignment="Center"
+                           Grid.Row="0"/>
+                                                  
+                <lvc:CartesianChart x:Name="ChartView" 
+                                    MaxWidth="600"
+                                    VerticalAlignment="Stretch"
+                                    Grid.Row="1"/>
+            </Grid>
+            
+        </Grid>
+    </Grid>
+</Page>

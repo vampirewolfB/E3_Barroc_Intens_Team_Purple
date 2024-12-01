@@ -74,6 +74,13 @@ namespace BarrocIntens.Finance
                     ContentFrame.Navigate(typeof(InvoiceCreatePage));
                 }
             }
+            else if (selectedItem == MonthYearOverView)
+            {
+                if (ContentFrame.CurrentSourcePageType != typeof(MonthYearOverviewPage))
+                {
+                    ContentFrame.Navigate(typeof(MonthYearOverviewPage));
+                }
+            }
         }
 
         private void ContentFrame_Navigated(object sender, NavigationEventArgs e)
