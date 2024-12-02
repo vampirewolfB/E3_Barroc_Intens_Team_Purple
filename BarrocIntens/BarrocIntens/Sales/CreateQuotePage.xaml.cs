@@ -16,6 +16,8 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Microsoft.EntityFrameworkCore;
+using Windows.System;
+using System.Runtime.CompilerServices;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -27,17 +29,24 @@ namespace BarrocIntens.Sales
     /// </summary>
     public sealed partial class CreateQuotePage : Page
     {
-        List<User> clients;
-        User chosenClient;
+        List<Models.User> clients;
+        Models.User chosenClient;
+        Quote sentQuote = new Quote();
+        List<QuoteProduct> quoteProducts = new List<QuoteProduct>();
         public CreateQuotePage()
         {
             this.InitializeComponent();
             using(AppDbContext db = new AppDbContext())
             {
                 Debug.WriteLine($"{db.Products.Count()}");
-                products.ItemsSource = db.Products.ToList();
+                products.ItemsSource = db.Products
+                    .Where(p => p.ProductCategoryId == 1)
+                    .Include(p => p.QuoteProducts)
+                    .ToList();
                 clients = db.User
                     .Where(u => u.RoleId == 5)
+                    .Include(u => u.Quotes)
+                    .ThenInclude(q => q.QuoteProducts)
                     .ToList();
             }
         }
@@ -50,7 +59,7 @@ namespace BarrocIntens.Sales
             if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
             {
                 // Filter companies based on user input
-                List<User> filteredClients = clients
+                List<Models.User> filteredClients = clients
                     .Where(c => c.Name.Contains(sender.Text, StringComparison.OrdinalIgnoreCase))
                     .ToList();
 
@@ -60,7 +69,7 @@ namespace BarrocIntens.Sales
         }
         private void ClientAutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
         {
-            if (args.SelectedItem is User client)
+            if (args.SelectedItem is Models.User client)
             {
                 chosenClient = client;
 
@@ -69,6 +78,8 @@ namespace BarrocIntens.Sales
         }
         private List<Product> Get_Products()
         {
+            int quantity = 1;
+            decimal totalPrice = 0;
             List<Product> list = new List<Product>();
             foreach (Product product in products.SelectedItems)
             {
@@ -81,14 +92,16 @@ namespace BarrocIntens.Sales
                 {
                     // Use VisualTreeHelper to find the TextBox within the ListViewItem
                     TextBox textBox = GetTextBoxFromListViewItem(listViewItem);
-                    int quantity = 1;
+                    
                     if (!String.IsNullOrEmpty(textBox.Text) && textBox.Tag?.ToString() == product.Id.ToString())
                     {
                         quantity = int.Parse(textBox.Text);
                     }
-                    product.Price = product.Price * quantity;
+                    totalPrice += product.Price * quantity;
                 }
             }
+           
+            totalPriceText.Text = $"{totalPrice}";
             return list;
         }
 
@@ -120,12 +133,13 @@ namespace BarrocIntens.Sales
                 using (AppDbContext db = new AppDbContext())
                 {
                     Quote quote = new Quote { Date = DateTime.Now, UserId = chosenClient.Id };
-                    List<QuoteProduct> quoteProducts = new List<QuoteProduct>();
+                    quoteProducts = new List<QuoteProduct>();
                     db.Quotes.Add(quote);
                     db.SaveChanges();
+                    sentQuote = quote;
                     foreach (Product product in products.SelectedItems)
                     {
-                        int quantity = 0;
+                        int quantity = 1;
                         foreach (QuoteProduct quoteProduct in db.QuoteProducts)
                         {
                             if (quoteProduct.ProductId != product.Id)
@@ -149,8 +163,8 @@ namespace BarrocIntens.Sales
                     db.SaveChanges();
                     savedNote.Visibility = Visibility.Visible;
                 }
-                    
 
+                sendEmail(chosenClient);
             }
             else
             {
@@ -165,16 +179,35 @@ namespace BarrocIntens.Sales
             }
 
         }
+        private async void sendEmail(Models.User client)
+        {
+            
+            string emailAdress = "d295237@edu.curio.nl"; //$"{client.Email}";
+            string bodyText = "Thank you for your purchase, below you will see a summary of your purchase.\n\n";
+            bodyText += "Product Name - Qty - Price - Subtotal\n";
+            bodyText += "-------------------------------------------------------------\n";
+            using (AppDbContext db = new AppDbContext())
+            {
+                
+                foreach (Product product in Get_Products())
+                {
+                    Debug.WriteLine($"{product.QuoteProducts.Count}");
+                    bodyText += $"{product.Name} - {quoteProducts.FirstOrDefault(qp => qp.QuoteId == sentQuote.Id && qp.ProductId == product.Id).Quantity} - €{product.Price} - €{product.Price * quoteProducts.FirstOrDefault(qp => qp.QuoteId == sentQuote.Id && qp.ProductId == product.Id).Quantity}\n";
+                }
+            }
+            bodyText += "-------------------------------------------------------------\n";
+            bodyText += $"Total Price :  €{totalPriceText.Text}";
+            string emailBody = Uri.EscapeDataString(bodyText);
+
+            // Construct the mailto URI
+            string email = $"mailto:{emailAdress}?subject=Your%20Order%20Summary&body={emailBody}";
+            Uri emailUri = new Uri(email);
+            bool success = await Launcher.LaunchUriAsync(emailUri);
+        }
 
         private void products_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            decimal totalPrice = 0;
-
-            foreach (Product product in Get_Products())
-            {
-                totalPrice += product.Price;
-            }
-            totalPriceText.Text = $"{totalPrice}";
+            Get_Products();
         }
     }
 }
