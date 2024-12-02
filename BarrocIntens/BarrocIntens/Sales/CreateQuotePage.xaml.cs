@@ -128,6 +128,7 @@ namespace BarrocIntens.Sales
 
         private void SaveQuote_Click(object sender, RoutedEventArgs e)
         {
+            productError.Visibility = Visibility.Collapsed;
             if (chosenClient != null && products.SelectedItems.Count > 0)
             {
                 using (AppDbContext db = new AppDbContext())
