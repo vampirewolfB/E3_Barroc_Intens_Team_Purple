@@ -47,7 +47,7 @@
                         <DataTemplate x:DataType="xlocal:User">
                             <StackPanel>
                                 <TextBlock Text="{x:Bind Name}"/>
-                                <TextBlock Text="{x:Bind UserName}"
+                                <TextBlock Text="{x:Bind Email}"
                                            FontSize="12"/>
                             </StackPanel>
                         </DataTemplate>

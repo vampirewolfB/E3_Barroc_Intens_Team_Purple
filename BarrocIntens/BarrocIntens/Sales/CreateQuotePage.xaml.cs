@@ -1,4 +1,4 @@
-using BarrocIntens.Uttility.Database;
+using BarrocIntens.Utility.Database;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -182,7 +182,7 @@ namespace BarrocIntens.Sales
         private async void sendEmail(Models.User client)
         {
             
-            string emailAdress = "d295237@edu.curio.nl"; //$"{client.Email}";
+            string emailAdress = $"{client.Email}";
             string bodyText = "Thank you for your purchase, below you will see a summary of your purchase.\n\n";
             bodyText += "Product Name - Qty - Price - Subtotal\n";
             bodyText += "-------------------------------------------------------------\n";
