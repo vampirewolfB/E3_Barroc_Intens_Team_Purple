@@ -77,7 +77,7 @@ namespace BarrocIntens.Utility.Database
                 Faker<User> userFaker = new Faker<User>("nl")
                     .RuleFor(u => u.Id, f => userId++)
                     .RuleFor(u => u.Name, f => f.Name.FirstName())
-                    .RuleFor(u => u.UserName, f => f.Internet.UserName())
+                    .RuleFor(u => u.Email, f => f.Internet.Email())
                     .RuleFor(u => u.Password, f => BCrypt.Net.BCrypt.EnhancedHashPassword("password"))
                     .RuleFor(u => u.RoleId, f => f.Random.ListItem<Role>(roles).Id);
 
@@ -86,7 +86,7 @@ namespace BarrocIntens.Utility.Database
                 {
                     Id = userId++,
                     Name = "adminf",
-                    UserName = "adminf",
+                    Email = "adminf",
                     Password = BCrypt.Net.BCrypt.EnhancedHashPassword("admin"),
                     RoleId = 1,
                 });
@@ -94,7 +94,7 @@ namespace BarrocIntens.Utility.Database
                 {
                     Id = userId++,
                     Name = "admins",
-                    UserName = "admins",
+                    Email = "admins",
                     Password = BCrypt.Net.BCrypt.EnhancedHashPassword("admin"),
                     RoleId = 2,
                 });
@@ -102,7 +102,7 @@ namespace BarrocIntens.Utility.Database
                 {
                     Id = userId++,
                     Name = "admini",
-                    UserName = "admini",
+                    Email = "admini",
                     Password = BCrypt.Net.BCrypt.EnhancedHashPassword("admin"),
                     RoleId = 3,
                 });
@@ -110,7 +110,7 @@ namespace BarrocIntens.Utility.Database
                 {
                     Id = userId++,
                     Name = "adminm",
-                    UserName = "adminm",
+                    Email = "adminm",
                     Password = BCrypt.Net.BCrypt.EnhancedHashPassword("admin"),
                     RoleId = 4,
                 });
@@ -118,7 +118,7 @@ namespace BarrocIntens.Utility.Database
                 {
                     Id = userId++,
                     Name = "adminc",
-                    UserName = "adminc",
+                    Email = "adminc",
                     Password = BCrypt.Net.BCrypt.EnhancedHashPassword("admin"),
                     RoleId = 5,
                 });

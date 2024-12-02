@@ -18,7 +18,7 @@ namespace BarrocIntens.Models
 
         [Column(TypeName = "varchar(255)")]
         [Required]
-        public string UserName { get; set; }
+        public string Email { get; set; }
 
         [Column(TypeName = "varchar(255)")]
         [Required]

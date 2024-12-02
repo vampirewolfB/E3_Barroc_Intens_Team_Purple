@@ -45,6 +45,30 @@ namespace BarrocIntens.Models
                     (int v) => v));
             id.AddAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn);
 
+            var email = runtimeEntityType.AddProperty(
+                "Email",
+                typeof(string),
+                propertyInfo: typeof(User).GetProperty("Email", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(User).GetField("<Email>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+            email.TypeMapping = MySqlStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                keyComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "varchar(255)",
+                    size: 255));
+            email.AddAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.None);
+            email.AddAnnotation("Relational:ColumnType", "varchar(255)");
+
             var name = runtimeEntityType.AddProperty(
                 "Name",
                 typeof(string),
@@ -113,30 +137,6 @@ namespace BarrocIntens.Models
                     (int v) => v,
                     (int v) => v));
             roleId.AddAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.None);
-
-            var userName = runtimeEntityType.AddProperty(
-                "UserName",
-                typeof(string),
-                propertyInfo: typeof(User).GetProperty("UserName", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(User).GetField("<UserName>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-            userName.TypeMapping = MySqlStringTypeMapping.Default.Clone(
-                comparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                keyComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                providerValueComparer: new ValueComparer<string>(
-                    (string v1, string v2) => v1 == v2,
-                    (string v) => v.GetHashCode(),
-                    (string v) => v),
-                mappingInfo: new RelationalTypeMappingInfo(
-                    storeTypeName: "varchar(255)",
-                    size: 255));
-            userName.AddAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.None);
-            userName.AddAnnotation("Relational:ColumnType", "varchar(255)");
 
             var key = runtimeEntityType.AddKey(
                 new[] { id });

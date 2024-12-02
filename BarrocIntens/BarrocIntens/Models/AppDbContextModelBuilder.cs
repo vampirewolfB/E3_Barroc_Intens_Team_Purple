@@ -944,6 +944,8 @@ namespace BarrocIntens.Models
             var defaultTableMappings12 = new List<TableMappingBase<ColumnMappingBase>>();
             user.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings12);
             var barrocIntensModelsUserTableBase = new TableBase("BarrocIntens.Models.User", null, relationalModel);
+            var emailColumnBase = new ColumnBase<ColumnMappingBase>("Email", "varchar(255)", barrocIntensModelsUserTableBase);
+            barrocIntensModelsUserTableBase.Columns.Add("Email", emailColumnBase);
             var idColumnBase12 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsUserTableBase);
             barrocIntensModelsUserTableBase.Columns.Add("Id", idColumnBase12);
             var nameColumnBase3 = new ColumnBase<ColumnMappingBase>("Name", "varchar(45)", barrocIntensModelsUserTableBase);
@@ -952,31 +954,29 @@ namespace BarrocIntens.Models
             barrocIntensModelsUserTableBase.Columns.Add("Password", passwordColumnBase);
             var roleIdColumnBase = new ColumnBase<ColumnMappingBase>("RoleId", "int", barrocIntensModelsUserTableBase);
             barrocIntensModelsUserTableBase.Columns.Add("RoleId", roleIdColumnBase);
-            var userNameColumnBase = new ColumnBase<ColumnMappingBase>("UserName", "varchar(255)", barrocIntensModelsUserTableBase);
-            barrocIntensModelsUserTableBase.Columns.Add("UserName", userNameColumnBase);
             relationalModel.DefaultTables.Add("BarrocIntens.Models.User", barrocIntensModelsUserTableBase);
             var barrocIntensModelsUserMappingBase = new TableMappingBase<ColumnMappingBase>(user, barrocIntensModelsUserTableBase, true);
             barrocIntensModelsUserTableBase.AddTypeMapping(barrocIntensModelsUserMappingBase, false);
             defaultTableMappings12.Add(barrocIntensModelsUserMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase12, user.FindProperty("Id")!, barrocIntensModelsUserMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)emailColumnBase, user.FindProperty("Email")!, barrocIntensModelsUserMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)nameColumnBase3, user.FindProperty("Name")!, barrocIntensModelsUserMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)passwordColumnBase, user.FindProperty("Password")!, barrocIntensModelsUserMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)roleIdColumnBase, user.FindProperty("RoleId")!, barrocIntensModelsUserMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)userNameColumnBase, user.FindProperty("UserName")!, barrocIntensModelsUserMappingBase);
 
             var tableMappings12 = new List<TableMapping>();
             user.SetRuntimeAnnotation("Relational:TableMappings", tableMappings12);
             var userTable = new Table("User", null, relationalModel);
             var idColumn12 = new Column("Id", "int", userTable);
             userTable.Columns.Add("Id", idColumn12);
+            var emailColumn = new Column("Email", "varchar(255)", userTable);
+            userTable.Columns.Add("Email", emailColumn);
             var nameColumn3 = new Column("Name", "varchar(45)", userTable);
             userTable.Columns.Add("Name", nameColumn3);
             var passwordColumn = new Column("Password", "varchar(255)", userTable);
             userTable.Columns.Add("Password", passwordColumn);
             var roleIdColumn = new Column("RoleId", "int", userTable);
             userTable.Columns.Add("RoleId", roleIdColumn);
-            var userNameColumn = new Column("UserName", "varchar(255)", userTable);
-            userTable.Columns.Add("UserName", userNameColumn);
             var pK_User = new UniqueConstraint("PK_User", userTable, new[] { idColumn12 });
             userTable.PrimaryKey = pK_User;
             var pK_UserUc = RelationalModel.GetKey(this,
@@ -998,10 +998,10 @@ namespace BarrocIntens.Models
             userTable.AddTypeMapping(userTableMapping, false);
             tableMappings12.Add(userTableMapping);
             RelationalModel.CreateColumnMapping(idColumn12, user.FindProperty("Id")!, userTableMapping);
+            RelationalModel.CreateColumnMapping(emailColumn, user.FindProperty("Email")!, userTableMapping);
             RelationalModel.CreateColumnMapping(nameColumn3, user.FindProperty("Name")!, userTableMapping);
             RelationalModel.CreateColumnMapping(passwordColumn, user.FindProperty("Password")!, userTableMapping);
             RelationalModel.CreateColumnMapping(roleIdColumn, user.FindProperty("RoleId")!, userTableMapping);
-            RelationalModel.CreateColumnMapping(userNameColumn, user.FindProperty("UserName")!, userTableMapping);
             var fK_Companies_User_UserId = new ForeignKeyConstraint(
                 "FK_Companies_User_UserId", companiesTable, userTable,
                 new[] { userIdColumn },
