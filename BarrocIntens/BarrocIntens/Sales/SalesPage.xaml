@@ -43,6 +43,12 @@
                     <TextBlock Text="Home" TextWrapping="Wrap" />
                 </NavigationViewItem>
                 <NavigationViewItem
+                     Foreground="#212121"
+                     Icon="Shop"
+                     Tag="QuoteCreate">
+                    <TextBlock Text="Create Quote" TextWrapping="Wrap" />
+                </NavigationViewItem>
+                <NavigationViewItem
                     Foreground="#212121"
                     Icon="Emoji"
                     Tag="MYOverview">
