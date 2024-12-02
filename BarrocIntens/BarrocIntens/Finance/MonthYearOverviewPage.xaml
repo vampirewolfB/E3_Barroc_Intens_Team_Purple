@@ -58,7 +58,6 @@
                            Foreground="#ffd700"
                            HorizontalAlignment="Center"
                            Grid.Row="0"/>
-                                                  
                 <lvc:CartesianChart x:Name="ChartView" 
                                     MaxWidth="600"
                                     VerticalAlignment="Stretch"

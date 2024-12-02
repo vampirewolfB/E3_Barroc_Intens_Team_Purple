@@ -13,7 +13,7 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using BarrocIntens.Models;
-using BarrocIntens.Uttility.Database;
+using BarrocIntens.Utility.Database;
 using System.Collections.ObjectModel;
 using Microsoft.EntityFrameworkCore;
 
@@ -46,7 +46,6 @@ namespace BarrocIntens.Finance
                         dbContext.CustomInvoiceProducts
                             .Include(c => c.Product)
                             .Where(c => c.CustomInvoiceId == invoice.Id)
-                            .ToList()
                     );
             }
 

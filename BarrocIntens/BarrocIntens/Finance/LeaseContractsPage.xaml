@@ -1,99 +1,108 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Page
     x:Class="BarrocIntens.Finance.LeaseContractsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:BarrocIntens.Finance"
-    xmlns:models="using:BarrocIntens.Models"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:BarrocIntens.Finance"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    xmlns:models="using:BarrocIntens.Models"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    mc:Ignorable="d">
 
     <Grid RowDefinitions="Auto,*">
-        <TextBlock Grid.Row="0"
-                   Text="Lease Contracts"
-                   Style="{StaticResource TitleTextBlockStyle}"
-                   Margin="0,0,10,0"/>
-        <StackPanel Grid.Row="1"
-                    Margin="0,25">
+        <TextBlock
+            Grid.Row="0"
+            Margin="0,0,10,0"
+            Style="{StaticResource TitleTextBlockStyle}"
+            Text="Lease Contracts" />
+        <StackPanel Grid.Row="1" Margin="0,25">
             <StackPanel Orientation="Horizontal">
-                <ComboBox x:Name="TypeSortComboBox"
-                          SelectionChanged="TypeSortComboBox_SelectionChanged"
-                          Margin="0,0,25,0"
-                          Width="150"/>
-                <AutoSuggestBox x:Name="CompanySearch"
-                                TextChanged="CompanySearch_TextChanged"
-                                PlaceholderText="Type a company name"
-                                QueryIcon="Find"
-                                Width="300"/>
+                <ComboBox
+                    x:Name="TypeSortComboBox"
+                    Width="150"
+                    Margin="0,0,25,0"
+                    SelectionChanged="TypeSortComboBox_SelectionChanged" />
+                <AutoSuggestBox
+                    x:Name="CompanySearch"
+                    Width="300"
+                    PlaceholderText="Type a company name"
+                    QueryIcon="Find"
+                    TextChanged="CompanySearch_TextChanged" />
             </StackPanel>
-            <ListView x:Name="ContractsListView"
-                  ItemClick="ContractsListView_ItemClick"
-                  IsItemClickEnabled="True">
+            <ListView
+                x:Name="ContractsListView"
+                IsItemClickEnabled="True"
+                ItemClick="ContractsListView_ItemClick">
                 <ListView.Header>
-                    <Grid Padding="16,12"
-                      ColumnSpacing="16">
+                    <Grid Padding="16,12" ColumnSpacing="16">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="150"/>
-                            <ColumnDefinition Width="150"/>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="200" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0"
-                               Style="{StaticResource BodyTextBlockStyle}"
-                               Text="Id"/>
-                        <TextBlock Grid.Column="1"
-                               Style="{StaticResource BodyTextBlockStyle}"
-                               Text="Start Date"/>
-                        <TextBlock Grid.Column="2"
-                               Style="{StaticResource BodyTextBlockStyle}"
-                               Text="End Date"/>
-                        <TextBlock Grid.Column="3"
-                               Style="{StaticResource BodyTextBlockStyle}"
-                               Text="Type"/>
-                        <TextBlock Grid.Column="4"
-                               Style="{StaticResource BodyTextBlockStyle}"
-                               Text="Company name"/>
+                        <TextBlock
+                            Grid.Column="0"
+                            Style="{StaticResource BodyTextBlockStyle}"
+                            Text="Id" />
+                        <TextBlock
+                            Grid.Column="1"
+                            Style="{StaticResource BodyTextBlockStyle}"
+                            Text="Start Date" />
+                        <TextBlock
+                            Grid.Column="2"
+                            Style="{StaticResource BodyTextBlockStyle}"
+                            Text="End Date" />
+                        <TextBlock
+                            Grid.Column="3"
+                            Style="{StaticResource BodyTextBlockStyle}"
+                            Text="Type" />
+                        <TextBlock
+                            Grid.Column="4"
+                            Style="{StaticResource BodyTextBlockStyle}"
+                            Text="Company name" />
                     </Grid>
                 </ListView.Header>
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="models:Contract">
-                        <Border BorderThickness="0,0,0,1"
-                            BorderBrush="#ffd700">
+                        <Border BorderBrush="#ffd700" BorderThickness="0,0,0,1">
                             <Grid ColumnSpacing="16">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="80"/>
-                                    <ColumnDefinition Width="150"/>
-                                    <ColumnDefinition Width="150"/>
-                                    <ColumnDefinition Width="80"/>
-                                    <ColumnDefinition Width="200"/>
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="150" />
+                                    <ColumnDefinition Width="150" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="200" />
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0"
-                                       Text="{x:Bind Id}"
-                                       TextWrapping="WrapWholeWords"/>
-                                <TextBlock Grid.Column="1"
-                                       Text="{x:Bind StartDate}"
-                                       TextWrapping="WrapWholeWords"/>
-                                <TextBlock Grid.Column="2"
-                                       Text="{x:Bind EndDate}"
-                                       TextWrapping="WrapWholeWords"/>
-                                <TextBlock Grid.Column="3"
-                                       Text="{x:Bind Type}"
-                                       TextWrapping="WrapWholeWords"/>
-                                <TextBlock Grid.Column="4"
-                                       Text="{x:Bind Company.Name}"
-                                       TextWrapping="WrapWholeWords"/>
+                                <TextBlock
+                                    Grid.Column="0"
+                                    Text="{x:Bind Id}"
+                                    TextWrapping="WrapWholeWords" />
+                                <TextBlock
+                                    Grid.Column="1"
+                                    Text="{x:Bind StartDate}"
+                                    TextWrapping="WrapWholeWords" />
+                                <TextBlock
+                                    Grid.Column="2"
+                                    Text="{x:Bind EndDate}"
+                                    TextWrapping="WrapWholeWords" />
+                                <TextBlock
+                                    Grid.Column="3"
+                                    Text="{x:Bind Type}"
+                                    TextWrapping="WrapWholeWords" />
+                                <TextBlock
+                                    Grid.Column="4"
+                                    Text="{x:Bind Company.Name}"
+                                    TextWrapping="WrapWholeWords" />
                             </Grid>
                         </Border>
                     </DataTemplate>
                 </ListView.ItemTemplate>
                 <ListView.ItemContainerStyle>
-                    <Style BasedOn="{StaticResource DefaultListViewItemStyle}"
-                       TargetType="ListViewItem">
-                        <Setter Property="HorizontalContentAlignment"
-                            Value="Stretch"/>
+                    <Style BasedOn="{StaticResource DefaultListViewItemStyle}" TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     </Style>
                 </ListView.ItemContainerStyle>
             </ListView>

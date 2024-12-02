@@ -46,6 +46,13 @@ namespace BarrocIntens.Finance
                     ContentFrame.Navigate(typeof(LogoPage));
                 }
             }
+            else if (selectedItem == MonthYearOverView)
+            {
+                if (ContentFrame.CurrentSourcePageType != typeof(MonthYearOverviewPage))
+                {
+                    ContentFrame.Navigate(typeof(MonthYearOverviewPage));
+                }
+            }
             else if (selectedItem == LeaseContracts)
             {
                 if (ContentFrame.CurrentSourcePageType != typeof(LeaseContractsPage))
@@ -67,19 +74,44 @@ namespace BarrocIntens.Finance
                     ContentFrame.Navigate(typeof(InvoicesPage));
                 }
             }
-            else if (selectedItem == CreateInvoice)
+            else if (selectedItem == InvoiceCreate)
             {
-                if (ContentFrame.CurrentSourcePageType != typeof(CreateInvoicePage))
+                if (ContentFrame.CurrentSourcePageType != typeof(InvoiceCreatePage))
                 {
-                    ContentFrame.Navigate(typeof(CreateInvoicePage));
+                    ContentFrame.Navigate(typeof(InvoiceCreatePage));
                 }
             }
-            else if (selectedItem == MonthYearOverView)
+        }
+
+        private void ContentFrame_Navigated(object sender, NavigationEventArgs e)
+        {
+            if (ContentFrame.SourcePageType == typeof(LogoPage))
             {
-                if (ContentFrame.CurrentSourcePageType != typeof(MonthYearOverviewPage))
-                {
-                    ContentFrame.Navigate(typeof(MonthYearOverviewPage));
-                }
+                NavigationViewControl.SelectedItem = Home;
+            }
+            else if (ContentFrame.SourcePageType == typeof(MonthYearOverviewPage))
+            {
+                NavigationViewControl.SelectedItem = MonthYearOverView;
+            }
+            else if (ContentFrame.SourcePageType == typeof(LeaseContractsPage))
+            {
+                NavigationViewControl.SelectedItem = LeaseContracts;
+            }
+            else if (ContentFrame.SourcePageType == typeof(LeaseContractCreatePage))
+            {
+                NavigationViewControl.SelectedItem = LeaseContractsCreate;
+            }
+            else if (ContentFrame.SourcePageType == typeof(InvoicesPage))
+            {
+                NavigationViewControl.SelectedItem = Invoices;
+            }
+            else if (ContentFrame.SourcePageType == typeof(ShowInvoicePage))
+            {
+                NavigationViewControl.SelectedItem = null;
+            }
+            else if (ContentFrame.SourcePageType == typeof(InvoiceCreatePage))
+            {
+                NavigationViewControl.SelectedItem = InvoiceCreate;
             }
         }
     }
