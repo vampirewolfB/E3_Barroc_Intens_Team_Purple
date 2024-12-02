@@ -10,18 +10,17 @@ using System.Drawing;
 using System.IO;
 using BarrocIntens.Models;
 using System.Threading.Tasks;
-using Bogus.DataSets;
 using Microsoft.UI.Xaml.Controls;
 using SkiaSharp;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using BarrocIntens.Uttility.Database;
+using BarrocIntens.Utility.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace BarrocIntens.Models
+namespace BarrocIntens.Utility
 {
     public class InvoiceDocument : IDocument
     {
-        Company company;
+        Models.Company company;
         CustomInvoice invoice = null;
         List<Product> products = new List<Product>();
         List<Product> checkProducts = new List<Product>();
@@ -41,15 +40,15 @@ namespace BarrocIntens.Models
         {
             invoice = customInvoice;
             logoData = imageData;
-    
+
             using (AppDbContext db = new AppDbContext())
             {
                 company = db.Companies.Include(c => c.User).FirstOrDefault(c => c.Id == invoice.CompanyId);
                 invoiceProducts = db.CustomInvoiceProducts.Where(p => p.CustomInvoiceId == invoice.Id).Include(ip => ip.Product).ThenInclude(p => p.CustomInvoiceProducts).ToList();
 
-                foreach(CustomInvoiceProduct invoiceProduct in invoiceProducts)
+                foreach (CustomInvoiceProduct invoiceProduct in invoiceProducts)
                 {
-                    this.products.Add(db.Products.FirstOrDefault(p => p.Id == invoiceProduct.ProductId));
+                    products.Add(db.Products.FirstOrDefault(p => p.Id == invoiceProduct.ProductId));
                 }
             }
         }
@@ -136,7 +135,7 @@ namespace BarrocIntens.Models
                     column.Item().AlignRight().Text("Terheijdenseweg 350").FontSize(12).Italic();
                     column.Item().AlignRight().Text("4826 AA Breda").FontSize(12).Italic();
                 });
-                
+
             });
         }
         void ComposeContent(IContainer container)
@@ -150,11 +149,11 @@ namespace BarrocIntens.Models
                 column.Item().AlignRight().Text(text =>
                 {
                     decimal totalPrice = 0;
-                    foreach(Product product in products)
+                    foreach (Product product in products)
                     {
                         if (invoice != null)
                         {
-                            totalPrice += (product.Price * invoiceProducts.FirstOrDefault(ip => ip.ProductId == product.Id).Amount);
+                            totalPrice += product.Price * invoiceProducts.FirstOrDefault(ip => ip.ProductId == product.Id).Amount;
                         }
                         else
                         {
@@ -196,8 +195,8 @@ namespace BarrocIntens.Models
                         return container.DefaultTextStyle(x => x.SemiBold()).PaddingVertical(5).BorderBottom(1).BorderColor(Colors.Black);
                     }
                 });
-                
-                foreach(Product product in products)
+
+                foreach (Product product in products)
                 {
                     table.Cell().Element(CellStyle).Text($"{product.Id}");
                     table.Cell().Element(CellStyle).Text($"{product.Name}");
@@ -213,7 +212,7 @@ namespace BarrocIntens.Models
                         table.Cell().Element(CellStyle).AlignRight().Text($"{product.Price / checkProducts.FirstOrDefault(p => p.Id == product.Id).Price}");
                         table.Cell().Element(CellStyle).AlignRight().Text($"€{product.Price}");
                     }
-                    
+
 
                     static IContainer CellStyle(IContainer container)
                     {

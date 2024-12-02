@@ -1,5 +1,5 @@
 using BarrocIntens.Models;
-using BarrocIntens.Uttility.Database;
+using BarrocIntens.Utility.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.UI.Xaml;
@@ -41,11 +41,8 @@ namespace BarrocIntens.Finance
     /// </summary>
     public sealed partial class MonthYearOverviewPage : Page
     {
-
-
-        List<string> months = new List<string>
-            {
-                "Jan", "Feb", "Mar", "Apr", "May", "Jun", "jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        List<string> months = new List<string> {
+                "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
             };
 
         public MonthYearOverviewPage()
@@ -53,13 +50,10 @@ namespace BarrocIntens.Finance
             this.InitializeComponent();
             year.Text = DateTime.Now.Year.ToString();
 
-
             CreateGraphDataYear(year.Text);
-            CreateGraphDataColumn(year.Text);
-
-            
-            
+            CreateGraphDataColumn(year.Text);          
         }
+
         private void Year_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
             args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
@@ -73,15 +67,32 @@ namespace BarrocIntens.Finance
                 CreateGraphDataColumn(year.Text);
             }    
         }
+
         private void CreateGraphDataColumn(string year)
         {
             List<decimal> profit = new List<decimal>();
             List<decimal> expense = new List<decimal>();
             using (AppDbContext db = new AppDbContext())
             {
-                List<CustomInvoice> invoices = db.CustomInvoices.Where(i => i.PaidAt.Value.Year == int.Parse(year)).Include(i => i.CustomInvoiceProducts).ThenInclude(ip => ip.Product).ToList();
-                List<Quote> quotes = db.Quotes.Where(q => q.Date.Year == int.Parse(year)).Include(q => q.QuoteProducts).ThenInclude(qp => qp.Product).ToList();
-                List<Expense> expenses = db.Expenses.Where(e => e.Date.Year == int.Parse(year) && e.IsApproved == true).Include(e => e.ExpenseProducts).ThenInclude(ep => ep.Product).ToList();
+                List<CustomInvoice> invoices = db.CustomInvoices
+                        .Where(i => i.PaidAt.Value.Year == int.Parse(year))
+                        .Include(i => i.CustomInvoiceProducts)
+                        .ThenInclude(ip => ip.Product)
+                        .AsNoTracking()
+                        .ToList();
+                List<Quote> quotes = db.Quotes
+                        .Where(q => q.Date.Year == int.Parse(year))
+                        .Include(q => q.QuoteProducts)
+                        .ThenInclude(qp => qp.Product)
+                        .AsNoTracking()
+                        .ToList();
+                List<Expense> expenses = db.Expenses
+                        .Where(e => e.Date.Year == int.Parse(year) && e.IsApproved == true)
+                        .Include(e => e.ExpenseProducts)
+                        .ThenInclude(ep => ep.Product)
+                        .AsNoTracking()
+                        .ToList();
+
                 for (int i = 1; i < months.Count; i++)
                 {
                     decimal price = 0;
@@ -168,15 +179,32 @@ namespace BarrocIntens.Finance
             };
 
         }
+
         private void CreateGraphDataYear(string year)
         {
             List<decimal> profit = new List<decimal>();
             List<decimal> expense = new List<decimal>();
             using (AppDbContext db = new AppDbContext())
             {
-                List<CustomInvoice> invoices = db.CustomInvoices.Where(i => i.PaidAt.Value.Year == int.Parse(year)).Include(i => i.CustomInvoiceProducts).ThenInclude(ip => ip.Product).ToList();
-                List<Quote> quotes = db.Quotes.Where(q => q.Date.Year == int.Parse(year)).Include(q => q.QuoteProducts).ThenInclude(qp => qp.Product).ToList();
-                List<Expense> expenses = db.Expenses.Where(e => e.Date.Year == int.Parse(year) && e.IsApproved == true).Include(e => e.ExpenseProducts).ThenInclude(ep => ep.Product).ToList();
+                List<CustomInvoice> invoices = db.CustomInvoices
+                        .Where(i => i.PaidAt.Value.Year == int.Parse(year))
+                        .Include(i => i.CustomInvoiceProducts)
+                        .ThenInclude(ip => ip.Product)
+                        .AsNoTracking()
+                        .ToList();
+                List<Quote> quotes = db.Quotes
+                        .Where(q => q.Date.Year == int.Parse(year))
+                        .Include(q => q.QuoteProducts)
+                        .ThenInclude(qp => qp.Product)
+                        .AsNoTracking()
+                        .ToList();
+                List<Expense> expenses = db.Expenses
+                        .Where(e => e.Date.Year == int.Parse(year) && e.IsApproved == true)
+                        .Include(e => e.ExpenseProducts)
+                        .ThenInclude(ep => ep.Product)
+                        .AsNoTracking()
+                        .ToList();
+
                 for (int i = 1; i < months.Count; i++)
                 {
                     decimal price = 0;

@@ -5,13 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BarrocIntens.Uttility;
+using BarrocIntens.Utility;
 using BarrocIntens.Models;
 using BCrypt.Net;
 using Bogus.DataSets;
 using static BarrocIntens.Models.Contract;
+using System.Diagnostics;
+using System.IO;
 
-namespace BarrocIntens.Uttility.Database
+namespace BarrocIntens.Utility.Database
 {
     internal class AppDbContext : DbContext
     {
@@ -34,21 +36,33 @@ namespace BarrocIntens.Uttility.Database
         // Aanmaken van een connectie met de database.
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySql(
-                $"server={AppSettingLoader.Configuration["Database:Server"]};" +
-                $"port={AppSettingLoader.Configuration["Database:Port"]};" +
-                $"user={AppSettingLoader.Configuration["Database:User"]};" +
-                $"password={AppSettingLoader.Configuration["Database:Password"]};" +
-                $"database={AppSettingLoader.Configuration["Database:Name"]};",
-                ServerVersion.Parse(AppSettingLoader.Configuration["Database:ServerVersion"])
-                );
+            new AppSettingLoader();
+            switch (AppSettingLoader.Configuration["AppEnviorment"].ToLower())
+            {
+                case "local":
+                    optionsBuilder.UseMySql(
+                        AppSettingLoader.Configuration["Database:ConnectionString"],
+                        ServerVersion.Parse(AppSettingLoader.Configuration["Database:ServerVersion"])
+                        )
+                        .UseModel(AppDbContextModel.Instance)
+                        .UseLoggerFactory(Logger.ContextLoggerFactory)
+                        .EnableSensitiveDataLogging()
+                        .EnableDetailedErrors();
+                    break;
+                default:
+                    optionsBuilder.UseMySql(
+                        AppSettingLoader.Configuration["Database:ConnectionString"],
+                        ServerVersion.Parse(AppSettingLoader.Configuration["Database:ServerVersion"])
+                        )
+                        .UseModel(AppDbContextModel.Instance);
+                    break;
+            }
         }
 
         // Seeden van data in de database.
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            Random rnd = new Random();
 
             if (AppSettingLoader.Configuration["AppEnviorment"].ToLower() == "local")
             {
@@ -63,7 +77,7 @@ namespace BarrocIntens.Uttility.Database
                 Faker<User> userFaker = new Faker<User>("nl")
                     .RuleFor(u => u.Id, f => userId++)
                     .RuleFor(u => u.Name, f => f.Name.FirstName())
-                    .RuleFor(u => u.UserName, f => f.Internet.UserName())
+                    .RuleFor(u => u.Email, f => f.Internet.Email())
                     .RuleFor(u => u.Password, f => BCrypt.Net.BCrypt.EnhancedHashPassword("password"))
                     .RuleFor(u => u.RoleId, f => f.Random.ListItem<Role>(roles).Id);
 
@@ -72,7 +86,7 @@ namespace BarrocIntens.Uttility.Database
                 {
                     Id = userId++,
                     Name = "adminf",
-                    UserName = "adminf",
+                    Email = "adminf",
                     Password = BCrypt.Net.BCrypt.EnhancedHashPassword("admin"),
                     RoleId = 1,
                 });
@@ -80,7 +94,7 @@ namespace BarrocIntens.Uttility.Database
                 {
                     Id = userId++,
                     Name = "admins",
-                    UserName = "admins",
+                    Email = "admins",
                     Password = BCrypt.Net.BCrypt.EnhancedHashPassword("admin"),
                     RoleId = 2,
                 });
@@ -88,7 +102,7 @@ namespace BarrocIntens.Uttility.Database
                 {
                     Id = userId++,
                     Name = "admini",
-                    UserName = "admini",
+                    Email = "admini",
                     Password = BCrypt.Net.BCrypt.EnhancedHashPassword("admin"),
                     RoleId = 3,
                 });
@@ -96,7 +110,7 @@ namespace BarrocIntens.Uttility.Database
                 {
                     Id = userId++,
                     Name = "adminm",
-                    UserName = "adminm",
+                    Email = "adminm",
                     Password = BCrypt.Net.BCrypt.EnhancedHashPassword("admin"),
                     RoleId = 4,
                 });
@@ -104,7 +118,7 @@ namespace BarrocIntens.Uttility.Database
                 {
                     Id = userId++,
                     Name = "adminc",
-                    UserName = "adminc",
+                    Email = "adminc",
                     Password = BCrypt.Net.BCrypt.EnhancedHashPassword("admin"),
                     RoleId = 5,
                 });
@@ -215,7 +229,7 @@ namespace BarrocIntens.Uttility.Database
                 int exepenseId = 1;
                 Faker<Expense> expenseFaker = new Faker<Expense>("nl")
                     .RuleFor(e => e.Id, f => exepenseId++)
-                    .RuleFor(e => e.Date, f => f.Date.Recent())
+                    .RuleFor(e => e.Date, f => f.Date.Past())
                     .RuleFor(e => e.UserId, f => f.Random.ListItem<User>(sales).Id)
                     .RuleFor(e => e.IsApproved, f => f.Random.Bool());
 
@@ -237,7 +251,7 @@ namespace BarrocIntens.Uttility.Database
                 int quoteId = 1;
                 Faker<Quote> quoteFaker = new Faker<Quote>("nl")
                     .RuleFor(q => q.Id, f => quoteId++)
-                    .RuleFor(q => q.Date, f => f.Date.Recent())
+                    .RuleFor(q => q.Date, f => f.Date.Past())
                     .RuleFor(q => q.UserId, f => f.Random.ListItem<User>(customers).Id);
 
                 List<Quote> quotes = quoteFaker.Generate(50);

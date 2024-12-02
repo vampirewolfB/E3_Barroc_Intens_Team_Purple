@@ -22,11 +22,13 @@
                     Height="300"
                     Source="Assets/Logo6_groot.png" />
                 <TextBox
-                    x:Name="UserNameTextBox"
+                    x:Name="EmailTextBox"
+                    KeyDown="EmailTextBox_KeyDown"
                     CornerRadius="5"
-                    PlaceholderText="Username" />
+                    PlaceholderText="Email" />
                 <PasswordBox
                     x:Name="PasswordTextBox"
+                    KeyDown="PasswordTextBox_KeyDown"
                     CornerRadius="5"
                     IsPasswordRevealButtonEnabled="True"
                     PlaceholderText="Password" />

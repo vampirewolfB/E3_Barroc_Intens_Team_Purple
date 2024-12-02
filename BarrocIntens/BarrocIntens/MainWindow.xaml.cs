@@ -1,7 +1,7 @@
 using BarrocIntens.Finance;
 using BarrocIntens.Purchase;
 using BarrocIntens.Sales;
-using BarrocIntens.Uttility;
+using BarrocIntens.Utility;
 using Microsoft.Extensions.Configuration;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;

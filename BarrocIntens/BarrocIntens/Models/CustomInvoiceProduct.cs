@@ -26,6 +26,7 @@ namespace BarrocIntens.Models
         [Required]
         public decimal PricePerProduct { get; set; }
 
+        // Calculates the total price of a invoice line
         public string TotalAmount(Decimal price, int amount)
         {
             return (price * amount).ToString();
