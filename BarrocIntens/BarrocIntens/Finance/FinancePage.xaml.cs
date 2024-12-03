@@ -83,6 +83,7 @@ namespace BarrocIntens.Finance
             }
         }
 
+        // Sets the navigationview correctly even if on page that's not in the list there.
         private void ContentFrame_Navigated(object sender, NavigationEventArgs e)
         {
             if (ContentFrame.SourcePageType == typeof(LogoPage))
