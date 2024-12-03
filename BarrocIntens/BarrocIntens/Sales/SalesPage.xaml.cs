@@ -30,7 +30,11 @@ namespace BarrocIntens.Sales
         }
         private void NavigationChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
-
+            NavigationViewItemBase selectedItem = args.SelectedItemContainer;
+            if(selectedItem.Tag.ToString() == "QuoteCreate")
+            {
+                ContentFrame.Navigate(typeof(CreateQuotePage));
+            }
         }
     }
 }

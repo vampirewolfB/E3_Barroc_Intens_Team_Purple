@@ -36,7 +36,7 @@ namespace BarrocIntens.Utility.Database
         // Aanmaken van een connectie met de database.
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            new AppSettingLoader();
+            //new AppSettingLoader();
             switch (AppSettingLoader.Configuration["AppEnviorment"].ToLower())
             {
                 case "local":
