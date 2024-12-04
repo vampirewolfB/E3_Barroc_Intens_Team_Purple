@@ -208,6 +208,7 @@ namespace BarrocIntens.Utility.Database
                     .RuleFor(p => p.Description, f => f.Commerce.ProductDescription())
                     .RuleFor(p => p.ImagePath, f => f.Image.PlaceholderUrl(50, 50))
                     .RuleFor(p => p.Price, f => f.Random.Decimal(0.01m, 10000.00m))
+                    .RuleFor(p => p.InStock, f => f.Random.Int(0, 100000))
                     .RuleFor(p => p.ProductCategoryId, f => f.Random.ListItem<ProductCategory>(productCategories).Id);
 
                 List<Product> products = productFaker.Generate(50);
