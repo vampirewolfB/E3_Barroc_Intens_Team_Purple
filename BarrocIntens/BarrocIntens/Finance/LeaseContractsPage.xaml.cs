@@ -61,7 +61,7 @@ namespace BarrocIntens.Finance
         {
             //Todo: Add way to edit page where you can also delete 
             Contract contract = (Contract)e.ClickedItem;
-            //this.Frame.Navigate(typeof(), contract);
+            this.Frame.Navigate(typeof(LeaseContractsEditPage), contract);
         }
         
         // Filter for the contract type

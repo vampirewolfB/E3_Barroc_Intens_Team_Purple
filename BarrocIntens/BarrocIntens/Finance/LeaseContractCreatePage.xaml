@@ -74,13 +74,13 @@
         </StackPanel>
 
         <StackPanel Grid.Row="3">
-            <DatePicker x:Name="StartDatePicker"
-                        Header="Pick a start date" />
+            <TextBlock>Pick a start date</TextBlock>
+            <DatePicker x:Name="StartDatePicker" />
         </StackPanel>
 
         <StackPanel Grid.Row="4">
-            <DatePicker x:Name="EndDatePicker"
-                Header="Pick a end date" />
+            <TextBlock>Pick a end date</TextBlock>
+            <DatePicker x:Name="EndDatePicker" />
         </StackPanel>
 
         <StackPanel Grid.Row="6">
