@@ -136,6 +136,13 @@ namespace BarrocIntens.Models
                 propertyInfo: typeof(QuoteProduct).GetProperty("Product", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(QuoteProduct).GetField("<Product>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
+            var quoteProducts = principalEntityType.AddNavigation("QuoteProducts",
+                runtimeForeignKey,
+                onDependent: false,
+                typeof(ICollection<QuoteProduct>),
+                propertyInfo: typeof(Product).GetProperty("QuoteProducts", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Product).GetField("<QuoteProducts>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
             return runtimeForeignKey;
         }
 

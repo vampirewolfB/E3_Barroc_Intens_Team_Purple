@@ -33,6 +33,7 @@
     <None Remove="Sales/SalesPage.xaml" />
 	<None Remove="LoginPage.xaml" />
     <None Remove="LogoPage.xaml" />
+    <None Remove="Sales\CreateQuotePage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -89,6 +90,9 @@
     <None Update="Assets\Logo6_klein.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Page Update="Sales\CreateQuotePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Finance\MonthYearOverviewPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

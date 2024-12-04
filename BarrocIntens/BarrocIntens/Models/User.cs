@@ -29,5 +29,6 @@ namespace BarrocIntens.Models
 
         public ICollection<Company> Company { get; set; }
         public ICollection<Note> Notes { get; set; }
+        public ICollection<Quote> Quotes { get; set; }
     }
 }
