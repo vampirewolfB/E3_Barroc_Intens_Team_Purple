@@ -294,7 +294,7 @@ namespace BarrocIntens.Utility.Database
         {
             return [
                 new ProductCategory { Id = 1, Name = "CoffeeBeans", IsEmployeeOnly = false},
-                new ProductCategory { Id = 2, Name = "Machine", IsEmployeeOnly = true},
+                new ProductCategory { Id = 2, Name = "Machine", IsEmployeeOnly = false},
                 new ProductCategory { Id = 3, Name = "Maintenance", IsEmployeeOnly = true}
                 ];
         }
