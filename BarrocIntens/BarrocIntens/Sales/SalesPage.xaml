@@ -11,13 +11,12 @@
 
     <Grid>
         <NavigationView
-            x:Name="navigation"
+            x:Name="NavigationViewControl"
             AlwaysShowHeader="False"
             IsBackButtonVisible="Collapsed"
             IsSettingsVisible="False"
-            OpenPaneLength="175"
             PaneDisplayMode="Left"
-            SelectionChanged="NavigationChanged">
+            SelectionChanged="NavigationViewControl_SelectionChanged">
             <NavigationView.PaneToggleButtonStyle>
                 <Style BasedOn="{StaticResource PaneToggleButtonStyle}" TargetType="Button">
                     <Setter Property="Foreground" Value="#212121" />
@@ -27,8 +26,12 @@
                 <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="#ffd700" />
                 <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="#ffd700" />
             </NavigationView.Resources>
-
-
+            <ScrollViewer Background="#212121">
+                <Frame
+                    x:Name="ContentFrame"
+                    Padding="26"
+                    Navigated="ContentFrame_Navigated" />
+            </ScrollViewer>
             <NavigationView.MenuItems>
                 <NavigationViewItem>
                     <Image
@@ -37,32 +40,40 @@
                         Source="/Assets/Logo6_klein.png" />
                 </NavigationViewItem>
                 <NavigationViewItem
-                    Foreground="#212121"
+                    x:Name="Home"
+                    Content="Home"
+                    Foreground="Black"
                     Icon="Home"
-                    Tag="Home">
-                    <TextBlock Text="Home" TextWrapping="Wrap" />
+                    Tag="Home" />
+                <NavigationViewItem
+                    x:Name="Quotes"
+                    Content="Quotes"
+                    Foreground="Black"
+                    Icon="Shop"
+                    Tag="Quotes">
+                    <NavigationViewItem.MenuItems>
+                        <NavigationViewItem
+                            x:Name="QuotesCreate"
+                            Content="Create Quote"
+                            Foreground="Black"
+                            Tag="QuotesCreate" />
+                    </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
                 <NavigationViewItem
-                     Foreground="#212121"
-                     Icon="Shop"
-                     Tag="QuoteCreate">
-                    <TextBlock Text="Create Quote" TextWrapping="Wrap" />
-                </NavigationViewItem>
-                <NavigationViewItem
-                    Foreground="#212121"
+                    x:Name="Customers"
+                    Content="Customers"
+                    Foreground="Black"
                     Icon="Emoji"
-                    Tag="MYOverview">
-                    <TextBlock Text="Customers" TextWrapping="Wrap" />
+                    Tag="Customers">
+                    <NavigationViewItem.MenuItems>
+                        <NavigationViewItem
+                            x:Name="CustomerCreate"
+                            Content="Create Customer"
+                            Foreground="Black"
+                            Tag="CustomerCreate" />
+                    </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
-            <NavigationView.Content>
-                <ScrollViewer Background="#212121">
-                    <Frame
-                        x:Name="ContentFrame"
-                        Padding="26"
-                        HorizontalAlignment="Center" />
-                </ScrollViewer>
-            </NavigationView.Content>
         </NavigationView>
     </Grid>
 </Page>

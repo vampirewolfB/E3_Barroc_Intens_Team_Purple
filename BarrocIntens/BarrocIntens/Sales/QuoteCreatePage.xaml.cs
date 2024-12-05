@@ -27,13 +27,14 @@ namespace BarrocIntens.Sales
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class CreateQuotePage : Page
+    public sealed partial class QuoteCreatePage : Page
     {
         List<Models.User> clients;
         Models.User chosenClient;
         Quote sentQuote = new Quote();
         List<QuoteProduct> quoteProducts = new List<QuoteProduct>();
-        public CreateQuotePage()
+
+        public QuoteCreatePage()
         {
             this.InitializeComponent();
             using(AppDbContext db = new AppDbContext())
@@ -50,10 +51,12 @@ namespace BarrocIntens.Sales
                     .ToList();
             }
         }
+
         private void Quantity_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
             args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
         }
+
         private void ClientAutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
             if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
@@ -67,6 +70,7 @@ namespace BarrocIntens.Sales
                 sender.ItemsSource = filteredClients;
             }
         }
+
         private void ClientAutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
         {
             if (args.SelectedItem is Models.User client)
@@ -76,6 +80,7 @@ namespace BarrocIntens.Sales
                 sender.Text = client.Name;
             }
         }
+
         private List<Product> Get_Products()
         {
             int quantity = 1;

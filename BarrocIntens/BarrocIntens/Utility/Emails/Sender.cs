@@ -11,14 +11,13 @@ namespace BarrocIntens.Utility.Emails
 {
     internal class Sender
     {
-        public static void Email(MailMessage email)
-        {
-            // Add the send adress 
-            email.From = new MailAddress(
+        public static MailAddress From = new MailAddress(
                 AppSettingLoader.Configuration["Email:SendMail"],
                 AppSettingLoader.Configuration["Email:SendName"]
             );
 
+        public static void Email(MailMessage email)
+        {
             // Create the client to send emails,
             SmtpClient smtpClient = new SmtpClient(
                 AppSettingLoader.Configuration["Email:Host"],

@@ -15,7 +15,7 @@
             Grid.Row="0"
             Margin="0,0,10,0"
             Style="{StaticResource TitleTextBlockStyle}"
-            Text="Lease Contracts" />
+            Text="Invoice Show" />
         <StackPanel Grid.Row="1" Orientation="Vertical">
             <StackPanel.Resources>
                 <Style TargetType="StackPanel">
@@ -46,9 +46,10 @@
                             ClockIdentifier="24HourClock"
                             Header="Pick a time" />
                     </StackPanel>
-                    <TextBlock x:Name="errorTextBlock"
-                               Foreground="Red"
-                               Visibility="Collapsed" />
+                    <TextBlock
+                        x:Name="errorTextBlock"
+                        Foreground="Red"
+                        Visibility="Collapsed" />
                     <Button
                         x:Name="SetPaidButton"
                         Width="100"
