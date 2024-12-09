@@ -34,12 +34,6 @@ namespace BarrocIntens.Finance
         public LeaseContractsEditPage()
         {
             this.InitializeComponent();
-            using (AppDbContext db = new AppDbContext())
-            {
-                companies = db.Companies
-                    .Include(c => c.User)
-                    .ToList();
-            }
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -49,6 +43,13 @@ namespace BarrocIntens.Finance
             {
                 SelectedContract = contract;
                 LeaseContractEdit.DataContext = this;
+                using (AppDbContext db = new AppDbContext())
+                {
+                    companies = db.Companies
+                        .Include(c => c.User)
+                        .ToList();
+                }
+                chosenCompany = companies.FirstOrDefault(c => c.Id == SelectedContract.CompanyId);
             }
             UpdateRadioButtons();
         }
@@ -97,7 +98,7 @@ namespace BarrocIntens.Finance
             LeaseTypeErrorTextBlock.Visibility = Visibility.Collapsed;
 
             // Validate selected company
-            if (chosenCompany == null)
+            if (CompanyAutoSuggestBox.Text == null)
             {
                 CompanyErrorTextBlock.Text = "Please select a valid company.";
                 CompanyErrorTextBlock.Visibility = Visibility.Visible;
@@ -151,15 +152,12 @@ namespace BarrocIntens.Finance
 
             using (AppDbContext db = new AppDbContext())
             {
-                var contractToUpdate = db.Contracts
-                    .Include(c => c.Company)
-                    .FirstOrDefault(c => c.Id == SelectedContract.Id);
+                SelectedContract.CompanyId = chosenCompany.Id;
+                SelectedContract.Type = selectedLeaseType.Value;
+                SelectedContract.StartDate = startDate.Date;
+                SelectedContract.EndDate = endDate.Date;
 
-                contractToUpdate.CompanyId = chosenCompany.Id;
-                contractToUpdate.Type = selectedLeaseType.Value;
-                contractToUpdate.StartDate = startDate.Date;
-                contractToUpdate.EndDate = endDate.Date;
-
+                db.Update(SelectedContract);
                 db.SaveChanges();
                 Frame.Navigate(typeof(LeaseContractsPage));
             }   
@@ -169,17 +167,10 @@ namespace BarrocIntens.Finance
         {
             using (AppDbContext db = new AppDbContext())
             {
-                var contractToDelete = db.Contracts
-                    .Include(c => c.Company)
-                    .FirstOrDefault(c => c.Id == SelectedContract.Id);
-
-                if (contractToDelete != null)
-                {
-                    db.Contracts.Remove(contractToDelete);
-                    db.SaveChanges();
-                    Frame.Navigate(typeof(LeaseContractsPage));
-                }
+                db.Contracts.Remove(SelectedContract);
+                db.SaveChanges();
             }
+            Frame.Navigate(typeof(LeaseContractsPage));
         }
     }
 }

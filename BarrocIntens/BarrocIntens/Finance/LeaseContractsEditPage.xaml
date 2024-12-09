@@ -37,7 +37,6 @@
         <StackPanel Grid.Row="1"
                 Spacing="4">
             <AutoSuggestBox x:Name="CompanyAutoSuggestBox"
-                        Text="{x:Bind SelectedContract.Company.Name}"
                         QueryIcon="Find"
                         TextChanged="CompanyAutoSuggestBox_TextChanged"
                         SuggestionChosen="CompanyAutoSuggestBox_SuggestionChosen"
