@@ -102,6 +102,10 @@ namespace BarrocIntens.Finance
             {
                 NavigationViewControl.SelectedItem = LeaseContractsCreate;
             }
+            else if (ContentFrame.SourcePageType == typeof(LeaseContractsEditPage))
+            {
+                NavigationViewControl.SelectedItem = null;
+            }
             else if (ContentFrame.SourcePageType == typeof(InvoicesPage))
             {
                 NavigationViewControl.SelectedItem = Invoices;
