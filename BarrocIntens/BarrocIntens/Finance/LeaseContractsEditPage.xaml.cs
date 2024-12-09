@@ -10,6 +10,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -84,6 +85,99 @@ namespace BarrocIntens.Finance
                 chosenCompany = company;
 
                 sender.Text = company.Name;
+            }
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            bool isValid = true;
+
+            CompanyErrorTextBlock.Visibility = Visibility.Collapsed;
+            LeaseTypeErrorTextBlock.Visibility = Visibility.Collapsed;
+
+            // Validate selected company
+            if (chosenCompany == null)
+            {
+                CompanyErrorTextBlock.Text = "Please select a valid company.";
+                CompanyErrorTextBlock.Visibility = Visibility.Visible;
+                isValid = false;
+            }
+
+            // Validate lease type selection
+            Contract.PaymentTypes? selectedLeaseType = null;
+            if (PerodicRadioButton.IsChecked == true)
+            {
+                selectedLeaseType = Contract.PaymentTypes.Perodic;
+            }
+            else if (MonthlyRadioButton.IsChecked == true)
+            {
+                selectedLeaseType = Contract.PaymentTypes.Monthly;
+            }
+
+            if (selectedLeaseType == null)
+            {
+                LeaseTypeErrorTextBlock.Text = "Please select a lease type.";
+                LeaseTypeErrorTextBlock.Visibility = Visibility.Visible;
+                isValid = false;
+            }
+
+            DateTimeOffset endDate;
+            if (EndDatePicker?.Date >= DateTime.Now)
+            {
+                endDate = EndDatePicker.Date;
+            }
+            else
+            {
+                endDate = DateTimeOffset.Now.AddYears(1);
+            }
+
+            // Check if the StartDate is set
+            DateTimeOffset startDate;
+            if (StartDatePicker?.Date >= DateTime.Now)
+            {
+                startDate = StartDatePicker.Date;
+            }
+            else
+            {
+                startDate = DateTime.Now;
+            }
+
+            // Check if all validations pass
+            if (!isValid)
+            {
+                return;
+            }
+
+            using (AppDbContext db = new AppDbContext())
+            {
+                var contractToUpdate = db.Contracts
+                    .Include(c => c.Company)
+                    .FirstOrDefault(c => c.Id == SelectedContract.Id);
+
+                contractToUpdate.CompanyId = chosenCompany.Id;
+                contractToUpdate.Type = selectedLeaseType.Value;
+                contractToUpdate.StartDate = startDate.Date;
+                contractToUpdate.EndDate = endDate.Date;
+
+                db.SaveChanges();
+                Frame.Navigate(typeof(LeaseContractsPage));
+            }   
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            using (AppDbContext db = new AppDbContext())
+            {
+                var contractToDelete = db.Contracts
+                    .Include(c => c.Company)
+                    .FirstOrDefault(c => c.Id == SelectedContract.Id);
+
+                if (contractToDelete != null)
+                {
+                    db.Contracts.Remove(contractToDelete);
+                    db.SaveChanges();
+                    Frame.Navigate(typeof(LeaseContractsPage));
+                }
             }
         }
     }

@@ -92,6 +92,7 @@
         <StackPanel Grid.Row="6" 
                     Orientation="Horizontal">
             <Button Content="Save"
+                    Click="SaveButton_Click"
                     Background="#ffd700"
                     Foreground="#212121"
                     CornerRadius="5"
@@ -100,7 +101,8 @@
                     Background="#ffd700"
                     Foreground="#212121"
                     CornerRadius="5"
-                    Padding="8"/>
+                    Padding="8"
+                    Click="DeleteButton_Click"/>
         </StackPanel>
     </Grid>
 </Page>
