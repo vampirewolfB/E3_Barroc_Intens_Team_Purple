@@ -15,7 +15,7 @@
             Grid.Row="0"
             Margin="0,0,10,0"
             Style="{StaticResource TitleTextBlockStyle}"
-            Text="Lease Contracts" />
+            Text="Invoices" />
         <StackPanel Grid.Row="1" Margin="0,25">
             <StackPanel HorizontalAlignment="Left">
                 <AutoSuggestBox

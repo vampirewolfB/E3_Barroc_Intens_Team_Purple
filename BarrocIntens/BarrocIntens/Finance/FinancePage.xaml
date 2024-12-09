@@ -1,71 +1,82 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Page
     x:Class="BarrocIntens.Finance.FinancePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:BarrocIntens.Finance"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:BarrocIntens.Finance"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    mc:Ignorable="d">
 
     <Grid>
-        <NavigationView x:Name="NavigationViewControl"
+        <NavigationView
+            x:Name="NavigationViewControl"
             AlwaysShowHeader="False"
             IsBackButtonVisible="Collapsed"
             IsSettingsVisible="False"
             PaneDisplayMode="Left"
             SelectionChanged="NavigationViewControl_SelectionChanged">
             <NavigationView.PaneToggleButtonStyle>
-                <Style BasedOn="{StaticResource PaneToggleButtonStyle}" 
-                       TargetType="Button">
-                    <Setter Property="Foreground"
-                            Value="black" />
+                <Style BasedOn="{StaticResource PaneToggleButtonStyle}" TargetType="Button">
+                    <Setter Property="Foreground" Value="black" />
                 </Style>
             </NavigationView.PaneToggleButtonStyle>
             <NavigationView.Resources>
-                <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" 
-                                 Color="#ffd700" />
-                <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" 
-                                 Color="#ffd700" />
+                <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="#ffd700" />
+                <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="#ffd700" />
             </NavigationView.Resources>
             <ScrollViewer Background="#212121">
-                <Frame x:Name="ContentFrame"
-                        Padding="26" />
+                <Frame
+                    x:Name="ContentFrame"
+                    Padding="26"
+                    Navigated="ContentFrame_Navigated" />
             </ScrollViewer>
             <NavigationView.MenuItems>
                 <NavigationViewItem>
-                    <Image MinWidth="20"
+                    <Image
+                        MinWidth="20"
                         MaxWidth="100"
                         Source="/Assets/Logo6_klein.png" />
                 </NavigationViewItem>
-                <NavigationViewItem x:Name="Home"
-                                    Foreground="Black"
-                                    Icon="Home"
-                                    Tag="Home"
-                                    Content="Home"/>
-                <NavigationViewItem x:Name="LeaseContracts"
-                                    Foreground="Black"
-                                    Content="Lease Contracts"
-                                    Icon="Paste"
-                                    Tag="LeaseContracts">
+                <NavigationViewItem
+                    x:Name="Home"
+                    Content="Home"
+                    Foreground="Black"
+                    Icon="Home"
+                    Tag="Home" />
+                <NavigationViewItem
+                    x:Name="MonthYearOverView"
+                    Content="Month/Year Overview"
+                    Foreground="Black"
+                    Icon="Calendar"
+                    Tag="MYOvervView" />
+                <NavigationViewItem
+                    x:Name="LeaseContracts"
+                    Content="Lease Contracts"
+                    Foreground="Black"
+                    Icon="Paste"
+                    Tag="LeaseContracts">
                     <NavigationViewItem.MenuItems>
-                        <NavigationViewItem x:Name="LeaseContractsCreate"
-                                            Foreground="Black"
-                                            Tag="LeaseContractsCreate"
-                                            Content="Lease Contracts Create"/>
+                        <NavigationViewItem
+                            x:Name="LeaseContractsCreate"
+                            Content="Lease Contracts Create"
+                            Foreground="Black"
+                            Tag="LeaseContractsCreate" />
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
-                <NavigationViewItem x:Name="Invoices"
-                                    Tag="Invoices"
-                                    Foreground="Black"
-                                    Icon="OpenFile"
-                                    Content="Invoices">
+                <NavigationViewItem
+                    x:Name="Invoices"
+                    Content="Invoices"
+                    Foreground="Black"
+                    Icon="OpenFile"
+                    Tag="Invoices">
                     <NavigationViewItem.MenuItems>
-                        <NavigationViewItem x:Name="CreateInvoice"
-                                            Tag="CreateInvoice"
-                                            Foreground="Black"
-                                            Content="Invoices Create"/>
+                        <NavigationViewItem
+                            x:Name="InvoiceCreate"
+                            Content="Invoices Create"
+                            Foreground="Black"
+                            Tag="InvoiceCreate" />
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
             </NavigationView.MenuItems>

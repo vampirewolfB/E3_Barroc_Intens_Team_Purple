@@ -31,9 +31,13 @@ namespace BarrocIntens.Models
         [Required]
         public decimal Price { get; set; }
 
+        [Column(TypeName = "int")]
+        [Required]
+        public int InStock { get; set; }
         public ProductCategory ProductCategory { get; set; }
         public int ProductCategoryId { get; set; }
 
         public ICollection<CustomInvoiceProduct> CustomInvoiceProducts { get; set; }
+        public ICollection<QuoteProduct> QuoteProducts { get; set; }
     }
 }

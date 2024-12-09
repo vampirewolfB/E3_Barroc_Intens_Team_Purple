@@ -2,9 +2,10 @@ using BarrocIntens.Finance;
 using BarrocIntens.Models;
 using BarrocIntens.Purchase;
 using BarrocIntens.Sales;
-using BarrocIntens.Uttility.Database;
+using BarrocIntens.Utility.Database;
 using BCrypt.Net;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -36,11 +37,34 @@ namespace BarrocIntens
             this.InitializeComponent();
         }
 
+        private void EmailTextBox_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                LoginUser();
+            }
+        }
+
+        // Allow for enter to be used as input as well.
+        private void PasswordTextBox_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                LoginUser();
+            }
+        }
+
+        // Allow for enter to be used as input
         private void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            LoginUser();
+        }
+
+        private void LoginUser()
         {
             // Zet de error textbox zichtbaarheid op collapsed en checkt of de velden zijn ingevuld
             ErrorTextBox.Visibility = Visibility.Collapsed;
-            if (String.IsNullOrEmpty(UserNameTextBox.Text) || String.IsNullOrEmpty(PasswordTextBox.Password.ToString()))
+            if (String.IsNullOrEmpty(EmailTextBox.Text) || String.IsNullOrEmpty(PasswordTextBox.Password.ToString()))
             {
                 ErrorTextBox.Text = "Een of meer velden niet ingevuld";
                 ErrorTextBox.Visibility = Visibility.Visible;
@@ -52,21 +76,22 @@ namespace BarrocIntens
             using (AppDbContext dbContext = new AppDbContext())
             {
                 user = dbContext.User
-                    .Where(u => u.UserName == UserNameTextBox.Text.ToString())
+                    .Where(u => u.Email == EmailTextBox.Text.ToString())
                     .Include(u => u.Role)
+                    .AsNoTracking()
                     .FirstOrDefault();
             }
 
             // Check of de gebruiker bestaat en het wachtwoord correct is.
             if (user is null)
             {
-                ErrorTextBox.Text = "Gebruikersnaam of wachtwoord incorect.";
+                ErrorTextBox.Text = "Email of wachtwoord incorect.";
                 ErrorTextBox.Visibility = Visibility.Visible;
                 return;
             }
             if (!BCrypt.Net.BCrypt.EnhancedVerify(PasswordTextBox.Password.ToString(), user.Password))
             {
-                ErrorTextBox.Text = "Gebruikersnaam of wachtwoord incorect.";
+                ErrorTextBox.Text = "Email of wachtwoord incorect.";
                 ErrorTextBox.Visibility = Visibility.Visible;
                 return;
             }
