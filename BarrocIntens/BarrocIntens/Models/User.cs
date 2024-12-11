@@ -24,6 +24,9 @@ namespace BarrocIntens.Models
         [Required]
         public string Password { get; set; }
 
+        [Column(TypeName = "tinyint")]
+        public bool FirstLogin { get; set; }
+
         public Role Role { get; set; }
         public int RoleId { get; set; }
 

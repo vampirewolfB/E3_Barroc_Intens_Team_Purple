@@ -107,6 +107,7 @@ namespace BarrocIntens.Sales
                     Name = NameTextBox.Text,
                     Email = EmailTextBox.Text,
                     Password = BCrypt.Net.BCrypt.EnhancedHashPassword(password),
+                    FirstLogin = false,
                     RoleId = dbContext.Roles.Where(r => r.Name.ToLower() == "customer").FirstOrDefault().Id
                 });
                 dbContext.SaveChanges();

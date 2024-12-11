@@ -43,7 +43,7 @@ namespace BarrocIntens.Utility.Database
         // Aanmaken van een connectie met de database.
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            new AppSettingLoader();
+            //new AppSettingLoader();
             switch (AppSettingLoader.Configuration["AppEnviorment"].ToLower())
             {
                 case "local":
@@ -86,6 +86,7 @@ namespace BarrocIntens.Utility.Database
                     .RuleFor(u => u.Name, f => f.Name.FirstName())
                     .RuleFor(u => u.Email, f => f.Internet.Email())
                     .RuleFor(u => u.Password, f => BCrypt.Net.BCrypt.EnhancedHashPassword("password"))
+                    .RuleFor(u => u.FirstLogin, f => f.Random.Bool())
                     .RuleFor(u => u.RoleId, f => f.Random.ListItem<Role>(roles).Id);
 
                 List<User> users = userFaker.Generate(250);
@@ -95,6 +96,7 @@ namespace BarrocIntens.Utility.Database
                     Name = "adminf",
                     Email = "adminf",
                     Password = BCrypt.Net.BCrypt.EnhancedHashPassword("admin"),
+                    FirstLogin = false,
                     RoleId = 1,
                 });
                 users.Add(new User
@@ -103,6 +105,7 @@ namespace BarrocIntens.Utility.Database
                     Name = "admins",
                     Email = "admins",
                     Password = BCrypt.Net.BCrypt.EnhancedHashPassword("admin"),
+                    FirstLogin = false,
                     RoleId = 2,
                 });
                 users.Add(new User
@@ -111,6 +114,7 @@ namespace BarrocIntens.Utility.Database
                     Name = "admini",
                     Email = "admini",
                     Password = BCrypt.Net.BCrypt.EnhancedHashPassword("admin"),
+                    FirstLogin = false,
                     RoleId = 3,
                 });
                 users.Add(new User
@@ -119,6 +123,7 @@ namespace BarrocIntens.Utility.Database
                     Name = "adminm",
                     Email = "adminm",
                     Password = BCrypt.Net.BCrypt.EnhancedHashPassword("admin"),
+                    FirstLogin = false,
                     RoleId = 4,
                 });
                 users.Add(new User
@@ -127,6 +132,7 @@ namespace BarrocIntens.Utility.Database
                     Name = "adminc",
                     Email = "adminc",
                     Password = BCrypt.Net.BCrypt.EnhancedHashPassword("admin"),
+                    FirstLogin = false,
                     RoleId = 5,
                 });
                 modelBuilder.Entity<User>().HasData(users);
