@@ -7,16 +7,19 @@ using System.Threading.Tasks;
 
 namespace BarrocIntens.Models
 {
-    internal class QuoteProduct
+    internal class ContractProduct
     {
         public int Id { get; set; }
 
         [Column(TypeName = "int")]
-        public int Quantity { get; set; }
+        public int Amount { get; set; }
 
-        public Quote Quote { get; set; }
-        public int QuoteId { get; set; }
+        [Column(TypeName = "decimal(8,2)")]
+        public decimal LeassedPrice { get; set; }
 
+        public Contract Contract { get; set; }
+        public int ContractId { get; set; }
+        
         public Product Product { get; set; }
         public int ProductId { get; set; }
     }

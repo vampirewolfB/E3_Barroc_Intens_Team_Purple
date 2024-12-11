@@ -12,19 +12,19 @@ namespace BarrocIntens.Models
     {
         public int Id { get; set; }
 
-        public CustomInvoice CustomInvoice { get; set; }
-        public int CustomInvoiceId { get; set; }
-
-        public Product Product { get; set; }
-        public int ProductId { get; set; }
+        [Column(TypeName = "decimal(8, 2)")]
+        [Required]
+        public decimal PricePerProduct { get; set; }
 
         [Column(TypeName = "int")]
         [Required]
         public int Amount { get; set; }
 
-        [Column(TypeName = "decimal(8, 2)")]
-        [Required]
-        public decimal PricePerProduct { get; set; }
+        public CustomInvoice CustomInvoice { get; set; }
+        public int CustomInvoiceId { get; set; }
+
+        public Product Product { get; set; }
+        public int ProductId { get; set; }
 
         // Calculates the total price of a invoice line
         public string TotalAmount(Decimal price, int amount)

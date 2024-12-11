@@ -12,15 +12,20 @@ namespace BarrocIntens.Models
     {
         public int Id { get; set; }
 
-        public Company Company { get; set; }
-        public int CompanyId { get; set; }
-
         [Column(TypeName ="longtext")]
         [Required]
         public string Remark { get; set; }
 
         [Column(TypeName = "datetime(6)")]
         [Required]
-        public DateTime DateAdded { get; set; }
+        public DateTime PlannedDate { get; set; }
+
+        [Column(TypeName = "datetime(6)")]
+        public DateTime? FinishedDate { get; set; }
+
+        public User User { get; set; }
+        public int UserId { get; set; }
+    
+        public ICollection<MaintenaceAppointmentWorkOrder> MaintenaceAppointmentWorkOrders { get; set; }
     }
 }

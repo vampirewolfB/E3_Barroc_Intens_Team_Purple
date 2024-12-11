@@ -20,6 +20,5 @@ namespace BarrocIntens.Models
         public int UserId { get; set; }
 
         public ICollection<QuoteProduct> QuoteProducts { get; set; }
-        public ICollection<Product> Products { get; set; }
     }
 }

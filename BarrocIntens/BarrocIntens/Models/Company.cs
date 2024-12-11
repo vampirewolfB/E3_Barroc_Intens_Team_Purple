@@ -45,7 +45,6 @@ namespace BarrocIntens.Models
         public int UserId { get; set; }
 
         public ICollection<Note> Notes { get; set; }
-        public ICollection<MaintenaceAppointment> MaintenaceAppointments { get; set; }
         public ICollection<CustomInvoice> CustomInvoices { get; set; }
         public ICollection<Contract> Contracts { get; set; }
     }

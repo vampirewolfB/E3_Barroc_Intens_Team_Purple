@@ -15,12 +15,12 @@ namespace BarrocIntens.Models
         [Column(TypeName = "datetime(6)")]
         [Required]
         public DateTime Date { get; set; }
+        
+        [Column(TypeName = "tinyint")]
+        public bool IsApproved { get; set; }
 
         public User User { get; set; }
         public int UserId { get; set; }
-
-        [Column(TypeName = "tinyint")]
-        public bool IsApproved { get; set; }
 
         public ICollection<ExpenseProduct> ExpenseProducts { get; set; }
         public ICollection<Product> Products { get; set; }

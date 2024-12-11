@@ -12,6 +12,7 @@ using Bogus.DataSets;
 using static BarrocIntens.Models.Contract;
 using System.Diagnostics;
 using System.IO;
+using static BarrocIntens.Models.MaintenanceRequest;
 
 namespace BarrocIntens.Utility.Database
 {
@@ -21,22 +22,28 @@ namespace BarrocIntens.Utility.Database
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<Models.Company> Companies { get; set; }
-        public DbSet<Note> Notes { get; set; }
-        public DbSet<MaintenaceAppointment> MaintenaceAppointments { get; set; }
-        public DbSet<Contract> Contracts { get; set; }
-        public DbSet<CustomInvoice> CustomInvoices { get; set; }
-        public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductCategory> ProductCategories { get; set; }
+        public DbSet<Note> Notes { get; set; }
+        public DbSet<CustomInvoice> CustomInvoices { get; set; }
         public DbSet<CustomInvoiceProduct> CustomInvoiceProducts { get; set; }
+        public DbSet<Contract> Contracts { get; set; }
+        public DbSet<ContractProduct> ContractProducts { get; set; }
         public DbSet<Expense> Expenses { get; set; }
         public DbSet<ExpenseProduct> ExpenseProducts { get; set; }
         public DbSet<Quote> Quotes { get; set; }
         public DbSet<QuoteProduct> QuoteProducts { get; set; }
+        public DbSet<MaintenanceRequest> MaintenanceRequests { get; set; }
+        public DbSet<MaintenaceAppointment> MaintenaceAppointments { get; set; }
+        public DbSet<WorkOrder> WorkOrders { get; set; }
+        public DbSet<WorkOrderHours> WorkOrderHours { get; set; }
+        public DbSet<WorkOrderMaterials> WorkOrderMaterials { get; set; }
+        public DbSet<MaintenaceAppointmentWorkOrder> MaintenaceAppointmentWorkOrders { get; set; }
 
         // Aanmaken van een connectie met de database.
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //new AppSettingLoader();
+            new AppSettingLoader();
             switch (AppSettingLoader.Configuration["AppEnviorment"].ToLower())
             {
                 case "local":
@@ -144,28 +151,58 @@ namespace BarrocIntens.Utility.Database
                 List<Models.Company> companies = companyFaker.Generate(100);
                 modelBuilder.Entity<Models.Company>().HasData(companies);
 
+                // Product category seeder
+                List<ProductCategory> productCategories = SeedProductCategoriesSeeder();
+                modelBuilder.Entity<ProductCategory>().HasData(productCategories);
+
+                // Product seeder
+                int productId = 1;
+                Faker<Product> productFaker = new Faker<Product>("nl")
+                    .RuleFor(p => p.Id, f => productId++)
+                    .RuleFor(p => p.Name, f => f.Commerce.Product())
+                    .RuleFor(p => p.Description, f => f.Commerce.ProductDescription())
+                    .RuleFor(p => p.ImagePath, f => f.Image.PlaceholderUrl(50, 50))
+                    .RuleFor(p => p.Price, f => f.Random.Decimal(0.01m, 10000.00m))
+                    .RuleFor(p => p.InStock, f => f.Random.Int(0, 100000))
+                    .RuleFor(p => p.ProductCategoryId, f => f.Random.ListItem<ProductCategory>(productCategories).Id);
+
+                List<Product> products = productFaker.Generate(50);
+                modelBuilder.Entity<Product>().HasData(products);
+
                 // Note seeder
                 int noteId = 1;
                 Faker<Note> noteFaker = new Faker<Note>("nl")
                     .RuleFor(n => n.Id, f => noteId++)
                     .RuleFor(n => n.Notes, f => f.Lorem.Text())
                     .RuleFor(n => n.Date, f => f.Date.Recent())
-                    .RuleFor(n => n.UserId, f => f.Random.ListItem<User>(sales).Id)
-                    .RuleFor(n => n.CompanyId, f => f.Random.ListItem<Models.Company>(companies).Id);
+                    .RuleFor(n => n.CompanyId, f => f.Random.ListItem<Models.Company>(companies).Id)
+                    .RuleFor(n => n.UserId, f => f.Random.ListItem<User>(sales).Id);
 
                 List<Note> notes = noteFaker.Generate(75);
                 modelBuilder.Entity<Note>().HasData(notes);
 
-                // Maintenace Appointments seeder
-                int maintenaceAppointmentId = 1;
-                Faker<MaintenaceAppointment> maintenaceAppointmentFaker = new Faker<MaintenaceAppointment>("nl")
-                    .RuleFor(m => m.Id, f => maintenaceAppointmentId++)
-                    .RuleFor(m => m.CompanyId, f => f.Random.ListItem<Models.Company>(companies).Id)
-                    .RuleFor(m => m.Remark, f => f.Lorem.Text())
-                    .RuleFor(m => m.DateAdded, f => f.Date.Recent());
+                // Custom invoice seeder
+                int customInvoiceId = 1;
+                Faker<CustomInvoice> customerInvoiceFaker = new Faker<CustomInvoice>("nl")
+                    .RuleFor(c => c.Id, f => customInvoiceId++)
+                    .RuleFor(c => c.Date, f => f.Date.Recent())
+                    .RuleFor(c => c.PaidAt, f => f.Date.Recent().OrNull(f))
+                    .RuleFor(c => c.CompanyId, f => f.Random.ListItem<Models.Company>(companies).Id);
 
-                List<MaintenaceAppointment> maintenaceAppointments = maintenaceAppointmentFaker.Generate(25);
-                modelBuilder.Entity<MaintenaceAppointment>().HasData(maintenaceAppointments);
+                List<CustomInvoice> customInvoices = customerInvoiceFaker.Generate(50);
+                modelBuilder.Entity<CustomInvoice>().HasData(customInvoices);
+
+                // Custom Invoice Product Seeder
+                int customInvoiceProductId = 1;
+                Faker<CustomInvoiceProduct> customInvoiceProductFaker = new Faker<CustomInvoiceProduct>("nl")
+                    .RuleFor(c => c.Id, f => customInvoiceProductId++)
+                    .RuleFor(c => c.Amount, f => f.Random.Int(1, 1000))
+                    .RuleFor(c => c.PricePerProduct, f => f.Random.Decimal(0.01m, 10000.00m))
+                    .RuleFor(c => c.CustomInvoiceId, f => f.Random.ListItem<CustomInvoice>(customInvoices).Id)
+                    .RuleFor(c => c.ProductId, f => f.Random.ListItem<Product>(products).Id);
+
+                List<CustomInvoiceProduct> customInvoiceProducts = customInvoiceProductFaker.Generate(50);
+                modelBuilder.Entity<CustomInvoiceProduct>().HasData(customInvoiceProducts);
 
                 // Contracts Seeder
                 int contractId = 1;
@@ -185,54 +222,25 @@ namespace BarrocIntens.Utility.Database
                 List<Contract> contracts = contractFaker.Generate(50);
                 modelBuilder.Entity<Contract>().HasData(contracts);
 
-                // Custom invoice seeder
-                int customInvoiceId = 1;
-                Faker<CustomInvoice> customerInvoiceFaker = new Faker<CustomInvoice>("nl")
-                    .RuleFor(c => c.Id, f => customInvoiceId++)
-                    .RuleFor(c => c.Date, f => f.Date.Recent())
-                    .RuleFor(c => c.PaidAt, f => f.Date.Recent().OrNull(f))
-                    .RuleFor(c => c.CompanyId, f => f.Random.ListItem<Models.Company>(companies).Id);
+                // Contract product seeder
+                int contractProductId = 1;
+                Faker<ContractProduct> contractProductFaker = new Faker<ContractProduct>("nl")
+                    .RuleFor(c => c.Id, f => contractProductId++)
+                    .RuleFor(c => c.Amount, f => f.Random.Int(1))
+                    .RuleFor(c => c.LeassedPrice, f => f.Random.Decimal(0.01m, 10000.00m))
+                    .RuleFor(c => c.ContractId, f => f.Random.ListItem<Contract>(contracts).Id)
+                    .RuleFor(c => c.ProductId, f => f.Random.ListItem<Product>(products).Id);
 
-                List<CustomInvoice> customInvoices = customerInvoiceFaker.Generate(50);
-                modelBuilder.Entity<CustomInvoice>().HasData(customInvoices);
-
-                // Product category seeder
-                List<ProductCategory> productCategories = SeedProductCategoriesSeeder();
-                modelBuilder.Entity<ProductCategory>().HasData(productCategories);
-
-                // Product seeder
-                int productId = 1;
-                Faker<Product> productFaker = new Faker<Product>("nl")
-                    .RuleFor(p => p.Id, f => productId++)
-                    .RuleFor(p => p.Name, f => f.Commerce.Product())
-                    .RuleFor(p => p.Description, f => f.Commerce.ProductDescription())
-                    .RuleFor(p => p.ImagePath, f => f.Image.PlaceholderUrl(50, 50))
-                    .RuleFor(p => p.Price, f => f.Random.Decimal(0.01m, 10000.00m))
-                    .RuleFor(p => p.InStock, f => f.Random.Int(0, 100000))
-                    .RuleFor(p => p.ProductCategoryId, f => f.Random.ListItem<ProductCategory>(productCategories).Id);
-
-                List<Product> products = productFaker.Generate(50);
-                modelBuilder.Entity<Product>().HasData(products);
-
-                // Custom Invoice Product Seeder
-                int customInvoiceProductId = 1;
-                Faker<CustomInvoiceProduct> customInvoiceProductFaker = new Faker<CustomInvoiceProduct>("nl")
-                    .RuleFor(c => c.Id, f => customInvoiceProductId++)
-                    .RuleFor(c => c.CustomInvoiceId, f => f.Random.ListItem<CustomInvoice>(customInvoices).Id)
-                    .RuleFor(c => c.ProductId, f => f.Random.ListItem<Product>(products).Id)
-                    .RuleFor(c => c.Amount, f => f.Random.Int(1, 1000))
-                    .RuleFor(c => c.PricePerProduct, f => f.Random.Decimal(0.01m, 10000.00m));
-
-                List<CustomInvoiceProduct> customInvoiceProducts = customInvoiceProductFaker.Generate(50);
-                modelBuilder.Entity<CustomInvoiceProduct>().HasData(customInvoiceProducts);
+                List<ContractProduct> contractProducts = contractProductFaker.Generate(100);
+                modelBuilder.Entity<ContractProduct>().HasData(contractProducts);
 
                 // Expense seeder
                 int exepenseId = 1;
                 Faker<Expense> expenseFaker = new Faker<Expense>("nl")
                     .RuleFor(e => e.Id, f => exepenseId++)
                     .RuleFor(e => e.Date, f => f.Date.Past())
-                    .RuleFor(e => e.UserId, f => f.Random.ListItem<User>(sales).Id)
-                    .RuleFor(e => e.IsApproved, f => f.Random.Bool());
+                    .RuleFor(e => e.IsApproved, f => f.Random.Bool())
+                    .RuleFor(e => e.UserId, f => f.Random.ListItem<User>(sales).Id);
 
                 List<Expense> expenses = expenseFaker.Generate(50);
                 modelBuilder.Entity<Expense>().HasData(expenses);
@@ -241,9 +249,9 @@ namespace BarrocIntens.Utility.Database
                 int expenseProductId = 1;
                 Faker<ExpenseProduct> expenseProductFaker = new Faker<ExpenseProduct>("nl")
                     .RuleFor(e => e.Id, f => expenseProductId++)
+                    .RuleFor(e => e.Quantity, f => f.Random.Int(1, 1000))
                     .RuleFor(e => e.ProductId, f => f.Random.ListItem<Product>(products).Id)
-                    .RuleFor(e => e.ExpenseId, f => f.Random.ListItem<Expense>(expenses).Id)
-                    .RuleFor(e => e.Quantity, f => f.Random.Int(1, 1000));
+                    .RuleFor(e => e.ExpenseId, f => f.Random.ListItem<Expense>(expenses).Id);
 
                 List<ExpenseProduct> expenseProducts = expenseProductFaker.Generate(100);
                 modelBuilder.Entity<ExpenseProduct>().HasData(expenseProducts);
@@ -262,12 +270,80 @@ namespace BarrocIntens.Utility.Database
                 int quoteProductId = 1;
                 Faker<QuoteProduct> quoteProductFaker = new Faker<QuoteProduct>("nl")
                     .RuleFor(q => q.Id, f => quoteProductId++)
+                    .RuleFor(q => q.Quantity, f => f.Random.Int(1, 1000))
                     .RuleFor(q => q.ProductId, f => f.Random.ListItem<Product>(products).Id)
-                    .RuleFor(q => q.QuoteId, f => f.Random.ListItem<Quote>(quotes).Id)
-                    .RuleFor(q => q.Quantity, f => f.Random.Int(1, 1000));
+                    .RuleFor(q => q.QuoteId, f => f.Random.ListItem<Quote>(quotes).Id);
 
                 List<QuoteProduct> quoteProducts = quoteProductFaker.Generate(100);
                 modelBuilder.Entity<QuoteProduct>().HasData(quoteProducts);
+
+                // Maintenance Requests seeder
+                int maintenanceRequestId = 1;
+                Faker<MaintenanceRequest> maintenanceRequestFaker = new Faker<MaintenanceRequest>("nl")
+                    .RuleFor(m => m.Id, f => maintenanceRequestId++)
+                    .RuleFor(m => m.Title, f => f.Lorem.Word())
+                    .RuleFor(m => m.Description, f => f.Lorem.Text())
+                    .RuleFor(m => m.Type, f => f.PickRandom<RequestType>())
+                    .RuleFor(m => m.UserId, f => f.Random.ListItem<User>(customers).Id);
+
+                List<MaintenanceRequest> maintenanceRequests = maintenanceRequestFaker.Generate(100);
+                modelBuilder.Entity<MaintenanceRequest>().HasData(maintenanceRequests);
+
+                // Maintenace Appointments seeder
+                int maintenaceAppointmentId = 1;
+                Faker<MaintenaceAppointment> maintenaceAppointmentFaker = new Faker<MaintenaceAppointment>("nl")
+                    .RuleFor(m => m.Id, f => maintenaceAppointmentId++)
+                    .RuleFor(m => m.Remark, f => f.Lorem.Text())
+                    .RuleFor(m => m.PlannedDate, f => f.Date.Recent())
+                    .RuleFor(m => m.FinishedDate, f => f.Date.Future().OrNull(f, 0.5f))
+                    .RuleFor(m => m.UserId, f => f.Random.ListItem<User>(customers).Id);
+
+                List<MaintenaceAppointment> maintenaceAppointments = maintenaceAppointmentFaker.Generate(25);
+                modelBuilder.Entity<MaintenaceAppointment>().HasData(maintenaceAppointments);
+
+                // WorkerOrder seeder
+                int workOrderId = 1;
+                Faker<WorkOrder> workOrderFaker = new Faker<WorkOrder>("nl")
+                    .RuleFor(w => w.Id, f => workOrderId++)
+                    .RuleFor(w => w.Title, f => f.Lorem.Word())
+                    .RuleFor(w => w.Description, f => f.Lorem.Text())
+                    .RuleFor(w => w.Date, f => f.Date.Recent());
+
+                List<WorkOrder> workOrders = workOrderFaker.Generate(50);
+                modelBuilder.Entity<WorkOrder>().HasData(workOrders);
+
+                // WorkOrder Hour seeder
+                int workOrderHourId = 1;
+                Faker<WorkOrderHours> workOrderHour = new Faker<WorkOrderHours>("nl")
+                    .RuleFor(w => w.Id, f => workOrderHourId++)
+                    .RuleFor(w => w.StartTime, f => f.Date.Recent())
+                    .RuleFor(w => w.EndTime, f => f.Date.Recent())
+                    .RuleFor(w => w.WorkOrderId, f => f.Random.ListItem<WorkOrder>(workOrders).Id);
+
+                List<WorkOrderHours> workOrderHours = workOrderHour.Generate(50);
+                modelBuilder.Entity<WorkOrderHours>().HasData(workOrderHours);
+
+                // Workorder Materials seeder
+                int workOrderMaterialId = 1;
+                Faker<WorkOrderMaterials> workOrderMaterialFaker = new Faker<WorkOrderMaterials>("nl")
+                    .RuleFor(w => w.Id, f => workOrderMaterialId++)
+                    .RuleFor(w => w.Amount, f => f.Random.Int(1))
+                    .RuleFor(w => w.PricePerMaterial, f => f.Random.Decimal(0.01m, 10000.00m))
+                    .RuleFor(w => w.ProductId, f => f.Random.ListItem<Product>(products.Where(p => p.Id == 3).ToList()).Id)
+                    .RuleFor(w => w.WorkOrderId, f => f.Random.ListItem<WorkOrder>(workOrders).Id);
+
+                List<WorkOrderMaterials> workOrderMaterials = workOrderMaterialFaker.Generate(100);
+                modelBuilder.Entity<WorkOrderMaterials>().HasData(workOrderMaterials);
+
+                // MaintenaceAppointment WorkOrder seeder
+                int maintenaceAppointmentWorkOrderId = 1;
+                Faker<MaintenaceAppointmentWorkOrder> maintenaceAppointmentWorkOrderFaker = new Faker<MaintenaceAppointmentWorkOrder>("nl")
+                    .RuleFor(m => m.Id, f => maintenaceAppointmentWorkOrderId++)
+                    .RuleFor(m => m.MaintenaceAppointmentId, f => f.Random.ListItem<MaintenaceAppointment>(maintenaceAppointments).Id)
+                    .RuleFor(m => m.WorkOrderId, f => f.Random.ListItem<WorkOrder>(workOrders).Id);
+
+                List<MaintenaceAppointmentWorkOrder> maintenaceAppointmentWorkOrders = maintenaceAppointmentWorkOrderFaker.Generate(100);
+                modelBuilder.Entity<MaintenaceAppointmentWorkOrder>().HasData(maintenaceAppointmentWorkOrders);
             }
             else
             {
@@ -296,7 +372,7 @@ namespace BarrocIntens.Utility.Database
             return [
                 new ProductCategory { Id = 1, Name = "CoffeeBeans", IsEmployeeOnly = false},
                 new ProductCategory { Id = 2, Name = "Machine", IsEmployeeOnly = false},
-                new ProductCategory { Id = 3, Name = "Maintenance", IsEmployeeOnly = true}
+                new ProductCategory { Id = 3, Name = "Material", IsEmployeeOnly = true}
                 ];
         }
     }

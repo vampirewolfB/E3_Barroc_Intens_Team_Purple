@@ -39,5 +39,8 @@ namespace BarrocIntens.Models
 
         public ICollection<CustomInvoiceProduct> CustomInvoiceProducts { get; set; }
         public ICollection<QuoteProduct> QuoteProducts { get; set; }
+        public ICollection<WorkOrderMaterials> WorkOrderMaterials { get; set; }
+        public ICollection<ExpenseProduct> ExpenseProducts { get; set; }
+        public ICollection<ContractProduct> ContractProducts { get; set; }
     }
 }

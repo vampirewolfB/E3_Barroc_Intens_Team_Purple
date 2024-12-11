@@ -18,11 +18,14 @@ namespace BarrocIntens.Models
         {
             var company = CompanyEntityType.Create(this);
             var contract = ContractEntityType.Create(this);
+            var contractProduct = ContractProductEntityType.Create(this);
             var customInvoice = CustomInvoiceEntityType.Create(this);
             var customInvoiceProduct = CustomInvoiceProductEntityType.Create(this);
             var expense = ExpenseEntityType.Create(this);
             var expenseProduct = ExpenseProductEntityType.Create(this);
             var maintenaceAppointment = MaintenaceAppointmentEntityType.Create(this);
+            var maintenaceAppointmentWorkOrder = MaintenaceAppointmentWorkOrderEntityType.Create(this);
+            var maintenanceRequest = MaintenanceRequestEntityType.Create(this);
             var note = NoteEntityType.Create(this);
             var product = ProductEntityType.Create(this);
             var productCategory = ProductCategoryEntityType.Create(this);
@@ -30,33 +33,46 @@ namespace BarrocIntens.Models
             var quoteProduct = QuoteProductEntityType.Create(this);
             var role = RoleEntityType.Create(this);
             var user = UserEntityType.Create(this);
+            var workOrder = WorkOrderEntityType.Create(this);
+            var workOrderHours = WorkOrderHoursEntityType.Create(this);
+            var workOrderMaterials = WorkOrderMaterialsEntityType.Create(this);
 
             CompanyEntityType.CreateForeignKey1(company, user);
             ContractEntityType.CreateForeignKey1(contract, company);
+            ContractProductEntityType.CreateForeignKey1(contractProduct, contract);
+            ContractProductEntityType.CreateForeignKey2(contractProduct, product);
             CustomInvoiceEntityType.CreateForeignKey1(customInvoice, company);
             CustomInvoiceProductEntityType.CreateForeignKey1(customInvoiceProduct, customInvoice);
             CustomInvoiceProductEntityType.CreateForeignKey2(customInvoiceProduct, product);
             ExpenseEntityType.CreateForeignKey1(expense, user);
             ExpenseProductEntityType.CreateForeignKey1(expenseProduct, expense);
             ExpenseProductEntityType.CreateForeignKey2(expenseProduct, product);
-            MaintenaceAppointmentEntityType.CreateForeignKey1(maintenaceAppointment, company);
+            MaintenaceAppointmentEntityType.CreateForeignKey1(maintenaceAppointment, user);
+            MaintenaceAppointmentWorkOrderEntityType.CreateForeignKey1(maintenaceAppointmentWorkOrder, maintenaceAppointment);
+            MaintenaceAppointmentWorkOrderEntityType.CreateForeignKey2(maintenaceAppointmentWorkOrder, workOrder);
+            MaintenanceRequestEntityType.CreateForeignKey1(maintenanceRequest, user);
             NoteEntityType.CreateForeignKey1(note, company);
             NoteEntityType.CreateForeignKey2(note, user);
             ProductEntityType.CreateForeignKey1(product, expense);
             ProductEntityType.CreateForeignKey2(product, productCategory);
-            ProductEntityType.CreateForeignKey3(product, quote);
             QuoteEntityType.CreateForeignKey1(quote, user);
             QuoteProductEntityType.CreateForeignKey1(quoteProduct, product);
             QuoteProductEntityType.CreateForeignKey2(quoteProduct, quote);
             UserEntityType.CreateForeignKey1(user, role);
+            WorkOrderHoursEntityType.CreateForeignKey1(workOrderHours, workOrder);
+            WorkOrderMaterialsEntityType.CreateForeignKey1(workOrderMaterials, product);
+            WorkOrderMaterialsEntityType.CreateForeignKey2(workOrderMaterials, workOrder);
 
             CompanyEntityType.CreateAnnotations(company);
             ContractEntityType.CreateAnnotations(contract);
+            ContractProductEntityType.CreateAnnotations(contractProduct);
             CustomInvoiceEntityType.CreateAnnotations(customInvoice);
             CustomInvoiceProductEntityType.CreateAnnotations(customInvoiceProduct);
             ExpenseEntityType.CreateAnnotations(expense);
             ExpenseProductEntityType.CreateAnnotations(expenseProduct);
             MaintenaceAppointmentEntityType.CreateAnnotations(maintenaceAppointment);
+            MaintenaceAppointmentWorkOrderEntityType.CreateAnnotations(maintenaceAppointmentWorkOrder);
+            MaintenanceRequestEntityType.CreateAnnotations(maintenanceRequest);
             NoteEntityType.CreateAnnotations(note);
             ProductEntityType.CreateAnnotations(product);
             ProductCategoryEntityType.CreateAnnotations(productCategory);
@@ -64,6 +80,9 @@ namespace BarrocIntens.Models
             QuoteProductEntityType.CreateAnnotations(quoteProduct);
             RoleEntityType.CreateAnnotations(role);
             UserEntityType.CreateAnnotations(user);
+            WorkOrderEntityType.CreateAnnotations(workOrder);
+            WorkOrderHoursEntityType.CreateAnnotations(workOrderHours);
+            WorkOrderMaterialsEntityType.CreateAnnotations(workOrderMaterials);
 
             AddAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn);
             AddAnnotation("ProductVersion", "8.0.10");
@@ -233,17 +252,89 @@ namespace BarrocIntens.Models
             RelationalModel.CreateColumnMapping(startDateColumn, contract.FindProperty("StartDate")!, contractsTableMapping);
             RelationalModel.CreateColumnMapping(typeColumn, contract.FindProperty("Type")!, contractsTableMapping);
 
-            var customInvoice = FindEntityType("BarrocIntens.Models.CustomInvoice")!;
+            var contractProduct = FindEntityType("BarrocIntens.Models.ContractProduct")!;
 
             var defaultTableMappings1 = new List<TableMappingBase<ColumnMappingBase>>();
-            customInvoice.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings1);
+            contractProduct.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings1);
+            var barrocIntensModelsContractProductTableBase = new TableBase("BarrocIntens.Models.ContractProduct", null, relationalModel);
+            var amountColumnBase = new ColumnBase<ColumnMappingBase>("Amount", "int", barrocIntensModelsContractProductTableBase);
+            barrocIntensModelsContractProductTableBase.Columns.Add("Amount", amountColumnBase);
+            var contractIdColumnBase = new ColumnBase<ColumnMappingBase>("ContractId", "int", barrocIntensModelsContractProductTableBase);
+            barrocIntensModelsContractProductTableBase.Columns.Add("ContractId", contractIdColumnBase);
+            var idColumnBase1 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsContractProductTableBase);
+            barrocIntensModelsContractProductTableBase.Columns.Add("Id", idColumnBase1);
+            var leassedPriceColumnBase = new ColumnBase<ColumnMappingBase>("LeassedPrice", "decimal(8,2)", barrocIntensModelsContractProductTableBase);
+            barrocIntensModelsContractProductTableBase.Columns.Add("LeassedPrice", leassedPriceColumnBase);
+            var productIdColumnBase = new ColumnBase<ColumnMappingBase>("ProductId", "int", barrocIntensModelsContractProductTableBase);
+            barrocIntensModelsContractProductTableBase.Columns.Add("ProductId", productIdColumnBase);
+            relationalModel.DefaultTables.Add("BarrocIntens.Models.ContractProduct", barrocIntensModelsContractProductTableBase);
+            var barrocIntensModelsContractProductMappingBase = new TableMappingBase<ColumnMappingBase>(contractProduct, barrocIntensModelsContractProductTableBase, true);
+            barrocIntensModelsContractProductTableBase.AddTypeMapping(barrocIntensModelsContractProductMappingBase, false);
+            defaultTableMappings1.Add(barrocIntensModelsContractProductMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase1, contractProduct.FindProperty("Id")!, barrocIntensModelsContractProductMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)amountColumnBase, contractProduct.FindProperty("Amount")!, barrocIntensModelsContractProductMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)contractIdColumnBase, contractProduct.FindProperty("ContractId")!, barrocIntensModelsContractProductMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)leassedPriceColumnBase, contractProduct.FindProperty("LeassedPrice")!, barrocIntensModelsContractProductMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)productIdColumnBase, contractProduct.FindProperty("ProductId")!, barrocIntensModelsContractProductMappingBase);
+
+            var tableMappings1 = new List<TableMapping>();
+            contractProduct.SetRuntimeAnnotation("Relational:TableMappings", tableMappings1);
+            var contractProductsTable = new Table("ContractProducts", null, relationalModel);
+            var idColumn1 = new Column("Id", "int", contractProductsTable);
+            contractProductsTable.Columns.Add("Id", idColumn1);
+            var amountColumn = new Column("Amount", "int", contractProductsTable);
+            contractProductsTable.Columns.Add("Amount", amountColumn);
+            var contractIdColumn = new Column("ContractId", "int", contractProductsTable);
+            contractProductsTable.Columns.Add("ContractId", contractIdColumn);
+            var leassedPriceColumn = new Column("LeassedPrice", "decimal(8,2)", contractProductsTable);
+            contractProductsTable.Columns.Add("LeassedPrice", leassedPriceColumn);
+            var productIdColumn = new Column("ProductId", "int", contractProductsTable);
+            contractProductsTable.Columns.Add("ProductId", productIdColumn);
+            var pK_ContractProducts = new UniqueConstraint("PK_ContractProducts", contractProductsTable, new[] { idColumn1 });
+            contractProductsTable.PrimaryKey = pK_ContractProducts;
+            var pK_ContractProductsUc = RelationalModel.GetKey(this,
+                "BarrocIntens.Models.ContractProduct",
+                new[] { "Id" });
+            pK_ContractProducts.MappedKeys.Add(pK_ContractProductsUc);
+            RelationalModel.GetOrCreateUniqueConstraints(pK_ContractProductsUc).Add(pK_ContractProducts);
+            contractProductsTable.UniqueConstraints.Add("PK_ContractProducts", pK_ContractProducts);
+            var iX_ContractProducts_ContractId = new TableIndex(
+            "IX_ContractProducts_ContractId", contractProductsTable, new[] { contractIdColumn }, false);
+            var iX_ContractProducts_ContractIdIx = RelationalModel.GetIndex(this,
+                "BarrocIntens.Models.ContractProduct",
+                new[] { "ContractId" });
+            iX_ContractProducts_ContractId.MappedIndexes.Add(iX_ContractProducts_ContractIdIx);
+            RelationalModel.GetOrCreateTableIndexes(iX_ContractProducts_ContractIdIx).Add(iX_ContractProducts_ContractId);
+            contractProductsTable.Indexes.Add("IX_ContractProducts_ContractId", iX_ContractProducts_ContractId);
+            var iX_ContractProducts_ProductId = new TableIndex(
+            "IX_ContractProducts_ProductId", contractProductsTable, new[] { productIdColumn }, false);
+            var iX_ContractProducts_ProductIdIx = RelationalModel.GetIndex(this,
+                "BarrocIntens.Models.ContractProduct",
+                new[] { "ProductId" });
+            iX_ContractProducts_ProductId.MappedIndexes.Add(iX_ContractProducts_ProductIdIx);
+            RelationalModel.GetOrCreateTableIndexes(iX_ContractProducts_ProductIdIx).Add(iX_ContractProducts_ProductId);
+            contractProductsTable.Indexes.Add("IX_ContractProducts_ProductId", iX_ContractProducts_ProductId);
+            relationalModel.Tables.Add(("ContractProducts", null), contractProductsTable);
+            var contractProductsTableMapping = new TableMapping(contractProduct, contractProductsTable, true);
+            contractProductsTable.AddTypeMapping(contractProductsTableMapping, false);
+            tableMappings1.Add(contractProductsTableMapping);
+            RelationalModel.CreateColumnMapping(idColumn1, contractProduct.FindProperty("Id")!, contractProductsTableMapping);
+            RelationalModel.CreateColumnMapping(amountColumn, contractProduct.FindProperty("Amount")!, contractProductsTableMapping);
+            RelationalModel.CreateColumnMapping(contractIdColumn, contractProduct.FindProperty("ContractId")!, contractProductsTableMapping);
+            RelationalModel.CreateColumnMapping(leassedPriceColumn, contractProduct.FindProperty("LeassedPrice")!, contractProductsTableMapping);
+            RelationalModel.CreateColumnMapping(productIdColumn, contractProduct.FindProperty("ProductId")!, contractProductsTableMapping);
+
+            var customInvoice = FindEntityType("BarrocIntens.Models.CustomInvoice")!;
+
+            var defaultTableMappings2 = new List<TableMappingBase<ColumnMappingBase>>();
+            customInvoice.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings2);
             var barrocIntensModelsCustomInvoiceTableBase = new TableBase("BarrocIntens.Models.CustomInvoice", null, relationalModel);
             var companyIdColumnBase0 = new ColumnBase<ColumnMappingBase>("CompanyId", "int", barrocIntensModelsCustomInvoiceTableBase);
             barrocIntensModelsCustomInvoiceTableBase.Columns.Add("CompanyId", companyIdColumnBase0);
             var dateColumnBase = new ColumnBase<ColumnMappingBase>("Date", "datetime(6)", barrocIntensModelsCustomInvoiceTableBase);
             barrocIntensModelsCustomInvoiceTableBase.Columns.Add("Date", dateColumnBase);
-            var idColumnBase1 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsCustomInvoiceTableBase);
-            barrocIntensModelsCustomInvoiceTableBase.Columns.Add("Id", idColumnBase1);
+            var idColumnBase2 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsCustomInvoiceTableBase);
+            barrocIntensModelsCustomInvoiceTableBase.Columns.Add("Id", idColumnBase2);
             var paidAtColumnBase = new ColumnBase<ColumnMappingBase>("PaidAt", "datetime(6)", barrocIntensModelsCustomInvoiceTableBase)
             {
                 IsNullable = true
@@ -252,17 +343,17 @@ namespace BarrocIntens.Models
             relationalModel.DefaultTables.Add("BarrocIntens.Models.CustomInvoice", barrocIntensModelsCustomInvoiceTableBase);
             var barrocIntensModelsCustomInvoiceMappingBase = new TableMappingBase<ColumnMappingBase>(customInvoice, barrocIntensModelsCustomInvoiceTableBase, true);
             barrocIntensModelsCustomInvoiceTableBase.AddTypeMapping(barrocIntensModelsCustomInvoiceMappingBase, false);
-            defaultTableMappings1.Add(barrocIntensModelsCustomInvoiceMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase1, customInvoice.FindProperty("Id")!, barrocIntensModelsCustomInvoiceMappingBase);
+            defaultTableMappings2.Add(barrocIntensModelsCustomInvoiceMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase2, customInvoice.FindProperty("Id")!, barrocIntensModelsCustomInvoiceMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)companyIdColumnBase0, customInvoice.FindProperty("CompanyId")!, barrocIntensModelsCustomInvoiceMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)dateColumnBase, customInvoice.FindProperty("Date")!, barrocIntensModelsCustomInvoiceMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)paidAtColumnBase, customInvoice.FindProperty("PaidAt")!, barrocIntensModelsCustomInvoiceMappingBase);
 
-            var tableMappings1 = new List<TableMapping>();
-            customInvoice.SetRuntimeAnnotation("Relational:TableMappings", tableMappings1);
+            var tableMappings2 = new List<TableMapping>();
+            customInvoice.SetRuntimeAnnotation("Relational:TableMappings", tableMappings2);
             var customInvoicesTable = new Table("CustomInvoices", null, relationalModel);
-            var idColumn1 = new Column("Id", "int", customInvoicesTable);
-            customInvoicesTable.Columns.Add("Id", idColumn1);
+            var idColumn2 = new Column("Id", "int", customInvoicesTable);
+            customInvoicesTable.Columns.Add("Id", idColumn2);
             var companyIdColumn0 = new Column("CompanyId", "int", customInvoicesTable);
             customInvoicesTable.Columns.Add("CompanyId", companyIdColumn0);
             var dateColumn = new Column("Date", "datetime(6)", customInvoicesTable);
@@ -272,7 +363,7 @@ namespace BarrocIntens.Models
                 IsNullable = true
             };
             customInvoicesTable.Columns.Add("PaidAt", paidAtColumn);
-            var pK_CustomInvoices = new UniqueConstraint("PK_CustomInvoices", customInvoicesTable, new[] { idColumn1 });
+            var pK_CustomInvoices = new UniqueConstraint("PK_CustomInvoices", customInvoicesTable, new[] { idColumn2 });
             customInvoicesTable.PrimaryKey = pK_CustomInvoices;
             var pK_CustomInvoicesUc = RelationalModel.GetKey(this,
                 "BarrocIntens.Models.CustomInvoice",
@@ -291,51 +382,51 @@ namespace BarrocIntens.Models
             relationalModel.Tables.Add(("CustomInvoices", null), customInvoicesTable);
             var customInvoicesTableMapping = new TableMapping(customInvoice, customInvoicesTable, true);
             customInvoicesTable.AddTypeMapping(customInvoicesTableMapping, false);
-            tableMappings1.Add(customInvoicesTableMapping);
-            RelationalModel.CreateColumnMapping(idColumn1, customInvoice.FindProperty("Id")!, customInvoicesTableMapping);
+            tableMappings2.Add(customInvoicesTableMapping);
+            RelationalModel.CreateColumnMapping(idColumn2, customInvoice.FindProperty("Id")!, customInvoicesTableMapping);
             RelationalModel.CreateColumnMapping(companyIdColumn0, customInvoice.FindProperty("CompanyId")!, customInvoicesTableMapping);
             RelationalModel.CreateColumnMapping(dateColumn, customInvoice.FindProperty("Date")!, customInvoicesTableMapping);
             RelationalModel.CreateColumnMapping(paidAtColumn, customInvoice.FindProperty("PaidAt")!, customInvoicesTableMapping);
 
             var customInvoiceProduct = FindEntityType("BarrocIntens.Models.CustomInvoiceProduct")!;
 
-            var defaultTableMappings2 = new List<TableMappingBase<ColumnMappingBase>>();
-            customInvoiceProduct.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings2);
+            var defaultTableMappings3 = new List<TableMappingBase<ColumnMappingBase>>();
+            customInvoiceProduct.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings3);
             var barrocIntensModelsCustomInvoiceProductTableBase = new TableBase("BarrocIntens.Models.CustomInvoiceProduct", null, relationalModel);
-            var amountColumnBase = new ColumnBase<ColumnMappingBase>("Amount", "int", barrocIntensModelsCustomInvoiceProductTableBase);
-            barrocIntensModelsCustomInvoiceProductTableBase.Columns.Add("Amount", amountColumnBase);
+            var amountColumnBase0 = new ColumnBase<ColumnMappingBase>("Amount", "int", barrocIntensModelsCustomInvoiceProductTableBase);
+            barrocIntensModelsCustomInvoiceProductTableBase.Columns.Add("Amount", amountColumnBase0);
             var customInvoiceIdColumnBase = new ColumnBase<ColumnMappingBase>("CustomInvoiceId", "int", barrocIntensModelsCustomInvoiceProductTableBase);
             barrocIntensModelsCustomInvoiceProductTableBase.Columns.Add("CustomInvoiceId", customInvoiceIdColumnBase);
-            var idColumnBase2 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsCustomInvoiceProductTableBase);
-            barrocIntensModelsCustomInvoiceProductTableBase.Columns.Add("Id", idColumnBase2);
+            var idColumnBase3 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsCustomInvoiceProductTableBase);
+            barrocIntensModelsCustomInvoiceProductTableBase.Columns.Add("Id", idColumnBase3);
             var pricePerProductColumnBase = new ColumnBase<ColumnMappingBase>("PricePerProduct", "decimal(8,2)", barrocIntensModelsCustomInvoiceProductTableBase);
             barrocIntensModelsCustomInvoiceProductTableBase.Columns.Add("PricePerProduct", pricePerProductColumnBase);
-            var productIdColumnBase = new ColumnBase<ColumnMappingBase>("ProductId", "int", barrocIntensModelsCustomInvoiceProductTableBase);
-            barrocIntensModelsCustomInvoiceProductTableBase.Columns.Add("ProductId", productIdColumnBase);
+            var productIdColumnBase0 = new ColumnBase<ColumnMappingBase>("ProductId", "int", barrocIntensModelsCustomInvoiceProductTableBase);
+            barrocIntensModelsCustomInvoiceProductTableBase.Columns.Add("ProductId", productIdColumnBase0);
             relationalModel.DefaultTables.Add("BarrocIntens.Models.CustomInvoiceProduct", barrocIntensModelsCustomInvoiceProductTableBase);
             var barrocIntensModelsCustomInvoiceProductMappingBase = new TableMappingBase<ColumnMappingBase>(customInvoiceProduct, barrocIntensModelsCustomInvoiceProductTableBase, true);
             barrocIntensModelsCustomInvoiceProductTableBase.AddTypeMapping(barrocIntensModelsCustomInvoiceProductMappingBase, false);
-            defaultTableMappings2.Add(barrocIntensModelsCustomInvoiceProductMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase2, customInvoiceProduct.FindProperty("Id")!, barrocIntensModelsCustomInvoiceProductMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)amountColumnBase, customInvoiceProduct.FindProperty("Amount")!, barrocIntensModelsCustomInvoiceProductMappingBase);
+            defaultTableMappings3.Add(barrocIntensModelsCustomInvoiceProductMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase3, customInvoiceProduct.FindProperty("Id")!, barrocIntensModelsCustomInvoiceProductMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)amountColumnBase0, customInvoiceProduct.FindProperty("Amount")!, barrocIntensModelsCustomInvoiceProductMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)customInvoiceIdColumnBase, customInvoiceProduct.FindProperty("CustomInvoiceId")!, barrocIntensModelsCustomInvoiceProductMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)pricePerProductColumnBase, customInvoiceProduct.FindProperty("PricePerProduct")!, barrocIntensModelsCustomInvoiceProductMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)productIdColumnBase, customInvoiceProduct.FindProperty("ProductId")!, barrocIntensModelsCustomInvoiceProductMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)productIdColumnBase0, customInvoiceProduct.FindProperty("ProductId")!, barrocIntensModelsCustomInvoiceProductMappingBase);
 
-            var tableMappings2 = new List<TableMapping>();
-            customInvoiceProduct.SetRuntimeAnnotation("Relational:TableMappings", tableMappings2);
+            var tableMappings3 = new List<TableMapping>();
+            customInvoiceProduct.SetRuntimeAnnotation("Relational:TableMappings", tableMappings3);
             var customInvoiceProductsTable = new Table("CustomInvoiceProducts", null, relationalModel);
-            var idColumn2 = new Column("Id", "int", customInvoiceProductsTable);
-            customInvoiceProductsTable.Columns.Add("Id", idColumn2);
-            var amountColumn = new Column("Amount", "int", customInvoiceProductsTable);
-            customInvoiceProductsTable.Columns.Add("Amount", amountColumn);
+            var idColumn3 = new Column("Id", "int", customInvoiceProductsTable);
+            customInvoiceProductsTable.Columns.Add("Id", idColumn3);
+            var amountColumn0 = new Column("Amount", "int", customInvoiceProductsTable);
+            customInvoiceProductsTable.Columns.Add("Amount", amountColumn0);
             var customInvoiceIdColumn = new Column("CustomInvoiceId", "int", customInvoiceProductsTable);
             customInvoiceProductsTable.Columns.Add("CustomInvoiceId", customInvoiceIdColumn);
             var pricePerProductColumn = new Column("PricePerProduct", "decimal(8,2)", customInvoiceProductsTable);
             customInvoiceProductsTable.Columns.Add("PricePerProduct", pricePerProductColumn);
-            var productIdColumn = new Column("ProductId", "int", customInvoiceProductsTable);
-            customInvoiceProductsTable.Columns.Add("ProductId", productIdColumn);
-            var pK_CustomInvoiceProducts = new UniqueConstraint("PK_CustomInvoiceProducts", customInvoiceProductsTable, new[] { idColumn2 });
+            var productIdColumn0 = new Column("ProductId", "int", customInvoiceProductsTable);
+            customInvoiceProductsTable.Columns.Add("ProductId", productIdColumn0);
+            var pK_CustomInvoiceProducts = new UniqueConstraint("PK_CustomInvoiceProducts", customInvoiceProductsTable, new[] { idColumn3 });
             customInvoiceProductsTable.PrimaryKey = pK_CustomInvoiceProducts;
             var pK_CustomInvoiceProductsUc = RelationalModel.GetKey(this,
                 "BarrocIntens.Models.CustomInvoiceProduct",
@@ -352,7 +443,7 @@ namespace BarrocIntens.Models
             RelationalModel.GetOrCreateTableIndexes(iX_CustomInvoiceProducts_CustomInvoiceIdIx).Add(iX_CustomInvoiceProducts_CustomInvoiceId);
             customInvoiceProductsTable.Indexes.Add("IX_CustomInvoiceProducts_CustomInvoiceId", iX_CustomInvoiceProducts_CustomInvoiceId);
             var iX_CustomInvoiceProducts_ProductId = new TableIndex(
-            "IX_CustomInvoiceProducts_ProductId", customInvoiceProductsTable, new[] { productIdColumn }, false);
+            "IX_CustomInvoiceProducts_ProductId", customInvoiceProductsTable, new[] { productIdColumn0 }, false);
             var iX_CustomInvoiceProducts_ProductIdIx = RelationalModel.GetIndex(this,
                 "BarrocIntens.Models.CustomInvoiceProduct",
                 new[] { "ProductId" });
@@ -362,22 +453,22 @@ namespace BarrocIntens.Models
             relationalModel.Tables.Add(("CustomInvoiceProducts", null), customInvoiceProductsTable);
             var customInvoiceProductsTableMapping = new TableMapping(customInvoiceProduct, customInvoiceProductsTable, true);
             customInvoiceProductsTable.AddTypeMapping(customInvoiceProductsTableMapping, false);
-            tableMappings2.Add(customInvoiceProductsTableMapping);
-            RelationalModel.CreateColumnMapping(idColumn2, customInvoiceProduct.FindProperty("Id")!, customInvoiceProductsTableMapping);
-            RelationalModel.CreateColumnMapping(amountColumn, customInvoiceProduct.FindProperty("Amount")!, customInvoiceProductsTableMapping);
+            tableMappings3.Add(customInvoiceProductsTableMapping);
+            RelationalModel.CreateColumnMapping(idColumn3, customInvoiceProduct.FindProperty("Id")!, customInvoiceProductsTableMapping);
+            RelationalModel.CreateColumnMapping(amountColumn0, customInvoiceProduct.FindProperty("Amount")!, customInvoiceProductsTableMapping);
             RelationalModel.CreateColumnMapping(customInvoiceIdColumn, customInvoiceProduct.FindProperty("CustomInvoiceId")!, customInvoiceProductsTableMapping);
             RelationalModel.CreateColumnMapping(pricePerProductColumn, customInvoiceProduct.FindProperty("PricePerProduct")!, customInvoiceProductsTableMapping);
-            RelationalModel.CreateColumnMapping(productIdColumn, customInvoiceProduct.FindProperty("ProductId")!, customInvoiceProductsTableMapping);
+            RelationalModel.CreateColumnMapping(productIdColumn0, customInvoiceProduct.FindProperty("ProductId")!, customInvoiceProductsTableMapping);
 
             var expense = FindEntityType("BarrocIntens.Models.Expense")!;
 
-            var defaultTableMappings3 = new List<TableMappingBase<ColumnMappingBase>>();
-            expense.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings3);
+            var defaultTableMappings4 = new List<TableMappingBase<ColumnMappingBase>>();
+            expense.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings4);
             var barrocIntensModelsExpenseTableBase = new TableBase("BarrocIntens.Models.Expense", null, relationalModel);
             var dateColumnBase0 = new ColumnBase<ColumnMappingBase>("Date", "datetime(6)", barrocIntensModelsExpenseTableBase);
             barrocIntensModelsExpenseTableBase.Columns.Add("Date", dateColumnBase0);
-            var idColumnBase3 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsExpenseTableBase);
-            barrocIntensModelsExpenseTableBase.Columns.Add("Id", idColumnBase3);
+            var idColumnBase4 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsExpenseTableBase);
+            barrocIntensModelsExpenseTableBase.Columns.Add("Id", idColumnBase4);
             var isApprovedColumnBase = new ColumnBase<ColumnMappingBase>("IsApproved", "tinyint", barrocIntensModelsExpenseTableBase);
             barrocIntensModelsExpenseTableBase.Columns.Add("IsApproved", isApprovedColumnBase);
             var userIdColumnBase0 = new ColumnBase<ColumnMappingBase>("UserId", "int", barrocIntensModelsExpenseTableBase);
@@ -385,24 +476,24 @@ namespace BarrocIntens.Models
             relationalModel.DefaultTables.Add("BarrocIntens.Models.Expense", barrocIntensModelsExpenseTableBase);
             var barrocIntensModelsExpenseMappingBase = new TableMappingBase<ColumnMappingBase>(expense, barrocIntensModelsExpenseTableBase, true);
             barrocIntensModelsExpenseTableBase.AddTypeMapping(barrocIntensModelsExpenseMappingBase, false);
-            defaultTableMappings3.Add(barrocIntensModelsExpenseMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase3, expense.FindProperty("Id")!, barrocIntensModelsExpenseMappingBase);
+            defaultTableMappings4.Add(barrocIntensModelsExpenseMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase4, expense.FindProperty("Id")!, barrocIntensModelsExpenseMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)dateColumnBase0, expense.FindProperty("Date")!, barrocIntensModelsExpenseMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)isApprovedColumnBase, expense.FindProperty("IsApproved")!, barrocIntensModelsExpenseMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)userIdColumnBase0, expense.FindProperty("UserId")!, barrocIntensModelsExpenseMappingBase);
 
-            var tableMappings3 = new List<TableMapping>();
-            expense.SetRuntimeAnnotation("Relational:TableMappings", tableMappings3);
+            var tableMappings4 = new List<TableMapping>();
+            expense.SetRuntimeAnnotation("Relational:TableMappings", tableMappings4);
             var expensesTable = new Table("Expenses", null, relationalModel);
-            var idColumn3 = new Column("Id", "int", expensesTable);
-            expensesTable.Columns.Add("Id", idColumn3);
+            var idColumn4 = new Column("Id", "int", expensesTable);
+            expensesTable.Columns.Add("Id", idColumn4);
             var dateColumn0 = new Column("Date", "datetime(6)", expensesTable);
             expensesTable.Columns.Add("Date", dateColumn0);
             var isApprovedColumn = new Column("IsApproved", "tinyint", expensesTable);
             expensesTable.Columns.Add("IsApproved", isApprovedColumn);
             var userIdColumn0 = new Column("UserId", "int", expensesTable);
             expensesTable.Columns.Add("UserId", userIdColumn0);
-            var pK_Expenses = new UniqueConstraint("PK_Expenses", expensesTable, new[] { idColumn3 });
+            var pK_Expenses = new UniqueConstraint("PK_Expenses", expensesTable, new[] { idColumn4 });
             expensesTable.PrimaryKey = pK_Expenses;
             var pK_ExpensesUc = RelationalModel.GetKey(this,
                 "BarrocIntens.Models.Expense",
@@ -421,46 +512,46 @@ namespace BarrocIntens.Models
             relationalModel.Tables.Add(("Expenses", null), expensesTable);
             var expensesTableMapping = new TableMapping(expense, expensesTable, true);
             expensesTable.AddTypeMapping(expensesTableMapping, false);
-            tableMappings3.Add(expensesTableMapping);
-            RelationalModel.CreateColumnMapping(idColumn3, expense.FindProperty("Id")!, expensesTableMapping);
+            tableMappings4.Add(expensesTableMapping);
+            RelationalModel.CreateColumnMapping(idColumn4, expense.FindProperty("Id")!, expensesTableMapping);
             RelationalModel.CreateColumnMapping(dateColumn0, expense.FindProperty("Date")!, expensesTableMapping);
             RelationalModel.CreateColumnMapping(isApprovedColumn, expense.FindProperty("IsApproved")!, expensesTableMapping);
             RelationalModel.CreateColumnMapping(userIdColumn0, expense.FindProperty("UserId")!, expensesTableMapping);
 
             var expenseProduct = FindEntityType("BarrocIntens.Models.ExpenseProduct")!;
 
-            var defaultTableMappings4 = new List<TableMappingBase<ColumnMappingBase>>();
-            expenseProduct.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings4);
+            var defaultTableMappings5 = new List<TableMappingBase<ColumnMappingBase>>();
+            expenseProduct.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings5);
             var barrocIntensModelsExpenseProductTableBase = new TableBase("BarrocIntens.Models.ExpenseProduct", null, relationalModel);
             var expenseIdColumnBase = new ColumnBase<ColumnMappingBase>("ExpenseId", "int", barrocIntensModelsExpenseProductTableBase);
             barrocIntensModelsExpenseProductTableBase.Columns.Add("ExpenseId", expenseIdColumnBase);
-            var idColumnBase4 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsExpenseProductTableBase);
-            barrocIntensModelsExpenseProductTableBase.Columns.Add("Id", idColumnBase4);
-            var productIdColumnBase0 = new ColumnBase<ColumnMappingBase>("ProductId", "int", barrocIntensModelsExpenseProductTableBase);
-            barrocIntensModelsExpenseProductTableBase.Columns.Add("ProductId", productIdColumnBase0);
+            var idColumnBase5 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsExpenseProductTableBase);
+            barrocIntensModelsExpenseProductTableBase.Columns.Add("Id", idColumnBase5);
+            var productIdColumnBase1 = new ColumnBase<ColumnMappingBase>("ProductId", "int", barrocIntensModelsExpenseProductTableBase);
+            barrocIntensModelsExpenseProductTableBase.Columns.Add("ProductId", productIdColumnBase1);
             var quantityColumnBase = new ColumnBase<ColumnMappingBase>("Quantity", "int", barrocIntensModelsExpenseProductTableBase);
             barrocIntensModelsExpenseProductTableBase.Columns.Add("Quantity", quantityColumnBase);
             relationalModel.DefaultTables.Add("BarrocIntens.Models.ExpenseProduct", barrocIntensModelsExpenseProductTableBase);
             var barrocIntensModelsExpenseProductMappingBase = new TableMappingBase<ColumnMappingBase>(expenseProduct, barrocIntensModelsExpenseProductTableBase, true);
             barrocIntensModelsExpenseProductTableBase.AddTypeMapping(barrocIntensModelsExpenseProductMappingBase, false);
-            defaultTableMappings4.Add(barrocIntensModelsExpenseProductMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase4, expenseProduct.FindProperty("Id")!, barrocIntensModelsExpenseProductMappingBase);
+            defaultTableMappings5.Add(barrocIntensModelsExpenseProductMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase5, expenseProduct.FindProperty("Id")!, barrocIntensModelsExpenseProductMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)expenseIdColumnBase, expenseProduct.FindProperty("ExpenseId")!, barrocIntensModelsExpenseProductMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)productIdColumnBase0, expenseProduct.FindProperty("ProductId")!, barrocIntensModelsExpenseProductMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)productIdColumnBase1, expenseProduct.FindProperty("ProductId")!, barrocIntensModelsExpenseProductMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)quantityColumnBase, expenseProduct.FindProperty("Quantity")!, barrocIntensModelsExpenseProductMappingBase);
 
-            var tableMappings4 = new List<TableMapping>();
-            expenseProduct.SetRuntimeAnnotation("Relational:TableMappings", tableMappings4);
+            var tableMappings5 = new List<TableMapping>();
+            expenseProduct.SetRuntimeAnnotation("Relational:TableMappings", tableMappings5);
             var expenseProductsTable = new Table("ExpenseProducts", null, relationalModel);
-            var idColumn4 = new Column("Id", "int", expenseProductsTable);
-            expenseProductsTable.Columns.Add("Id", idColumn4);
+            var idColumn5 = new Column("Id", "int", expenseProductsTable);
+            expenseProductsTable.Columns.Add("Id", idColumn5);
             var expenseIdColumn = new Column("ExpenseId", "int", expenseProductsTable);
             expenseProductsTable.Columns.Add("ExpenseId", expenseIdColumn);
-            var productIdColumn0 = new Column("ProductId", "int", expenseProductsTable);
-            expenseProductsTable.Columns.Add("ProductId", productIdColumn0);
+            var productIdColumn1 = new Column("ProductId", "int", expenseProductsTable);
+            expenseProductsTable.Columns.Add("ProductId", productIdColumn1);
             var quantityColumn = new Column("Quantity", "int", expenseProductsTable);
             expenseProductsTable.Columns.Add("Quantity", quantityColumn);
-            var pK_ExpenseProducts = new UniqueConstraint("PK_ExpenseProducts", expenseProductsTable, new[] { idColumn4 });
+            var pK_ExpenseProducts = new UniqueConstraint("PK_ExpenseProducts", expenseProductsTable, new[] { idColumn5 });
             expenseProductsTable.PrimaryKey = pK_ExpenseProducts;
             var pK_ExpenseProductsUc = RelationalModel.GetKey(this,
                 "BarrocIntens.Models.ExpenseProduct",
@@ -477,7 +568,7 @@ namespace BarrocIntens.Models
             RelationalModel.GetOrCreateTableIndexes(iX_ExpenseProducts_ExpenseIdIx).Add(iX_ExpenseProducts_ExpenseId);
             expenseProductsTable.Indexes.Add("IX_ExpenseProducts_ExpenseId", iX_ExpenseProducts_ExpenseId);
             var iX_ExpenseProducts_ProductId = new TableIndex(
-            "IX_ExpenseProducts_ProductId", expenseProductsTable, new[] { productIdColumn0 }, false);
+            "IX_ExpenseProducts_ProductId", expenseProductsTable, new[] { productIdColumn1 }, false);
             var iX_ExpenseProducts_ProductIdIx = RelationalModel.GetIndex(this,
                 "BarrocIntens.Models.ExpenseProduct",
                 new[] { "ProductId" });
@@ -487,46 +578,57 @@ namespace BarrocIntens.Models
             relationalModel.Tables.Add(("ExpenseProducts", null), expenseProductsTable);
             var expenseProductsTableMapping = new TableMapping(expenseProduct, expenseProductsTable, true);
             expenseProductsTable.AddTypeMapping(expenseProductsTableMapping, false);
-            tableMappings4.Add(expenseProductsTableMapping);
-            RelationalModel.CreateColumnMapping(idColumn4, expenseProduct.FindProperty("Id")!, expenseProductsTableMapping);
+            tableMappings5.Add(expenseProductsTableMapping);
+            RelationalModel.CreateColumnMapping(idColumn5, expenseProduct.FindProperty("Id")!, expenseProductsTableMapping);
             RelationalModel.CreateColumnMapping(expenseIdColumn, expenseProduct.FindProperty("ExpenseId")!, expenseProductsTableMapping);
-            RelationalModel.CreateColumnMapping(productIdColumn0, expenseProduct.FindProperty("ProductId")!, expenseProductsTableMapping);
+            RelationalModel.CreateColumnMapping(productIdColumn1, expenseProduct.FindProperty("ProductId")!, expenseProductsTableMapping);
             RelationalModel.CreateColumnMapping(quantityColumn, expenseProduct.FindProperty("Quantity")!, expenseProductsTableMapping);
 
             var maintenaceAppointment = FindEntityType("BarrocIntens.Models.MaintenaceAppointment")!;
 
-            var defaultTableMappings5 = new List<TableMappingBase<ColumnMappingBase>>();
-            maintenaceAppointment.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings5);
+            var defaultTableMappings6 = new List<TableMappingBase<ColumnMappingBase>>();
+            maintenaceAppointment.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings6);
             var barrocIntensModelsMaintenaceAppointmentTableBase = new TableBase("BarrocIntens.Models.MaintenaceAppointment", null, relationalModel);
-            var companyIdColumnBase1 = new ColumnBase<ColumnMappingBase>("CompanyId", "int", barrocIntensModelsMaintenaceAppointmentTableBase);
-            barrocIntensModelsMaintenaceAppointmentTableBase.Columns.Add("CompanyId", companyIdColumnBase1);
-            var dateAddedColumnBase = new ColumnBase<ColumnMappingBase>("DateAdded", "datetime(6)", barrocIntensModelsMaintenaceAppointmentTableBase);
-            barrocIntensModelsMaintenaceAppointmentTableBase.Columns.Add("DateAdded", dateAddedColumnBase);
-            var idColumnBase5 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsMaintenaceAppointmentTableBase);
-            barrocIntensModelsMaintenaceAppointmentTableBase.Columns.Add("Id", idColumnBase5);
+            var finishedDateColumnBase = new ColumnBase<ColumnMappingBase>("FinishedDate", "datetime(6)", barrocIntensModelsMaintenaceAppointmentTableBase)
+            {
+                IsNullable = true
+            };
+            barrocIntensModelsMaintenaceAppointmentTableBase.Columns.Add("FinishedDate", finishedDateColumnBase);
+            var idColumnBase6 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsMaintenaceAppointmentTableBase);
+            barrocIntensModelsMaintenaceAppointmentTableBase.Columns.Add("Id", idColumnBase6);
+            var plannedDateColumnBase = new ColumnBase<ColumnMappingBase>("PlannedDate", "datetime(6)", barrocIntensModelsMaintenaceAppointmentTableBase);
+            barrocIntensModelsMaintenaceAppointmentTableBase.Columns.Add("PlannedDate", plannedDateColumnBase);
             var remarkColumnBase = new ColumnBase<ColumnMappingBase>("Remark", "longtext", barrocIntensModelsMaintenaceAppointmentTableBase);
             barrocIntensModelsMaintenaceAppointmentTableBase.Columns.Add("Remark", remarkColumnBase);
+            var userIdColumnBase1 = new ColumnBase<ColumnMappingBase>("UserId", "int", barrocIntensModelsMaintenaceAppointmentTableBase);
+            barrocIntensModelsMaintenaceAppointmentTableBase.Columns.Add("UserId", userIdColumnBase1);
             relationalModel.DefaultTables.Add("BarrocIntens.Models.MaintenaceAppointment", barrocIntensModelsMaintenaceAppointmentTableBase);
             var barrocIntensModelsMaintenaceAppointmentMappingBase = new TableMappingBase<ColumnMappingBase>(maintenaceAppointment, barrocIntensModelsMaintenaceAppointmentTableBase, true);
             barrocIntensModelsMaintenaceAppointmentTableBase.AddTypeMapping(barrocIntensModelsMaintenaceAppointmentMappingBase, false);
-            defaultTableMappings5.Add(barrocIntensModelsMaintenaceAppointmentMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase5, maintenaceAppointment.FindProperty("Id")!, barrocIntensModelsMaintenaceAppointmentMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)companyIdColumnBase1, maintenaceAppointment.FindProperty("CompanyId")!, barrocIntensModelsMaintenaceAppointmentMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)dateAddedColumnBase, maintenaceAppointment.FindProperty("DateAdded")!, barrocIntensModelsMaintenaceAppointmentMappingBase);
+            defaultTableMappings6.Add(barrocIntensModelsMaintenaceAppointmentMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase6, maintenaceAppointment.FindProperty("Id")!, barrocIntensModelsMaintenaceAppointmentMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)finishedDateColumnBase, maintenaceAppointment.FindProperty("FinishedDate")!, barrocIntensModelsMaintenaceAppointmentMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)plannedDateColumnBase, maintenaceAppointment.FindProperty("PlannedDate")!, barrocIntensModelsMaintenaceAppointmentMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)remarkColumnBase, maintenaceAppointment.FindProperty("Remark")!, barrocIntensModelsMaintenaceAppointmentMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)userIdColumnBase1, maintenaceAppointment.FindProperty("UserId")!, barrocIntensModelsMaintenaceAppointmentMappingBase);
 
-            var tableMappings5 = new List<TableMapping>();
-            maintenaceAppointment.SetRuntimeAnnotation("Relational:TableMappings", tableMappings5);
+            var tableMappings6 = new List<TableMapping>();
+            maintenaceAppointment.SetRuntimeAnnotation("Relational:TableMappings", tableMappings6);
             var maintenaceAppointmentsTable = new Table("MaintenaceAppointments", null, relationalModel);
-            var idColumn5 = new Column("Id", "int", maintenaceAppointmentsTable);
-            maintenaceAppointmentsTable.Columns.Add("Id", idColumn5);
-            var companyIdColumn1 = new Column("CompanyId", "int", maintenaceAppointmentsTable);
-            maintenaceAppointmentsTable.Columns.Add("CompanyId", companyIdColumn1);
-            var dateAddedColumn = new Column("DateAdded", "datetime(6)", maintenaceAppointmentsTable);
-            maintenaceAppointmentsTable.Columns.Add("DateAdded", dateAddedColumn);
+            var idColumn6 = new Column("Id", "int", maintenaceAppointmentsTable);
+            maintenaceAppointmentsTable.Columns.Add("Id", idColumn6);
+            var finishedDateColumn = new Column("FinishedDate", "datetime(6)", maintenaceAppointmentsTable)
+            {
+                IsNullable = true
+            };
+            maintenaceAppointmentsTable.Columns.Add("FinishedDate", finishedDateColumn);
+            var plannedDateColumn = new Column("PlannedDate", "datetime(6)", maintenaceAppointmentsTable);
+            maintenaceAppointmentsTable.Columns.Add("PlannedDate", plannedDateColumn);
             var remarkColumn = new Column("Remark", "longtext", maintenaceAppointmentsTable);
             maintenaceAppointmentsTable.Columns.Add("Remark", remarkColumn);
-            var pK_MaintenaceAppointments = new UniqueConstraint("PK_MaintenaceAppointments", maintenaceAppointmentsTable, new[] { idColumn5 });
+            var userIdColumn1 = new Column("UserId", "int", maintenaceAppointmentsTable);
+            maintenaceAppointmentsTable.Columns.Add("UserId", userIdColumn1);
+            var pK_MaintenaceAppointments = new UniqueConstraint("PK_MaintenaceAppointments", maintenaceAppointmentsTable, new[] { idColumn6 });
             maintenaceAppointmentsTable.PrimaryKey = pK_MaintenaceAppointments;
             var pK_MaintenaceAppointmentsUc = RelationalModel.GetKey(this,
                 "BarrocIntens.Models.MaintenaceAppointment",
@@ -534,62 +636,199 @@ namespace BarrocIntens.Models
             pK_MaintenaceAppointments.MappedKeys.Add(pK_MaintenaceAppointmentsUc);
             RelationalModel.GetOrCreateUniqueConstraints(pK_MaintenaceAppointmentsUc).Add(pK_MaintenaceAppointments);
             maintenaceAppointmentsTable.UniqueConstraints.Add("PK_MaintenaceAppointments", pK_MaintenaceAppointments);
-            var iX_MaintenaceAppointments_CompanyId = new TableIndex(
-            "IX_MaintenaceAppointments_CompanyId", maintenaceAppointmentsTable, new[] { companyIdColumn1 }, false);
-            var iX_MaintenaceAppointments_CompanyIdIx = RelationalModel.GetIndex(this,
+            var iX_MaintenaceAppointments_UserId = new TableIndex(
+            "IX_MaintenaceAppointments_UserId", maintenaceAppointmentsTable, new[] { userIdColumn1 }, false);
+            var iX_MaintenaceAppointments_UserIdIx = RelationalModel.GetIndex(this,
                 "BarrocIntens.Models.MaintenaceAppointment",
-                new[] { "CompanyId" });
-            iX_MaintenaceAppointments_CompanyId.MappedIndexes.Add(iX_MaintenaceAppointments_CompanyIdIx);
-            RelationalModel.GetOrCreateTableIndexes(iX_MaintenaceAppointments_CompanyIdIx).Add(iX_MaintenaceAppointments_CompanyId);
-            maintenaceAppointmentsTable.Indexes.Add("IX_MaintenaceAppointments_CompanyId", iX_MaintenaceAppointments_CompanyId);
+                new[] { "UserId" });
+            iX_MaintenaceAppointments_UserId.MappedIndexes.Add(iX_MaintenaceAppointments_UserIdIx);
+            RelationalModel.GetOrCreateTableIndexes(iX_MaintenaceAppointments_UserIdIx).Add(iX_MaintenaceAppointments_UserId);
+            maintenaceAppointmentsTable.Indexes.Add("IX_MaintenaceAppointments_UserId", iX_MaintenaceAppointments_UserId);
             relationalModel.Tables.Add(("MaintenaceAppointments", null), maintenaceAppointmentsTable);
             var maintenaceAppointmentsTableMapping = new TableMapping(maintenaceAppointment, maintenaceAppointmentsTable, true);
             maintenaceAppointmentsTable.AddTypeMapping(maintenaceAppointmentsTableMapping, false);
-            tableMappings5.Add(maintenaceAppointmentsTableMapping);
-            RelationalModel.CreateColumnMapping(idColumn5, maintenaceAppointment.FindProperty("Id")!, maintenaceAppointmentsTableMapping);
-            RelationalModel.CreateColumnMapping(companyIdColumn1, maintenaceAppointment.FindProperty("CompanyId")!, maintenaceAppointmentsTableMapping);
-            RelationalModel.CreateColumnMapping(dateAddedColumn, maintenaceAppointment.FindProperty("DateAdded")!, maintenaceAppointmentsTableMapping);
+            tableMappings6.Add(maintenaceAppointmentsTableMapping);
+            RelationalModel.CreateColumnMapping(idColumn6, maintenaceAppointment.FindProperty("Id")!, maintenaceAppointmentsTableMapping);
+            RelationalModel.CreateColumnMapping(finishedDateColumn, maintenaceAppointment.FindProperty("FinishedDate")!, maintenaceAppointmentsTableMapping);
+            RelationalModel.CreateColumnMapping(plannedDateColumn, maintenaceAppointment.FindProperty("PlannedDate")!, maintenaceAppointmentsTableMapping);
             RelationalModel.CreateColumnMapping(remarkColumn, maintenaceAppointment.FindProperty("Remark")!, maintenaceAppointmentsTableMapping);
+            RelationalModel.CreateColumnMapping(userIdColumn1, maintenaceAppointment.FindProperty("UserId")!, maintenaceAppointmentsTableMapping);
+
+            var maintenaceAppointmentWorkOrder = FindEntityType("BarrocIntens.Models.MaintenaceAppointmentWorkOrder")!;
+
+            var defaultTableMappings7 = new List<TableMappingBase<ColumnMappingBase>>();
+            maintenaceAppointmentWorkOrder.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings7);
+            var barrocIntensModelsMaintenaceAppointmentWorkOrderTableBase = new TableBase("BarrocIntens.Models.MaintenaceAppointmentWorkOrder", null, relationalModel);
+            var idColumnBase7 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsMaintenaceAppointmentWorkOrderTableBase);
+            barrocIntensModelsMaintenaceAppointmentWorkOrderTableBase.Columns.Add("Id", idColumnBase7);
+            var maintenaceAppointmentIdColumnBase = new ColumnBase<ColumnMappingBase>("MaintenaceAppointmentId", "int", barrocIntensModelsMaintenaceAppointmentWorkOrderTableBase);
+            barrocIntensModelsMaintenaceAppointmentWorkOrderTableBase.Columns.Add("MaintenaceAppointmentId", maintenaceAppointmentIdColumnBase);
+            var workOrderIdColumnBase = new ColumnBase<ColumnMappingBase>("WorkOrderId", "int", barrocIntensModelsMaintenaceAppointmentWorkOrderTableBase);
+            barrocIntensModelsMaintenaceAppointmentWorkOrderTableBase.Columns.Add("WorkOrderId", workOrderIdColumnBase);
+            relationalModel.DefaultTables.Add("BarrocIntens.Models.MaintenaceAppointmentWorkOrder", barrocIntensModelsMaintenaceAppointmentWorkOrderTableBase);
+            var barrocIntensModelsMaintenaceAppointmentWorkOrderMappingBase = new TableMappingBase<ColumnMappingBase>(maintenaceAppointmentWorkOrder, barrocIntensModelsMaintenaceAppointmentWorkOrderTableBase, true);
+            barrocIntensModelsMaintenaceAppointmentWorkOrderTableBase.AddTypeMapping(barrocIntensModelsMaintenaceAppointmentWorkOrderMappingBase, false);
+            defaultTableMappings7.Add(barrocIntensModelsMaintenaceAppointmentWorkOrderMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase7, maintenaceAppointmentWorkOrder.FindProperty("Id")!, barrocIntensModelsMaintenaceAppointmentWorkOrderMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)maintenaceAppointmentIdColumnBase, maintenaceAppointmentWorkOrder.FindProperty("MaintenaceAppointmentId")!, barrocIntensModelsMaintenaceAppointmentWorkOrderMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)workOrderIdColumnBase, maintenaceAppointmentWorkOrder.FindProperty("WorkOrderId")!, barrocIntensModelsMaintenaceAppointmentWorkOrderMappingBase);
+
+            var tableMappings7 = new List<TableMapping>();
+            maintenaceAppointmentWorkOrder.SetRuntimeAnnotation("Relational:TableMappings", tableMappings7);
+            var maintenaceAppointmentWorkOrdersTable = new Table("MaintenaceAppointmentWorkOrders", null, relationalModel);
+            var idColumn7 = new Column("Id", "int", maintenaceAppointmentWorkOrdersTable);
+            maintenaceAppointmentWorkOrdersTable.Columns.Add("Id", idColumn7);
+            var maintenaceAppointmentIdColumn = new Column("MaintenaceAppointmentId", "int", maintenaceAppointmentWorkOrdersTable);
+            maintenaceAppointmentWorkOrdersTable.Columns.Add("MaintenaceAppointmentId", maintenaceAppointmentIdColumn);
+            var workOrderIdColumn = new Column("WorkOrderId", "int", maintenaceAppointmentWorkOrdersTable);
+            maintenaceAppointmentWorkOrdersTable.Columns.Add("WorkOrderId", workOrderIdColumn);
+            var pK_MaintenaceAppointmentWorkOrders = new UniqueConstraint("PK_MaintenaceAppointmentWorkOrders", maintenaceAppointmentWorkOrdersTable, new[] { idColumn7 });
+            maintenaceAppointmentWorkOrdersTable.PrimaryKey = pK_MaintenaceAppointmentWorkOrders;
+            var pK_MaintenaceAppointmentWorkOrdersUc = RelationalModel.GetKey(this,
+                "BarrocIntens.Models.MaintenaceAppointmentWorkOrder",
+                new[] { "Id" });
+            pK_MaintenaceAppointmentWorkOrders.MappedKeys.Add(pK_MaintenaceAppointmentWorkOrdersUc);
+            RelationalModel.GetOrCreateUniqueConstraints(pK_MaintenaceAppointmentWorkOrdersUc).Add(pK_MaintenaceAppointmentWorkOrders);
+            maintenaceAppointmentWorkOrdersTable.UniqueConstraints.Add("PK_MaintenaceAppointmentWorkOrders", pK_MaintenaceAppointmentWorkOrders);
+            var iX_MaintenaceAppointmentWorkOrders_MaintenaceAppointmentId = new TableIndex(
+            "IX_MaintenaceAppointmentWorkOrders_MaintenaceAppointmentId", maintenaceAppointmentWorkOrdersTable, new[] { maintenaceAppointmentIdColumn }, false);
+            var iX_MaintenaceAppointmentWorkOrders_MaintenaceAppointmentIdIx = RelationalModel.GetIndex(this,
+                "BarrocIntens.Models.MaintenaceAppointmentWorkOrder",
+                new[] { "MaintenaceAppointmentId" });
+            iX_MaintenaceAppointmentWorkOrders_MaintenaceAppointmentId.MappedIndexes.Add(iX_MaintenaceAppointmentWorkOrders_MaintenaceAppointmentIdIx);
+            RelationalModel.GetOrCreateTableIndexes(iX_MaintenaceAppointmentWorkOrders_MaintenaceAppointmentIdIx).Add(iX_MaintenaceAppointmentWorkOrders_MaintenaceAppointmentId);
+            maintenaceAppointmentWorkOrdersTable.Indexes.Add("IX_MaintenaceAppointmentWorkOrders_MaintenaceAppointmentId", iX_MaintenaceAppointmentWorkOrders_MaintenaceAppointmentId);
+            var iX_MaintenaceAppointmentWorkOrders_WorkOrderId = new TableIndex(
+            "IX_MaintenaceAppointmentWorkOrders_WorkOrderId", maintenaceAppointmentWorkOrdersTable, new[] { workOrderIdColumn }, false);
+            var iX_MaintenaceAppointmentWorkOrders_WorkOrderIdIx = RelationalModel.GetIndex(this,
+                "BarrocIntens.Models.MaintenaceAppointmentWorkOrder",
+                new[] { "WorkOrderId" });
+            iX_MaintenaceAppointmentWorkOrders_WorkOrderId.MappedIndexes.Add(iX_MaintenaceAppointmentWorkOrders_WorkOrderIdIx);
+            RelationalModel.GetOrCreateTableIndexes(iX_MaintenaceAppointmentWorkOrders_WorkOrderIdIx).Add(iX_MaintenaceAppointmentWorkOrders_WorkOrderId);
+            maintenaceAppointmentWorkOrdersTable.Indexes.Add("IX_MaintenaceAppointmentWorkOrders_WorkOrderId", iX_MaintenaceAppointmentWorkOrders_WorkOrderId);
+            relationalModel.Tables.Add(("MaintenaceAppointmentWorkOrders", null), maintenaceAppointmentWorkOrdersTable);
+            var maintenaceAppointmentWorkOrdersTableMapping = new TableMapping(maintenaceAppointmentWorkOrder, maintenaceAppointmentWorkOrdersTable, true);
+            maintenaceAppointmentWorkOrdersTable.AddTypeMapping(maintenaceAppointmentWorkOrdersTableMapping, false);
+            tableMappings7.Add(maintenaceAppointmentWorkOrdersTableMapping);
+            RelationalModel.CreateColumnMapping(idColumn7, maintenaceAppointmentWorkOrder.FindProperty("Id")!, maintenaceAppointmentWorkOrdersTableMapping);
+            RelationalModel.CreateColumnMapping(maintenaceAppointmentIdColumn, maintenaceAppointmentWorkOrder.FindProperty("MaintenaceAppointmentId")!, maintenaceAppointmentWorkOrdersTableMapping);
+            RelationalModel.CreateColumnMapping(workOrderIdColumn, maintenaceAppointmentWorkOrder.FindProperty("WorkOrderId")!, maintenaceAppointmentWorkOrdersTableMapping);
+
+            var maintenanceRequest = FindEntityType("BarrocIntens.Models.MaintenanceRequest")!;
+
+            var defaultTableMappings8 = new List<TableMappingBase<ColumnMappingBase>>();
+            maintenanceRequest.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings8);
+            var barrocIntensModelsMaintenanceRequestTableBase = new TableBase("BarrocIntens.Models.MaintenanceRequest", null, relationalModel);
+            var descriptionColumnBase = new ColumnBase<ColumnMappingBase>("Description", "longtext", barrocIntensModelsMaintenanceRequestTableBase)
+            {
+                IsNullable = true
+            };
+            barrocIntensModelsMaintenanceRequestTableBase.Columns.Add("Description", descriptionColumnBase);
+            var idColumnBase8 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsMaintenanceRequestTableBase);
+            barrocIntensModelsMaintenanceRequestTableBase.Columns.Add("Id", idColumnBase8);
+            var titleColumnBase = new ColumnBase<ColumnMappingBase>("Title", "varchar(255)", barrocIntensModelsMaintenanceRequestTableBase)
+            {
+                IsNullable = true
+            };
+            barrocIntensModelsMaintenanceRequestTableBase.Columns.Add("Title", titleColumnBase);
+            var typeColumnBase0 = new ColumnBase<ColumnMappingBase>("Type", "enum('keuring', 'melding')", barrocIntensModelsMaintenanceRequestTableBase);
+            barrocIntensModelsMaintenanceRequestTableBase.Columns.Add("Type", typeColumnBase0);
+            var userIdColumnBase2 = new ColumnBase<ColumnMappingBase>("UserId", "int", barrocIntensModelsMaintenanceRequestTableBase);
+            barrocIntensModelsMaintenanceRequestTableBase.Columns.Add("UserId", userIdColumnBase2);
+            relationalModel.DefaultTables.Add("BarrocIntens.Models.MaintenanceRequest", barrocIntensModelsMaintenanceRequestTableBase);
+            var barrocIntensModelsMaintenanceRequestMappingBase = new TableMappingBase<ColumnMappingBase>(maintenanceRequest, barrocIntensModelsMaintenanceRequestTableBase, true);
+            barrocIntensModelsMaintenanceRequestTableBase.AddTypeMapping(barrocIntensModelsMaintenanceRequestMappingBase, false);
+            defaultTableMappings8.Add(barrocIntensModelsMaintenanceRequestMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase8, maintenanceRequest.FindProperty("Id")!, barrocIntensModelsMaintenanceRequestMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)descriptionColumnBase, maintenanceRequest.FindProperty("Description")!, barrocIntensModelsMaintenanceRequestMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)titleColumnBase, maintenanceRequest.FindProperty("Title")!, barrocIntensModelsMaintenanceRequestMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)typeColumnBase0, maintenanceRequest.FindProperty("Type")!, barrocIntensModelsMaintenanceRequestMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)userIdColumnBase2, maintenanceRequest.FindProperty("UserId")!, barrocIntensModelsMaintenanceRequestMappingBase);
+
+            var tableMappings8 = new List<TableMapping>();
+            maintenanceRequest.SetRuntimeAnnotation("Relational:TableMappings", tableMappings8);
+            var maintenanceRequestsTable = new Table("MaintenanceRequests", null, relationalModel);
+            var idColumn8 = new Column("Id", "int", maintenanceRequestsTable);
+            maintenanceRequestsTable.Columns.Add("Id", idColumn8);
+            var descriptionColumn = new Column("Description", "longtext", maintenanceRequestsTable)
+            {
+                IsNullable = true
+            };
+            maintenanceRequestsTable.Columns.Add("Description", descriptionColumn);
+            var titleColumn = new Column("Title", "varchar(255)", maintenanceRequestsTable)
+            {
+                IsNullable = true
+            };
+            maintenanceRequestsTable.Columns.Add("Title", titleColumn);
+            var typeColumn0 = new Column("Type", "enum('keuring', 'melding')", maintenanceRequestsTable);
+            maintenanceRequestsTable.Columns.Add("Type", typeColumn0);
+            var userIdColumn2 = new Column("UserId", "int", maintenanceRequestsTable);
+            maintenanceRequestsTable.Columns.Add("UserId", userIdColumn2);
+            var pK_MaintenanceRequests = new UniqueConstraint("PK_MaintenanceRequests", maintenanceRequestsTable, new[] { idColumn8 });
+            maintenanceRequestsTable.PrimaryKey = pK_MaintenanceRequests;
+            var pK_MaintenanceRequestsUc = RelationalModel.GetKey(this,
+                "BarrocIntens.Models.MaintenanceRequest",
+                new[] { "Id" });
+            pK_MaintenanceRequests.MappedKeys.Add(pK_MaintenanceRequestsUc);
+            RelationalModel.GetOrCreateUniqueConstraints(pK_MaintenanceRequestsUc).Add(pK_MaintenanceRequests);
+            maintenanceRequestsTable.UniqueConstraints.Add("PK_MaintenanceRequests", pK_MaintenanceRequests);
+            var iX_MaintenanceRequests_UserId = new TableIndex(
+            "IX_MaintenanceRequests_UserId", maintenanceRequestsTable, new[] { userIdColumn2 }, false);
+            var iX_MaintenanceRequests_UserIdIx = RelationalModel.GetIndex(this,
+                "BarrocIntens.Models.MaintenanceRequest",
+                new[] { "UserId" });
+            iX_MaintenanceRequests_UserId.MappedIndexes.Add(iX_MaintenanceRequests_UserIdIx);
+            RelationalModel.GetOrCreateTableIndexes(iX_MaintenanceRequests_UserIdIx).Add(iX_MaintenanceRequests_UserId);
+            maintenanceRequestsTable.Indexes.Add("IX_MaintenanceRequests_UserId", iX_MaintenanceRequests_UserId);
+            relationalModel.Tables.Add(("MaintenanceRequests", null), maintenanceRequestsTable);
+            var maintenanceRequestsTableMapping = new TableMapping(maintenanceRequest, maintenanceRequestsTable, true);
+            maintenanceRequestsTable.AddTypeMapping(maintenanceRequestsTableMapping, false);
+            tableMappings8.Add(maintenanceRequestsTableMapping);
+            RelationalModel.CreateColumnMapping(idColumn8, maintenanceRequest.FindProperty("Id")!, maintenanceRequestsTableMapping);
+            RelationalModel.CreateColumnMapping(descriptionColumn, maintenanceRequest.FindProperty("Description")!, maintenanceRequestsTableMapping);
+            RelationalModel.CreateColumnMapping(titleColumn, maintenanceRequest.FindProperty("Title")!, maintenanceRequestsTableMapping);
+            RelationalModel.CreateColumnMapping(typeColumn0, maintenanceRequest.FindProperty("Type")!, maintenanceRequestsTableMapping);
+            RelationalModel.CreateColumnMapping(userIdColumn2, maintenanceRequest.FindProperty("UserId")!, maintenanceRequestsTableMapping);
 
             var note = FindEntityType("BarrocIntens.Models.Note")!;
 
-            var defaultTableMappings6 = new List<TableMappingBase<ColumnMappingBase>>();
-            note.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings6);
+            var defaultTableMappings9 = new List<TableMappingBase<ColumnMappingBase>>();
+            note.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings9);
             var barrocIntensModelsNoteTableBase = new TableBase("BarrocIntens.Models.Note", null, relationalModel);
-            var companyIdColumnBase2 = new ColumnBase<ColumnMappingBase>("CompanyId", "int", barrocIntensModelsNoteTableBase);
-            barrocIntensModelsNoteTableBase.Columns.Add("CompanyId", companyIdColumnBase2);
+            var companyIdColumnBase1 = new ColumnBase<ColumnMappingBase>("CompanyId", "int", barrocIntensModelsNoteTableBase);
+            barrocIntensModelsNoteTableBase.Columns.Add("CompanyId", companyIdColumnBase1);
             var dateColumnBase1 = new ColumnBase<ColumnMappingBase>("Date", "datetime(6)", barrocIntensModelsNoteTableBase);
             barrocIntensModelsNoteTableBase.Columns.Add("Date", dateColumnBase1);
-            var idColumnBase6 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsNoteTableBase);
-            barrocIntensModelsNoteTableBase.Columns.Add("Id", idColumnBase6);
+            var idColumnBase9 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsNoteTableBase);
+            barrocIntensModelsNoteTableBase.Columns.Add("Id", idColumnBase9);
             var notesColumnBase = new ColumnBase<ColumnMappingBase>("Notes", "longtext", barrocIntensModelsNoteTableBase);
             barrocIntensModelsNoteTableBase.Columns.Add("Notes", notesColumnBase);
-            var userIdColumnBase1 = new ColumnBase<ColumnMappingBase>("UserId", "int", barrocIntensModelsNoteTableBase);
-            barrocIntensModelsNoteTableBase.Columns.Add("UserId", userIdColumnBase1);
+            var userIdColumnBase3 = new ColumnBase<ColumnMappingBase>("UserId", "int", barrocIntensModelsNoteTableBase);
+            barrocIntensModelsNoteTableBase.Columns.Add("UserId", userIdColumnBase3);
             relationalModel.DefaultTables.Add("BarrocIntens.Models.Note", barrocIntensModelsNoteTableBase);
             var barrocIntensModelsNoteMappingBase = new TableMappingBase<ColumnMappingBase>(note, barrocIntensModelsNoteTableBase, true);
             barrocIntensModelsNoteTableBase.AddTypeMapping(barrocIntensModelsNoteMappingBase, false);
-            defaultTableMappings6.Add(barrocIntensModelsNoteMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase6, note.FindProperty("Id")!, barrocIntensModelsNoteMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)companyIdColumnBase2, note.FindProperty("CompanyId")!, barrocIntensModelsNoteMappingBase);
+            defaultTableMappings9.Add(barrocIntensModelsNoteMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase9, note.FindProperty("Id")!, barrocIntensModelsNoteMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)companyIdColumnBase1, note.FindProperty("CompanyId")!, barrocIntensModelsNoteMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)dateColumnBase1, note.FindProperty("Date")!, barrocIntensModelsNoteMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)notesColumnBase, note.FindProperty("Notes")!, barrocIntensModelsNoteMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)userIdColumnBase1, note.FindProperty("UserId")!, barrocIntensModelsNoteMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)userIdColumnBase3, note.FindProperty("UserId")!, barrocIntensModelsNoteMappingBase);
 
-            var tableMappings6 = new List<TableMapping>();
-            note.SetRuntimeAnnotation("Relational:TableMappings", tableMappings6);
+            var tableMappings9 = new List<TableMapping>();
+            note.SetRuntimeAnnotation("Relational:TableMappings", tableMappings9);
             var notesTable = new Table("Notes", null, relationalModel);
-            var idColumn6 = new Column("Id", "int", notesTable);
-            notesTable.Columns.Add("Id", idColumn6);
-            var companyIdColumn2 = new Column("CompanyId", "int", notesTable);
-            notesTable.Columns.Add("CompanyId", companyIdColumn2);
+            var idColumn9 = new Column("Id", "int", notesTable);
+            notesTable.Columns.Add("Id", idColumn9);
+            var companyIdColumn1 = new Column("CompanyId", "int", notesTable);
+            notesTable.Columns.Add("CompanyId", companyIdColumn1);
             var dateColumn1 = new Column("Date", "datetime(6)", notesTable);
             notesTable.Columns.Add("Date", dateColumn1);
             var notesColumn = new Column("Notes", "longtext", notesTable);
             notesTable.Columns.Add("Notes", notesColumn);
-            var userIdColumn1 = new Column("UserId", "int", notesTable);
-            notesTable.Columns.Add("UserId", userIdColumn1);
-            var pK_Notes = new UniqueConstraint("PK_Notes", notesTable, new[] { idColumn6 });
+            var userIdColumn3 = new Column("UserId", "int", notesTable);
+            notesTable.Columns.Add("UserId", userIdColumn3);
+            var pK_Notes = new UniqueConstraint("PK_Notes", notesTable, new[] { idColumn9 });
             notesTable.PrimaryKey = pK_Notes;
             var pK_NotesUc = RelationalModel.GetKey(this,
                 "BarrocIntens.Models.Note",
@@ -598,7 +837,7 @@ namespace BarrocIntens.Models
             RelationalModel.GetOrCreateUniqueConstraints(pK_NotesUc).Add(pK_Notes);
             notesTable.UniqueConstraints.Add("PK_Notes", pK_Notes);
             var iX_Notes_CompanyId = new TableIndex(
-            "IX_Notes_CompanyId", notesTable, new[] { companyIdColumn2 }, false);
+            "IX_Notes_CompanyId", notesTable, new[] { companyIdColumn1 }, false);
             var iX_Notes_CompanyIdIx = RelationalModel.GetIndex(this,
                 "BarrocIntens.Models.Note",
                 new[] { "CompanyId" });
@@ -606,7 +845,7 @@ namespace BarrocIntens.Models
             RelationalModel.GetOrCreateTableIndexes(iX_Notes_CompanyIdIx).Add(iX_Notes_CompanyId);
             notesTable.Indexes.Add("IX_Notes_CompanyId", iX_Notes_CompanyId);
             var iX_Notes_UserId = new TableIndex(
-            "IX_Notes_UserId", notesTable, new[] { userIdColumn1 }, false);
+            "IX_Notes_UserId", notesTable, new[] { userIdColumn3 }, false);
             var iX_Notes_UserIdIx = RelationalModel.GetIndex(this,
                 "BarrocIntens.Models.Note",
                 new[] { "UserId" });
@@ -616,63 +855,60 @@ namespace BarrocIntens.Models
             relationalModel.Tables.Add(("Notes", null), notesTable);
             var notesTableMapping = new TableMapping(note, notesTable, true);
             notesTable.AddTypeMapping(notesTableMapping, false);
-            tableMappings6.Add(notesTableMapping);
-            RelationalModel.CreateColumnMapping(idColumn6, note.FindProperty("Id")!, notesTableMapping);
-            RelationalModel.CreateColumnMapping(companyIdColumn2, note.FindProperty("CompanyId")!, notesTableMapping);
+            tableMappings9.Add(notesTableMapping);
+            RelationalModel.CreateColumnMapping(idColumn9, note.FindProperty("Id")!, notesTableMapping);
+            RelationalModel.CreateColumnMapping(companyIdColumn1, note.FindProperty("CompanyId")!, notesTableMapping);
             RelationalModel.CreateColumnMapping(dateColumn1, note.FindProperty("Date")!, notesTableMapping);
             RelationalModel.CreateColumnMapping(notesColumn, note.FindProperty("Notes")!, notesTableMapping);
-            RelationalModel.CreateColumnMapping(userIdColumn1, note.FindProperty("UserId")!, notesTableMapping);
+            RelationalModel.CreateColumnMapping(userIdColumn3, note.FindProperty("UserId")!, notesTableMapping);
 
             var product = FindEntityType("BarrocIntens.Models.Product")!;
 
-            var defaultTableMappings7 = new List<TableMappingBase<ColumnMappingBase>>();
-            product.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings7);
+            var defaultTableMappings10 = new List<TableMappingBase<ColumnMappingBase>>();
+            product.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings10);
             var barrocIntensModelsProductTableBase = new TableBase("BarrocIntens.Models.Product", null, relationalModel);
-            var descriptionColumnBase = new ColumnBase<ColumnMappingBase>("Description", "varchar(255)", barrocIntensModelsProductTableBase);
-            barrocIntensModelsProductTableBase.Columns.Add("Description", descriptionColumnBase);
+            var descriptionColumnBase0 = new ColumnBase<ColumnMappingBase>("Description", "varchar(255)", barrocIntensModelsProductTableBase);
+            barrocIntensModelsProductTableBase.Columns.Add("Description", descriptionColumnBase0);
             var expenseIdColumnBase0 = new ColumnBase<ColumnMappingBase>("ExpenseId", "int", barrocIntensModelsProductTableBase)
             {
                 IsNullable = true
             };
             barrocIntensModelsProductTableBase.Columns.Add("ExpenseId", expenseIdColumnBase0);
-            var idColumnBase7 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsProductTableBase);
-            barrocIntensModelsProductTableBase.Columns.Add("Id", idColumnBase7);
+            var idColumnBase10 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsProductTableBase);
+            barrocIntensModelsProductTableBase.Columns.Add("Id", idColumnBase10);
             var imagePathColumnBase = new ColumnBase<ColumnMappingBase>("ImagePath", "varchar(255)", barrocIntensModelsProductTableBase)
             {
                 IsNullable = true
             };
             barrocIntensModelsProductTableBase.Columns.Add("ImagePath", imagePathColumnBase);
+            var inStockColumnBase = new ColumnBase<ColumnMappingBase>("InStock", "int", barrocIntensModelsProductTableBase);
+            barrocIntensModelsProductTableBase.Columns.Add("InStock", inStockColumnBase);
             var nameColumnBase0 = new ColumnBase<ColumnMappingBase>("Name", "varchar(255)", barrocIntensModelsProductTableBase);
             barrocIntensModelsProductTableBase.Columns.Add("Name", nameColumnBase0);
             var priceColumnBase = new ColumnBase<ColumnMappingBase>("Price", "decimal(8,2)", barrocIntensModelsProductTableBase);
             barrocIntensModelsProductTableBase.Columns.Add("Price", priceColumnBase);
             var productCategoryIdColumnBase = new ColumnBase<ColumnMappingBase>("ProductCategoryId", "int", barrocIntensModelsProductTableBase);
             barrocIntensModelsProductTableBase.Columns.Add("ProductCategoryId", productCategoryIdColumnBase);
-            var quoteIdColumnBase = new ColumnBase<ColumnMappingBase>("QuoteId", "int", barrocIntensModelsProductTableBase)
-            {
-                IsNullable = true
-            };
-            barrocIntensModelsProductTableBase.Columns.Add("QuoteId", quoteIdColumnBase);
             relationalModel.DefaultTables.Add("BarrocIntens.Models.Product", barrocIntensModelsProductTableBase);
             var barrocIntensModelsProductMappingBase = new TableMappingBase<ColumnMappingBase>(product, barrocIntensModelsProductTableBase, true);
             barrocIntensModelsProductTableBase.AddTypeMapping(barrocIntensModelsProductMappingBase, false);
-            defaultTableMappings7.Add(barrocIntensModelsProductMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase7, product.FindProperty("Id")!, barrocIntensModelsProductMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)descriptionColumnBase, product.FindProperty("Description")!, barrocIntensModelsProductMappingBase);
+            defaultTableMappings10.Add(barrocIntensModelsProductMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase10, product.FindProperty("Id")!, barrocIntensModelsProductMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)descriptionColumnBase0, product.FindProperty("Description")!, barrocIntensModelsProductMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)expenseIdColumnBase0, product.FindProperty("ExpenseId")!, barrocIntensModelsProductMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)imagePathColumnBase, product.FindProperty("ImagePath")!, barrocIntensModelsProductMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)inStockColumnBase, product.FindProperty("InStock")!, barrocIntensModelsProductMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)nameColumnBase0, product.FindProperty("Name")!, barrocIntensModelsProductMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)priceColumnBase, product.FindProperty("Price")!, barrocIntensModelsProductMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)productCategoryIdColumnBase, product.FindProperty("ProductCategoryId")!, barrocIntensModelsProductMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)quoteIdColumnBase, product.FindProperty("QuoteId")!, barrocIntensModelsProductMappingBase);
 
-            var tableMappings7 = new List<TableMapping>();
-            product.SetRuntimeAnnotation("Relational:TableMappings", tableMappings7);
+            var tableMappings10 = new List<TableMapping>();
+            product.SetRuntimeAnnotation("Relational:TableMappings", tableMappings10);
             var productsTable = new Table("Products", null, relationalModel);
-            var idColumn7 = new Column("Id", "int", productsTable);
-            productsTable.Columns.Add("Id", idColumn7);
-            var descriptionColumn = new Column("Description", "varchar(255)", productsTable);
-            productsTable.Columns.Add("Description", descriptionColumn);
+            var idColumn10 = new Column("Id", "int", productsTable);
+            productsTable.Columns.Add("Id", idColumn10);
+            var descriptionColumn0 = new Column("Description", "varchar(255)", productsTable);
+            productsTable.Columns.Add("Description", descriptionColumn0);
             var expenseIdColumn0 = new Column("ExpenseId", "int", productsTable)
             {
                 IsNullable = true
@@ -683,18 +919,15 @@ namespace BarrocIntens.Models
                 IsNullable = true
             };
             productsTable.Columns.Add("ImagePath", imagePathColumn);
+            var inStockColumn = new Column("InStock", "int", productsTable);
+            productsTable.Columns.Add("InStock", inStockColumn);
             var nameColumn0 = new Column("Name", "varchar(255)", productsTable);
             productsTable.Columns.Add("Name", nameColumn0);
             var priceColumn = new Column("Price", "decimal(8,2)", productsTable);
             productsTable.Columns.Add("Price", priceColumn);
             var productCategoryIdColumn = new Column("ProductCategoryId", "int", productsTable);
             productsTable.Columns.Add("ProductCategoryId", productCategoryIdColumn);
-            var quoteIdColumn = new Column("QuoteId", "int", productsTable)
-            {
-                IsNullable = true
-            };
-            productsTable.Columns.Add("QuoteId", quoteIdColumn);
-            var pK_Products = new UniqueConstraint("PK_Products", productsTable, new[] { idColumn7 });
+            var pK_Products = new UniqueConstraint("PK_Products", productsTable, new[] { idColumn10 });
             productsTable.PrimaryKey = pK_Products;
             var pK_ProductsUc = RelationalModel.GetKey(this,
                 "BarrocIntens.Models.Product",
@@ -718,34 +951,26 @@ namespace BarrocIntens.Models
             iX_Products_ProductCategoryId.MappedIndexes.Add(iX_Products_ProductCategoryIdIx);
             RelationalModel.GetOrCreateTableIndexes(iX_Products_ProductCategoryIdIx).Add(iX_Products_ProductCategoryId);
             productsTable.Indexes.Add("IX_Products_ProductCategoryId", iX_Products_ProductCategoryId);
-            var iX_Products_QuoteId = new TableIndex(
-            "IX_Products_QuoteId", productsTable, new[] { quoteIdColumn }, false);
-            var iX_Products_QuoteIdIx = RelationalModel.GetIndex(this,
-                "BarrocIntens.Models.Product",
-                new[] { "QuoteId" });
-            iX_Products_QuoteId.MappedIndexes.Add(iX_Products_QuoteIdIx);
-            RelationalModel.GetOrCreateTableIndexes(iX_Products_QuoteIdIx).Add(iX_Products_QuoteId);
-            productsTable.Indexes.Add("IX_Products_QuoteId", iX_Products_QuoteId);
             relationalModel.Tables.Add(("Products", null), productsTable);
             var productsTableMapping = new TableMapping(product, productsTable, true);
             productsTable.AddTypeMapping(productsTableMapping, false);
-            tableMappings7.Add(productsTableMapping);
-            RelationalModel.CreateColumnMapping(idColumn7, product.FindProperty("Id")!, productsTableMapping);
-            RelationalModel.CreateColumnMapping(descriptionColumn, product.FindProperty("Description")!, productsTableMapping);
+            tableMappings10.Add(productsTableMapping);
+            RelationalModel.CreateColumnMapping(idColumn10, product.FindProperty("Id")!, productsTableMapping);
+            RelationalModel.CreateColumnMapping(descriptionColumn0, product.FindProperty("Description")!, productsTableMapping);
             RelationalModel.CreateColumnMapping(expenseIdColumn0, product.FindProperty("ExpenseId")!, productsTableMapping);
             RelationalModel.CreateColumnMapping(imagePathColumn, product.FindProperty("ImagePath")!, productsTableMapping);
+            RelationalModel.CreateColumnMapping(inStockColumn, product.FindProperty("InStock")!, productsTableMapping);
             RelationalModel.CreateColumnMapping(nameColumn0, product.FindProperty("Name")!, productsTableMapping);
             RelationalModel.CreateColumnMapping(priceColumn, product.FindProperty("Price")!, productsTableMapping);
             RelationalModel.CreateColumnMapping(productCategoryIdColumn, product.FindProperty("ProductCategoryId")!, productsTableMapping);
-            RelationalModel.CreateColumnMapping(quoteIdColumn, product.FindProperty("QuoteId")!, productsTableMapping);
 
             var productCategory = FindEntityType("BarrocIntens.Models.ProductCategory")!;
 
-            var defaultTableMappings8 = new List<TableMappingBase<ColumnMappingBase>>();
-            productCategory.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings8);
+            var defaultTableMappings11 = new List<TableMappingBase<ColumnMappingBase>>();
+            productCategory.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings11);
             var barrocIntensModelsProductCategoryTableBase = new TableBase("BarrocIntens.Models.ProductCategory", null, relationalModel);
-            var idColumnBase8 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsProductCategoryTableBase);
-            barrocIntensModelsProductCategoryTableBase.Columns.Add("Id", idColumnBase8);
+            var idColumnBase11 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsProductCategoryTableBase);
+            barrocIntensModelsProductCategoryTableBase.Columns.Add("Id", idColumnBase11);
             var isEmployeeOnlyColumnBase = new ColumnBase<ColumnMappingBase>("IsEmployeeOnly", "tinyint", barrocIntensModelsProductCategoryTableBase);
             barrocIntensModelsProductCategoryTableBase.Columns.Add("IsEmployeeOnly", isEmployeeOnlyColumnBase);
             var nameColumnBase1 = new ColumnBase<ColumnMappingBase>("Name", "varchar(255)", barrocIntensModelsProductCategoryTableBase);
@@ -753,21 +978,21 @@ namespace BarrocIntens.Models
             relationalModel.DefaultTables.Add("BarrocIntens.Models.ProductCategory", barrocIntensModelsProductCategoryTableBase);
             var barrocIntensModelsProductCategoryMappingBase = new TableMappingBase<ColumnMappingBase>(productCategory, barrocIntensModelsProductCategoryTableBase, true);
             barrocIntensModelsProductCategoryTableBase.AddTypeMapping(barrocIntensModelsProductCategoryMappingBase, false);
-            defaultTableMappings8.Add(barrocIntensModelsProductCategoryMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase8, productCategory.FindProperty("Id")!, barrocIntensModelsProductCategoryMappingBase);
+            defaultTableMappings11.Add(barrocIntensModelsProductCategoryMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase11, productCategory.FindProperty("Id")!, barrocIntensModelsProductCategoryMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)isEmployeeOnlyColumnBase, productCategory.FindProperty("IsEmployeeOnly")!, barrocIntensModelsProductCategoryMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)nameColumnBase1, productCategory.FindProperty("Name")!, barrocIntensModelsProductCategoryMappingBase);
 
-            var tableMappings8 = new List<TableMapping>();
-            productCategory.SetRuntimeAnnotation("Relational:TableMappings", tableMappings8);
+            var tableMappings11 = new List<TableMapping>();
+            productCategory.SetRuntimeAnnotation("Relational:TableMappings", tableMappings11);
             var productCategoriesTable = new Table("ProductCategories", null, relationalModel);
-            var idColumn8 = new Column("Id", "int", productCategoriesTable);
-            productCategoriesTable.Columns.Add("Id", idColumn8);
+            var idColumn11 = new Column("Id", "int", productCategoriesTable);
+            productCategoriesTable.Columns.Add("Id", idColumn11);
             var isEmployeeOnlyColumn = new Column("IsEmployeeOnly", "tinyint", productCategoriesTable);
             productCategoriesTable.Columns.Add("IsEmployeeOnly", isEmployeeOnlyColumn);
             var nameColumn1 = new Column("Name", "varchar(255)", productCategoriesTable);
             productCategoriesTable.Columns.Add("Name", nameColumn1);
-            var pK_ProductCategories = new UniqueConstraint("PK_ProductCategories", productCategoriesTable, new[] { idColumn8 });
+            var pK_ProductCategories = new UniqueConstraint("PK_ProductCategories", productCategoriesTable, new[] { idColumn11 });
             productCategoriesTable.PrimaryKey = pK_ProductCategories;
             var pK_ProductCategoriesUc = RelationalModel.GetKey(this,
                 "BarrocIntens.Models.ProductCategory",
@@ -778,40 +1003,40 @@ namespace BarrocIntens.Models
             relationalModel.Tables.Add(("ProductCategories", null), productCategoriesTable);
             var productCategoriesTableMapping = new TableMapping(productCategory, productCategoriesTable, true);
             productCategoriesTable.AddTypeMapping(productCategoriesTableMapping, false);
-            tableMappings8.Add(productCategoriesTableMapping);
-            RelationalModel.CreateColumnMapping(idColumn8, productCategory.FindProperty("Id")!, productCategoriesTableMapping);
+            tableMappings11.Add(productCategoriesTableMapping);
+            RelationalModel.CreateColumnMapping(idColumn11, productCategory.FindProperty("Id")!, productCategoriesTableMapping);
             RelationalModel.CreateColumnMapping(isEmployeeOnlyColumn, productCategory.FindProperty("IsEmployeeOnly")!, productCategoriesTableMapping);
             RelationalModel.CreateColumnMapping(nameColumn1, productCategory.FindProperty("Name")!, productCategoriesTableMapping);
 
             var quote = FindEntityType("BarrocIntens.Models.Quote")!;
 
-            var defaultTableMappings9 = new List<TableMappingBase<ColumnMappingBase>>();
-            quote.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings9);
+            var defaultTableMappings12 = new List<TableMappingBase<ColumnMappingBase>>();
+            quote.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings12);
             var barrocIntensModelsQuoteTableBase = new TableBase("BarrocIntens.Models.Quote", null, relationalModel);
             var dateColumnBase2 = new ColumnBase<ColumnMappingBase>("Date", "datetime(6)", barrocIntensModelsQuoteTableBase);
             barrocIntensModelsQuoteTableBase.Columns.Add("Date", dateColumnBase2);
-            var idColumnBase9 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsQuoteTableBase);
-            barrocIntensModelsQuoteTableBase.Columns.Add("Id", idColumnBase9);
-            var userIdColumnBase2 = new ColumnBase<ColumnMappingBase>("UserId", "int", barrocIntensModelsQuoteTableBase);
-            barrocIntensModelsQuoteTableBase.Columns.Add("UserId", userIdColumnBase2);
+            var idColumnBase12 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsQuoteTableBase);
+            barrocIntensModelsQuoteTableBase.Columns.Add("Id", idColumnBase12);
+            var userIdColumnBase4 = new ColumnBase<ColumnMappingBase>("UserId", "int", barrocIntensModelsQuoteTableBase);
+            barrocIntensModelsQuoteTableBase.Columns.Add("UserId", userIdColumnBase4);
             relationalModel.DefaultTables.Add("BarrocIntens.Models.Quote", barrocIntensModelsQuoteTableBase);
             var barrocIntensModelsQuoteMappingBase = new TableMappingBase<ColumnMappingBase>(quote, barrocIntensModelsQuoteTableBase, true);
             barrocIntensModelsQuoteTableBase.AddTypeMapping(barrocIntensModelsQuoteMappingBase, false);
-            defaultTableMappings9.Add(barrocIntensModelsQuoteMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase9, quote.FindProperty("Id")!, barrocIntensModelsQuoteMappingBase);
+            defaultTableMappings12.Add(barrocIntensModelsQuoteMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase12, quote.FindProperty("Id")!, barrocIntensModelsQuoteMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)dateColumnBase2, quote.FindProperty("Date")!, barrocIntensModelsQuoteMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)userIdColumnBase2, quote.FindProperty("UserId")!, barrocIntensModelsQuoteMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)userIdColumnBase4, quote.FindProperty("UserId")!, barrocIntensModelsQuoteMappingBase);
 
-            var tableMappings9 = new List<TableMapping>();
-            quote.SetRuntimeAnnotation("Relational:TableMappings", tableMappings9);
+            var tableMappings12 = new List<TableMapping>();
+            quote.SetRuntimeAnnotation("Relational:TableMappings", tableMappings12);
             var quotesTable = new Table("Quotes", null, relationalModel);
-            var idColumn9 = new Column("Id", "int", quotesTable);
-            quotesTable.Columns.Add("Id", idColumn9);
+            var idColumn12 = new Column("Id", "int", quotesTable);
+            quotesTable.Columns.Add("Id", idColumn12);
             var dateColumn2 = new Column("Date", "datetime(6)", quotesTable);
             quotesTable.Columns.Add("Date", dateColumn2);
-            var userIdColumn2 = new Column("UserId", "int", quotesTable);
-            quotesTable.Columns.Add("UserId", userIdColumn2);
-            var pK_Quotes = new UniqueConstraint("PK_Quotes", quotesTable, new[] { idColumn9 });
+            var userIdColumn4 = new Column("UserId", "int", quotesTable);
+            quotesTable.Columns.Add("UserId", userIdColumn4);
+            var pK_Quotes = new UniqueConstraint("PK_Quotes", quotesTable, new[] { idColumn12 });
             quotesTable.PrimaryKey = pK_Quotes;
             var pK_QuotesUc = RelationalModel.GetKey(this,
                 "BarrocIntens.Models.Quote",
@@ -820,7 +1045,7 @@ namespace BarrocIntens.Models
             RelationalModel.GetOrCreateUniqueConstraints(pK_QuotesUc).Add(pK_Quotes);
             quotesTable.UniqueConstraints.Add("PK_Quotes", pK_Quotes);
             var iX_Quotes_UserId = new TableIndex(
-            "IX_Quotes_UserId", quotesTable, new[] { userIdColumn2 }, false);
+            "IX_Quotes_UserId", quotesTable, new[] { userIdColumn4 }, false);
             var iX_Quotes_UserIdIx = RelationalModel.GetIndex(this,
                 "BarrocIntens.Models.Quote",
                 new[] { "UserId" });
@@ -830,45 +1055,45 @@ namespace BarrocIntens.Models
             relationalModel.Tables.Add(("Quotes", null), quotesTable);
             var quotesTableMapping = new TableMapping(quote, quotesTable, true);
             quotesTable.AddTypeMapping(quotesTableMapping, false);
-            tableMappings9.Add(quotesTableMapping);
-            RelationalModel.CreateColumnMapping(idColumn9, quote.FindProperty("Id")!, quotesTableMapping);
+            tableMappings12.Add(quotesTableMapping);
+            RelationalModel.CreateColumnMapping(idColumn12, quote.FindProperty("Id")!, quotesTableMapping);
             RelationalModel.CreateColumnMapping(dateColumn2, quote.FindProperty("Date")!, quotesTableMapping);
-            RelationalModel.CreateColumnMapping(userIdColumn2, quote.FindProperty("UserId")!, quotesTableMapping);
+            RelationalModel.CreateColumnMapping(userIdColumn4, quote.FindProperty("UserId")!, quotesTableMapping);
 
             var quoteProduct = FindEntityType("BarrocIntens.Models.QuoteProduct")!;
 
-            var defaultTableMappings10 = new List<TableMappingBase<ColumnMappingBase>>();
-            quoteProduct.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings10);
+            var defaultTableMappings13 = new List<TableMappingBase<ColumnMappingBase>>();
+            quoteProduct.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings13);
             var barrocIntensModelsQuoteProductTableBase = new TableBase("BarrocIntens.Models.QuoteProduct", null, relationalModel);
-            var idColumnBase10 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsQuoteProductTableBase);
-            barrocIntensModelsQuoteProductTableBase.Columns.Add("Id", idColumnBase10);
-            var productIdColumnBase1 = new ColumnBase<ColumnMappingBase>("ProductId", "int", barrocIntensModelsQuoteProductTableBase);
-            barrocIntensModelsQuoteProductTableBase.Columns.Add("ProductId", productIdColumnBase1);
+            var idColumnBase13 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsQuoteProductTableBase);
+            barrocIntensModelsQuoteProductTableBase.Columns.Add("Id", idColumnBase13);
+            var productIdColumnBase2 = new ColumnBase<ColumnMappingBase>("ProductId", "int", barrocIntensModelsQuoteProductTableBase);
+            barrocIntensModelsQuoteProductTableBase.Columns.Add("ProductId", productIdColumnBase2);
             var quantityColumnBase0 = new ColumnBase<ColumnMappingBase>("Quantity", "int", barrocIntensModelsQuoteProductTableBase);
             barrocIntensModelsQuoteProductTableBase.Columns.Add("Quantity", quantityColumnBase0);
-            var quoteIdColumnBase0 = new ColumnBase<ColumnMappingBase>("QuoteId", "int", barrocIntensModelsQuoteProductTableBase);
-            barrocIntensModelsQuoteProductTableBase.Columns.Add("QuoteId", quoteIdColumnBase0);
+            var quoteIdColumnBase = new ColumnBase<ColumnMappingBase>("QuoteId", "int", barrocIntensModelsQuoteProductTableBase);
+            barrocIntensModelsQuoteProductTableBase.Columns.Add("QuoteId", quoteIdColumnBase);
             relationalModel.DefaultTables.Add("BarrocIntens.Models.QuoteProduct", barrocIntensModelsQuoteProductTableBase);
             var barrocIntensModelsQuoteProductMappingBase = new TableMappingBase<ColumnMappingBase>(quoteProduct, barrocIntensModelsQuoteProductTableBase, true);
             barrocIntensModelsQuoteProductTableBase.AddTypeMapping(barrocIntensModelsQuoteProductMappingBase, false);
-            defaultTableMappings10.Add(barrocIntensModelsQuoteProductMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase10, quoteProduct.FindProperty("Id")!, barrocIntensModelsQuoteProductMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)productIdColumnBase1, quoteProduct.FindProperty("ProductId")!, barrocIntensModelsQuoteProductMappingBase);
+            defaultTableMappings13.Add(barrocIntensModelsQuoteProductMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase13, quoteProduct.FindProperty("Id")!, barrocIntensModelsQuoteProductMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)productIdColumnBase2, quoteProduct.FindProperty("ProductId")!, barrocIntensModelsQuoteProductMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)quantityColumnBase0, quoteProduct.FindProperty("Quantity")!, barrocIntensModelsQuoteProductMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)quoteIdColumnBase0, quoteProduct.FindProperty("QuoteId")!, barrocIntensModelsQuoteProductMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)quoteIdColumnBase, quoteProduct.FindProperty("QuoteId")!, barrocIntensModelsQuoteProductMappingBase);
 
-            var tableMappings10 = new List<TableMapping>();
-            quoteProduct.SetRuntimeAnnotation("Relational:TableMappings", tableMappings10);
+            var tableMappings13 = new List<TableMapping>();
+            quoteProduct.SetRuntimeAnnotation("Relational:TableMappings", tableMappings13);
             var quoteProductsTable = new Table("QuoteProducts", null, relationalModel);
-            var idColumn10 = new Column("Id", "int", quoteProductsTable);
-            quoteProductsTable.Columns.Add("Id", idColumn10);
-            var productIdColumn1 = new Column("ProductId", "int", quoteProductsTable);
-            quoteProductsTable.Columns.Add("ProductId", productIdColumn1);
+            var idColumn13 = new Column("Id", "int", quoteProductsTable);
+            quoteProductsTable.Columns.Add("Id", idColumn13);
+            var productIdColumn2 = new Column("ProductId", "int", quoteProductsTable);
+            quoteProductsTable.Columns.Add("ProductId", productIdColumn2);
             var quantityColumn0 = new Column("Quantity", "int", quoteProductsTable);
             quoteProductsTable.Columns.Add("Quantity", quantityColumn0);
-            var quoteIdColumn0 = new Column("QuoteId", "int", quoteProductsTable);
-            quoteProductsTable.Columns.Add("QuoteId", quoteIdColumn0);
-            var pK_QuoteProducts = new UniqueConstraint("PK_QuoteProducts", quoteProductsTable, new[] { idColumn10 });
+            var quoteIdColumn = new Column("QuoteId", "int", quoteProductsTable);
+            quoteProductsTable.Columns.Add("QuoteId", quoteIdColumn);
+            var pK_QuoteProducts = new UniqueConstraint("PK_QuoteProducts", quoteProductsTable, new[] { idColumn13 });
             quoteProductsTable.PrimaryKey = pK_QuoteProducts;
             var pK_QuoteProductsUc = RelationalModel.GetKey(this,
                 "BarrocIntens.Models.QuoteProduct",
@@ -877,7 +1102,7 @@ namespace BarrocIntens.Models
             RelationalModel.GetOrCreateUniqueConstraints(pK_QuoteProductsUc).Add(pK_QuoteProducts);
             quoteProductsTable.UniqueConstraints.Add("PK_QuoteProducts", pK_QuoteProducts);
             var iX_QuoteProducts_ProductId = new TableIndex(
-            "IX_QuoteProducts_ProductId", quoteProductsTable, new[] { productIdColumn1 }, false);
+            "IX_QuoteProducts_ProductId", quoteProductsTable, new[] { productIdColumn2 }, false);
             var iX_QuoteProducts_ProductIdIx = RelationalModel.GetIndex(this,
                 "BarrocIntens.Models.QuoteProduct",
                 new[] { "ProductId" });
@@ -885,7 +1110,7 @@ namespace BarrocIntens.Models
             RelationalModel.GetOrCreateTableIndexes(iX_QuoteProducts_ProductIdIx).Add(iX_QuoteProducts_ProductId);
             quoteProductsTable.Indexes.Add("IX_QuoteProducts_ProductId", iX_QuoteProducts_ProductId);
             var iX_QuoteProducts_QuoteId = new TableIndex(
-            "IX_QuoteProducts_QuoteId", quoteProductsTable, new[] { quoteIdColumn0 }, false);
+            "IX_QuoteProducts_QuoteId", quoteProductsTable, new[] { quoteIdColumn }, false);
             var iX_QuoteProducts_QuoteIdIx = RelationalModel.GetIndex(this,
                 "BarrocIntens.Models.QuoteProduct",
                 new[] { "QuoteId" });
@@ -895,36 +1120,36 @@ namespace BarrocIntens.Models
             relationalModel.Tables.Add(("QuoteProducts", null), quoteProductsTable);
             var quoteProductsTableMapping = new TableMapping(quoteProduct, quoteProductsTable, true);
             quoteProductsTable.AddTypeMapping(quoteProductsTableMapping, false);
-            tableMappings10.Add(quoteProductsTableMapping);
-            RelationalModel.CreateColumnMapping(idColumn10, quoteProduct.FindProperty("Id")!, quoteProductsTableMapping);
-            RelationalModel.CreateColumnMapping(productIdColumn1, quoteProduct.FindProperty("ProductId")!, quoteProductsTableMapping);
+            tableMappings13.Add(quoteProductsTableMapping);
+            RelationalModel.CreateColumnMapping(idColumn13, quoteProduct.FindProperty("Id")!, quoteProductsTableMapping);
+            RelationalModel.CreateColumnMapping(productIdColumn2, quoteProduct.FindProperty("ProductId")!, quoteProductsTableMapping);
             RelationalModel.CreateColumnMapping(quantityColumn0, quoteProduct.FindProperty("Quantity")!, quoteProductsTableMapping);
-            RelationalModel.CreateColumnMapping(quoteIdColumn0, quoteProduct.FindProperty("QuoteId")!, quoteProductsTableMapping);
+            RelationalModel.CreateColumnMapping(quoteIdColumn, quoteProduct.FindProperty("QuoteId")!, quoteProductsTableMapping);
 
             var role = FindEntityType("BarrocIntens.Models.Role")!;
 
-            var defaultTableMappings11 = new List<TableMappingBase<ColumnMappingBase>>();
-            role.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings11);
+            var defaultTableMappings14 = new List<TableMappingBase<ColumnMappingBase>>();
+            role.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings14);
             var barrocIntensModelsRoleTableBase = new TableBase("BarrocIntens.Models.Role", null, relationalModel);
-            var idColumnBase11 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsRoleTableBase);
-            barrocIntensModelsRoleTableBase.Columns.Add("Id", idColumnBase11);
+            var idColumnBase14 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsRoleTableBase);
+            barrocIntensModelsRoleTableBase.Columns.Add("Id", idColumnBase14);
             var nameColumnBase2 = new ColumnBase<ColumnMappingBase>("Name", "varchar(255)", barrocIntensModelsRoleTableBase);
             barrocIntensModelsRoleTableBase.Columns.Add("Name", nameColumnBase2);
             relationalModel.DefaultTables.Add("BarrocIntens.Models.Role", barrocIntensModelsRoleTableBase);
             var barrocIntensModelsRoleMappingBase = new TableMappingBase<ColumnMappingBase>(role, barrocIntensModelsRoleTableBase, true);
             barrocIntensModelsRoleTableBase.AddTypeMapping(barrocIntensModelsRoleMappingBase, false);
-            defaultTableMappings11.Add(barrocIntensModelsRoleMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase11, role.FindProperty("Id")!, barrocIntensModelsRoleMappingBase);
+            defaultTableMappings14.Add(barrocIntensModelsRoleMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase14, role.FindProperty("Id")!, barrocIntensModelsRoleMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)nameColumnBase2, role.FindProperty("Name")!, barrocIntensModelsRoleMappingBase);
 
-            var tableMappings11 = new List<TableMapping>();
-            role.SetRuntimeAnnotation("Relational:TableMappings", tableMappings11);
+            var tableMappings14 = new List<TableMapping>();
+            role.SetRuntimeAnnotation("Relational:TableMappings", tableMappings14);
             var rolesTable = new Table("Roles", null, relationalModel);
-            var idColumn11 = new Column("Id", "int", rolesTable);
-            rolesTable.Columns.Add("Id", idColumn11);
+            var idColumn14 = new Column("Id", "int", rolesTable);
+            rolesTable.Columns.Add("Id", idColumn14);
             var nameColumn2 = new Column("Name", "varchar(255)", rolesTable);
             rolesTable.Columns.Add("Name", nameColumn2);
-            var pK_Roles = new UniqueConstraint("PK_Roles", rolesTable, new[] { idColumn11 });
+            var pK_Roles = new UniqueConstraint("PK_Roles", rolesTable, new[] { idColumn14 });
             rolesTable.PrimaryKey = pK_Roles;
             var pK_RolesUc = RelationalModel.GetKey(this,
                 "BarrocIntens.Models.Role",
@@ -935,19 +1160,19 @@ namespace BarrocIntens.Models
             relationalModel.Tables.Add(("Roles", null), rolesTable);
             var rolesTableMapping = new TableMapping(role, rolesTable, true);
             rolesTable.AddTypeMapping(rolesTableMapping, false);
-            tableMappings11.Add(rolesTableMapping);
-            RelationalModel.CreateColumnMapping(idColumn11, role.FindProperty("Id")!, rolesTableMapping);
+            tableMappings14.Add(rolesTableMapping);
+            RelationalModel.CreateColumnMapping(idColumn14, role.FindProperty("Id")!, rolesTableMapping);
             RelationalModel.CreateColumnMapping(nameColumn2, role.FindProperty("Name")!, rolesTableMapping);
 
             var user = FindEntityType("BarrocIntens.Models.User")!;
 
-            var defaultTableMappings12 = new List<TableMappingBase<ColumnMappingBase>>();
-            user.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings12);
+            var defaultTableMappings15 = new List<TableMappingBase<ColumnMappingBase>>();
+            user.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings15);
             var barrocIntensModelsUserTableBase = new TableBase("BarrocIntens.Models.User", null, relationalModel);
             var emailColumnBase = new ColumnBase<ColumnMappingBase>("Email", "varchar(255)", barrocIntensModelsUserTableBase);
             barrocIntensModelsUserTableBase.Columns.Add("Email", emailColumnBase);
-            var idColumnBase12 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsUserTableBase);
-            barrocIntensModelsUserTableBase.Columns.Add("Id", idColumnBase12);
+            var idColumnBase15 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsUserTableBase);
+            barrocIntensModelsUserTableBase.Columns.Add("Id", idColumnBase15);
             var nameColumnBase3 = new ColumnBase<ColumnMappingBase>("Name", "varchar(45)", barrocIntensModelsUserTableBase);
             barrocIntensModelsUserTableBase.Columns.Add("Name", nameColumnBase3);
             var passwordColumnBase = new ColumnBase<ColumnMappingBase>("Password", "varchar(255)", barrocIntensModelsUserTableBase);
@@ -957,18 +1182,18 @@ namespace BarrocIntens.Models
             relationalModel.DefaultTables.Add("BarrocIntens.Models.User", barrocIntensModelsUserTableBase);
             var barrocIntensModelsUserMappingBase = new TableMappingBase<ColumnMappingBase>(user, barrocIntensModelsUserTableBase, true);
             barrocIntensModelsUserTableBase.AddTypeMapping(barrocIntensModelsUserMappingBase, false);
-            defaultTableMappings12.Add(barrocIntensModelsUserMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase12, user.FindProperty("Id")!, barrocIntensModelsUserMappingBase);
+            defaultTableMappings15.Add(barrocIntensModelsUserMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase15, user.FindProperty("Id")!, barrocIntensModelsUserMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)emailColumnBase, user.FindProperty("Email")!, barrocIntensModelsUserMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)nameColumnBase3, user.FindProperty("Name")!, barrocIntensModelsUserMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)passwordColumnBase, user.FindProperty("Password")!, barrocIntensModelsUserMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)roleIdColumnBase, user.FindProperty("RoleId")!, barrocIntensModelsUserMappingBase);
 
-            var tableMappings12 = new List<TableMapping>();
-            user.SetRuntimeAnnotation("Relational:TableMappings", tableMappings12);
+            var tableMappings15 = new List<TableMapping>();
+            user.SetRuntimeAnnotation("Relational:TableMappings", tableMappings15);
             var userTable = new Table("User", null, relationalModel);
-            var idColumn12 = new Column("Id", "int", userTable);
-            userTable.Columns.Add("Id", idColumn12);
+            var idColumn15 = new Column("Id", "int", userTable);
+            userTable.Columns.Add("Id", idColumn15);
             var emailColumn = new Column("Email", "varchar(255)", userTable);
             userTable.Columns.Add("Email", emailColumn);
             var nameColumn3 = new Column("Name", "varchar(45)", userTable);
@@ -977,7 +1202,7 @@ namespace BarrocIntens.Models
             userTable.Columns.Add("Password", passwordColumn);
             var roleIdColumn = new Column("RoleId", "int", userTable);
             userTable.Columns.Add("RoleId", roleIdColumn);
-            var pK_User = new UniqueConstraint("PK_User", userTable, new[] { idColumn12 });
+            var pK_User = new UniqueConstraint("PK_User", userTable, new[] { idColumn15 });
             userTable.PrimaryKey = pK_User;
             var pK_UserUc = RelationalModel.GetKey(this,
                 "BarrocIntens.Models.User",
@@ -996,12 +1221,204 @@ namespace BarrocIntens.Models
             relationalModel.Tables.Add(("User", null), userTable);
             var userTableMapping = new TableMapping(user, userTable, true);
             userTable.AddTypeMapping(userTableMapping, false);
-            tableMappings12.Add(userTableMapping);
-            RelationalModel.CreateColumnMapping(idColumn12, user.FindProperty("Id")!, userTableMapping);
+            tableMappings15.Add(userTableMapping);
+            RelationalModel.CreateColumnMapping(idColumn15, user.FindProperty("Id")!, userTableMapping);
             RelationalModel.CreateColumnMapping(emailColumn, user.FindProperty("Email")!, userTableMapping);
             RelationalModel.CreateColumnMapping(nameColumn3, user.FindProperty("Name")!, userTableMapping);
             RelationalModel.CreateColumnMapping(passwordColumn, user.FindProperty("Password")!, userTableMapping);
             RelationalModel.CreateColumnMapping(roleIdColumn, user.FindProperty("RoleId")!, userTableMapping);
+
+            var workOrder = FindEntityType("BarrocIntens.Models.WorkOrder")!;
+
+            var defaultTableMappings16 = new List<TableMappingBase<ColumnMappingBase>>();
+            workOrder.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings16);
+            var barrocIntensModelsWorkOrderTableBase = new TableBase("BarrocIntens.Models.WorkOrder", null, relationalModel);
+            var dateColumnBase3 = new ColumnBase<ColumnMappingBase>("Date", "datetime(6)", barrocIntensModelsWorkOrderTableBase);
+            barrocIntensModelsWorkOrderTableBase.Columns.Add("Date", dateColumnBase3);
+            var descriptionColumnBase1 = new ColumnBase<ColumnMappingBase>("Description", "longtext", barrocIntensModelsWorkOrderTableBase)
+            {
+                IsNullable = true
+            };
+            barrocIntensModelsWorkOrderTableBase.Columns.Add("Description", descriptionColumnBase1);
+            var idColumnBase16 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsWorkOrderTableBase);
+            barrocIntensModelsWorkOrderTableBase.Columns.Add("Id", idColumnBase16);
+            var titleColumnBase0 = new ColumnBase<ColumnMappingBase>("Title", "varchar(255)", barrocIntensModelsWorkOrderTableBase)
+            {
+                IsNullable = true
+            };
+            barrocIntensModelsWorkOrderTableBase.Columns.Add("Title", titleColumnBase0);
+            relationalModel.DefaultTables.Add("BarrocIntens.Models.WorkOrder", barrocIntensModelsWorkOrderTableBase);
+            var barrocIntensModelsWorkOrderMappingBase = new TableMappingBase<ColumnMappingBase>(workOrder, barrocIntensModelsWorkOrderTableBase, true);
+            barrocIntensModelsWorkOrderTableBase.AddTypeMapping(barrocIntensModelsWorkOrderMappingBase, false);
+            defaultTableMappings16.Add(barrocIntensModelsWorkOrderMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase16, workOrder.FindProperty("Id")!, barrocIntensModelsWorkOrderMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)dateColumnBase3, workOrder.FindProperty("Date")!, barrocIntensModelsWorkOrderMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)descriptionColumnBase1, workOrder.FindProperty("Description")!, barrocIntensModelsWorkOrderMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)titleColumnBase0, workOrder.FindProperty("Title")!, barrocIntensModelsWorkOrderMappingBase);
+
+            var tableMappings16 = new List<TableMapping>();
+            workOrder.SetRuntimeAnnotation("Relational:TableMappings", tableMappings16);
+            var workOrdersTable = new Table("WorkOrders", null, relationalModel);
+            var idColumn16 = new Column("Id", "int", workOrdersTable);
+            workOrdersTable.Columns.Add("Id", idColumn16);
+            var dateColumn3 = new Column("Date", "datetime(6)", workOrdersTable);
+            workOrdersTable.Columns.Add("Date", dateColumn3);
+            var descriptionColumn1 = new Column("Description", "longtext", workOrdersTable)
+            {
+                IsNullable = true
+            };
+            workOrdersTable.Columns.Add("Description", descriptionColumn1);
+            var titleColumn0 = new Column("Title", "varchar(255)", workOrdersTable)
+            {
+                IsNullable = true
+            };
+            workOrdersTable.Columns.Add("Title", titleColumn0);
+            var pK_WorkOrders = new UniqueConstraint("PK_WorkOrders", workOrdersTable, new[] { idColumn16 });
+            workOrdersTable.PrimaryKey = pK_WorkOrders;
+            var pK_WorkOrdersUc = RelationalModel.GetKey(this,
+                "BarrocIntens.Models.WorkOrder",
+                new[] { "Id" });
+            pK_WorkOrders.MappedKeys.Add(pK_WorkOrdersUc);
+            RelationalModel.GetOrCreateUniqueConstraints(pK_WorkOrdersUc).Add(pK_WorkOrders);
+            workOrdersTable.UniqueConstraints.Add("PK_WorkOrders", pK_WorkOrders);
+            relationalModel.Tables.Add(("WorkOrders", null), workOrdersTable);
+            var workOrdersTableMapping = new TableMapping(workOrder, workOrdersTable, true);
+            workOrdersTable.AddTypeMapping(workOrdersTableMapping, false);
+            tableMappings16.Add(workOrdersTableMapping);
+            RelationalModel.CreateColumnMapping(idColumn16, workOrder.FindProperty("Id")!, workOrdersTableMapping);
+            RelationalModel.CreateColumnMapping(dateColumn3, workOrder.FindProperty("Date")!, workOrdersTableMapping);
+            RelationalModel.CreateColumnMapping(descriptionColumn1, workOrder.FindProperty("Description")!, workOrdersTableMapping);
+            RelationalModel.CreateColumnMapping(titleColumn0, workOrder.FindProperty("Title")!, workOrdersTableMapping);
+
+            var workOrderHours = FindEntityType("BarrocIntens.Models.WorkOrderHours")!;
+
+            var defaultTableMappings17 = new List<TableMappingBase<ColumnMappingBase>>();
+            workOrderHours.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings17);
+            var barrocIntensModelsWorkOrderHoursTableBase = new TableBase("BarrocIntens.Models.WorkOrderHours", null, relationalModel);
+            var endTimeColumnBase = new ColumnBase<ColumnMappingBase>("EndTime", "datetime(6)", barrocIntensModelsWorkOrderHoursTableBase);
+            barrocIntensModelsWorkOrderHoursTableBase.Columns.Add("EndTime", endTimeColumnBase);
+            var idColumnBase17 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsWorkOrderHoursTableBase);
+            barrocIntensModelsWorkOrderHoursTableBase.Columns.Add("Id", idColumnBase17);
+            var startTimeColumnBase = new ColumnBase<ColumnMappingBase>("StartTime", "datetime(6)", barrocIntensModelsWorkOrderHoursTableBase);
+            barrocIntensModelsWorkOrderHoursTableBase.Columns.Add("StartTime", startTimeColumnBase);
+            var workOrderIdColumnBase0 = new ColumnBase<ColumnMappingBase>("WorkOrderId", "int", barrocIntensModelsWorkOrderHoursTableBase);
+            barrocIntensModelsWorkOrderHoursTableBase.Columns.Add("WorkOrderId", workOrderIdColumnBase0);
+            relationalModel.DefaultTables.Add("BarrocIntens.Models.WorkOrderHours", barrocIntensModelsWorkOrderHoursTableBase);
+            var barrocIntensModelsWorkOrderHoursMappingBase = new TableMappingBase<ColumnMappingBase>(workOrderHours, barrocIntensModelsWorkOrderHoursTableBase, true);
+            barrocIntensModelsWorkOrderHoursTableBase.AddTypeMapping(barrocIntensModelsWorkOrderHoursMappingBase, false);
+            defaultTableMappings17.Add(barrocIntensModelsWorkOrderHoursMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase17, workOrderHours.FindProperty("Id")!, barrocIntensModelsWorkOrderHoursMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)endTimeColumnBase, workOrderHours.FindProperty("EndTime")!, barrocIntensModelsWorkOrderHoursMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)startTimeColumnBase, workOrderHours.FindProperty("StartTime")!, barrocIntensModelsWorkOrderHoursMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)workOrderIdColumnBase0, workOrderHours.FindProperty("WorkOrderId")!, barrocIntensModelsWorkOrderHoursMappingBase);
+
+            var tableMappings17 = new List<TableMapping>();
+            workOrderHours.SetRuntimeAnnotation("Relational:TableMappings", tableMappings17);
+            var workOrderHoursTable = new Table("WorkOrderHours", null, relationalModel);
+            var idColumn17 = new Column("Id", "int", workOrderHoursTable);
+            workOrderHoursTable.Columns.Add("Id", idColumn17);
+            var endTimeColumn = new Column("EndTime", "datetime(6)", workOrderHoursTable);
+            workOrderHoursTable.Columns.Add("EndTime", endTimeColumn);
+            var startTimeColumn = new Column("StartTime", "datetime(6)", workOrderHoursTable);
+            workOrderHoursTable.Columns.Add("StartTime", startTimeColumn);
+            var workOrderIdColumn0 = new Column("WorkOrderId", "int", workOrderHoursTable);
+            workOrderHoursTable.Columns.Add("WorkOrderId", workOrderIdColumn0);
+            var pK_WorkOrderHours = new UniqueConstraint("PK_WorkOrderHours", workOrderHoursTable, new[] { idColumn17 });
+            workOrderHoursTable.PrimaryKey = pK_WorkOrderHours;
+            var pK_WorkOrderHoursUc = RelationalModel.GetKey(this,
+                "BarrocIntens.Models.WorkOrderHours",
+                new[] { "Id" });
+            pK_WorkOrderHours.MappedKeys.Add(pK_WorkOrderHoursUc);
+            RelationalModel.GetOrCreateUniqueConstraints(pK_WorkOrderHoursUc).Add(pK_WorkOrderHours);
+            workOrderHoursTable.UniqueConstraints.Add("PK_WorkOrderHours", pK_WorkOrderHours);
+            var iX_WorkOrderHours_WorkOrderId = new TableIndex(
+            "IX_WorkOrderHours_WorkOrderId", workOrderHoursTable, new[] { workOrderIdColumn0 }, false);
+            var iX_WorkOrderHours_WorkOrderIdIx = RelationalModel.GetIndex(this,
+                "BarrocIntens.Models.WorkOrderHours",
+                new[] { "WorkOrderId" });
+            iX_WorkOrderHours_WorkOrderId.MappedIndexes.Add(iX_WorkOrderHours_WorkOrderIdIx);
+            RelationalModel.GetOrCreateTableIndexes(iX_WorkOrderHours_WorkOrderIdIx).Add(iX_WorkOrderHours_WorkOrderId);
+            workOrderHoursTable.Indexes.Add("IX_WorkOrderHours_WorkOrderId", iX_WorkOrderHours_WorkOrderId);
+            relationalModel.Tables.Add(("WorkOrderHours", null), workOrderHoursTable);
+            var workOrderHoursTableMapping = new TableMapping(workOrderHours, workOrderHoursTable, true);
+            workOrderHoursTable.AddTypeMapping(workOrderHoursTableMapping, false);
+            tableMappings17.Add(workOrderHoursTableMapping);
+            RelationalModel.CreateColumnMapping(idColumn17, workOrderHours.FindProperty("Id")!, workOrderHoursTableMapping);
+            RelationalModel.CreateColumnMapping(endTimeColumn, workOrderHours.FindProperty("EndTime")!, workOrderHoursTableMapping);
+            RelationalModel.CreateColumnMapping(startTimeColumn, workOrderHours.FindProperty("StartTime")!, workOrderHoursTableMapping);
+            RelationalModel.CreateColumnMapping(workOrderIdColumn0, workOrderHours.FindProperty("WorkOrderId")!, workOrderHoursTableMapping);
+
+            var workOrderMaterials = FindEntityType("BarrocIntens.Models.WorkOrderMaterials")!;
+
+            var defaultTableMappings18 = new List<TableMappingBase<ColumnMappingBase>>();
+            workOrderMaterials.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings18);
+            var barrocIntensModelsWorkOrderMaterialsTableBase = new TableBase("BarrocIntens.Models.WorkOrderMaterials", null, relationalModel);
+            var amountColumnBase1 = new ColumnBase<ColumnMappingBase>("Amount", "int", barrocIntensModelsWorkOrderMaterialsTableBase);
+            barrocIntensModelsWorkOrderMaterialsTableBase.Columns.Add("Amount", amountColumnBase1);
+            var idColumnBase18 = new ColumnBase<ColumnMappingBase>("Id", "int", barrocIntensModelsWorkOrderMaterialsTableBase);
+            barrocIntensModelsWorkOrderMaterialsTableBase.Columns.Add("Id", idColumnBase18);
+            var pricePerMaterialColumnBase = new ColumnBase<ColumnMappingBase>("PricePerMaterial", "decimal(8,2)", barrocIntensModelsWorkOrderMaterialsTableBase);
+            barrocIntensModelsWorkOrderMaterialsTableBase.Columns.Add("PricePerMaterial", pricePerMaterialColumnBase);
+            var productIdColumnBase3 = new ColumnBase<ColumnMappingBase>("ProductId", "int", barrocIntensModelsWorkOrderMaterialsTableBase);
+            barrocIntensModelsWorkOrderMaterialsTableBase.Columns.Add("ProductId", productIdColumnBase3);
+            var workOrderIdColumnBase1 = new ColumnBase<ColumnMappingBase>("WorkOrderId", "int", barrocIntensModelsWorkOrderMaterialsTableBase);
+            barrocIntensModelsWorkOrderMaterialsTableBase.Columns.Add("WorkOrderId", workOrderIdColumnBase1);
+            relationalModel.DefaultTables.Add("BarrocIntens.Models.WorkOrderMaterials", barrocIntensModelsWorkOrderMaterialsTableBase);
+            var barrocIntensModelsWorkOrderMaterialsMappingBase = new TableMappingBase<ColumnMappingBase>(workOrderMaterials, barrocIntensModelsWorkOrderMaterialsTableBase, true);
+            barrocIntensModelsWorkOrderMaterialsTableBase.AddTypeMapping(barrocIntensModelsWorkOrderMaterialsMappingBase, false);
+            defaultTableMappings18.Add(barrocIntensModelsWorkOrderMaterialsMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase18, workOrderMaterials.FindProperty("Id")!, barrocIntensModelsWorkOrderMaterialsMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)amountColumnBase1, workOrderMaterials.FindProperty("Amount")!, barrocIntensModelsWorkOrderMaterialsMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)pricePerMaterialColumnBase, workOrderMaterials.FindProperty("PricePerMaterial")!, barrocIntensModelsWorkOrderMaterialsMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)productIdColumnBase3, workOrderMaterials.FindProperty("ProductId")!, barrocIntensModelsWorkOrderMaterialsMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)workOrderIdColumnBase1, workOrderMaterials.FindProperty("WorkOrderId")!, barrocIntensModelsWorkOrderMaterialsMappingBase);
+
+            var tableMappings18 = new List<TableMapping>();
+            workOrderMaterials.SetRuntimeAnnotation("Relational:TableMappings", tableMappings18);
+            var workOrderMaterialsTable = new Table("WorkOrderMaterials", null, relationalModel);
+            var idColumn18 = new Column("Id", "int", workOrderMaterialsTable);
+            workOrderMaterialsTable.Columns.Add("Id", idColumn18);
+            var amountColumn1 = new Column("Amount", "int", workOrderMaterialsTable);
+            workOrderMaterialsTable.Columns.Add("Amount", amountColumn1);
+            var pricePerMaterialColumn = new Column("PricePerMaterial", "decimal(8,2)", workOrderMaterialsTable);
+            workOrderMaterialsTable.Columns.Add("PricePerMaterial", pricePerMaterialColumn);
+            var productIdColumn3 = new Column("ProductId", "int", workOrderMaterialsTable);
+            workOrderMaterialsTable.Columns.Add("ProductId", productIdColumn3);
+            var workOrderIdColumn1 = new Column("WorkOrderId", "int", workOrderMaterialsTable);
+            workOrderMaterialsTable.Columns.Add("WorkOrderId", workOrderIdColumn1);
+            var pK_WorkOrderMaterials = new UniqueConstraint("PK_WorkOrderMaterials", workOrderMaterialsTable, new[] { idColumn18 });
+            workOrderMaterialsTable.PrimaryKey = pK_WorkOrderMaterials;
+            var pK_WorkOrderMaterialsUc = RelationalModel.GetKey(this,
+                "BarrocIntens.Models.WorkOrderMaterials",
+                new[] { "Id" });
+            pK_WorkOrderMaterials.MappedKeys.Add(pK_WorkOrderMaterialsUc);
+            RelationalModel.GetOrCreateUniqueConstraints(pK_WorkOrderMaterialsUc).Add(pK_WorkOrderMaterials);
+            workOrderMaterialsTable.UniqueConstraints.Add("PK_WorkOrderMaterials", pK_WorkOrderMaterials);
+            var iX_WorkOrderMaterials_ProductId = new TableIndex(
+            "IX_WorkOrderMaterials_ProductId", workOrderMaterialsTable, new[] { productIdColumn3 }, false);
+            var iX_WorkOrderMaterials_ProductIdIx = RelationalModel.GetIndex(this,
+                "BarrocIntens.Models.WorkOrderMaterials",
+                new[] { "ProductId" });
+            iX_WorkOrderMaterials_ProductId.MappedIndexes.Add(iX_WorkOrderMaterials_ProductIdIx);
+            RelationalModel.GetOrCreateTableIndexes(iX_WorkOrderMaterials_ProductIdIx).Add(iX_WorkOrderMaterials_ProductId);
+            workOrderMaterialsTable.Indexes.Add("IX_WorkOrderMaterials_ProductId", iX_WorkOrderMaterials_ProductId);
+            var iX_WorkOrderMaterials_WorkOrderId = new TableIndex(
+            "IX_WorkOrderMaterials_WorkOrderId", workOrderMaterialsTable, new[] { workOrderIdColumn1 }, false);
+            var iX_WorkOrderMaterials_WorkOrderIdIx = RelationalModel.GetIndex(this,
+                "BarrocIntens.Models.WorkOrderMaterials",
+                new[] { "WorkOrderId" });
+            iX_WorkOrderMaterials_WorkOrderId.MappedIndexes.Add(iX_WorkOrderMaterials_WorkOrderIdIx);
+            RelationalModel.GetOrCreateTableIndexes(iX_WorkOrderMaterials_WorkOrderIdIx).Add(iX_WorkOrderMaterials_WorkOrderId);
+            workOrderMaterialsTable.Indexes.Add("IX_WorkOrderMaterials_WorkOrderId", iX_WorkOrderMaterials_WorkOrderId);
+            relationalModel.Tables.Add(("WorkOrderMaterials", null), workOrderMaterialsTable);
+            var workOrderMaterialsTableMapping = new TableMapping(workOrderMaterials, workOrderMaterialsTable, true);
+            workOrderMaterialsTable.AddTypeMapping(workOrderMaterialsTableMapping, false);
+            tableMappings18.Add(workOrderMaterialsTableMapping);
+            RelationalModel.CreateColumnMapping(idColumn18, workOrderMaterials.FindProperty("Id")!, workOrderMaterialsTableMapping);
+            RelationalModel.CreateColumnMapping(amountColumn1, workOrderMaterials.FindProperty("Amount")!, workOrderMaterialsTableMapping);
+            RelationalModel.CreateColumnMapping(pricePerMaterialColumn, workOrderMaterials.FindProperty("PricePerMaterial")!, workOrderMaterialsTableMapping);
+            RelationalModel.CreateColumnMapping(productIdColumn3, workOrderMaterials.FindProperty("ProductId")!, workOrderMaterialsTableMapping);
+            RelationalModel.CreateColumnMapping(workOrderIdColumn1, workOrderMaterials.FindProperty("WorkOrderId")!, workOrderMaterialsTableMapping);
             var fK_Companies_User_UserId = new ForeignKeyConstraint(
                 "FK_Companies_User_UserId", companiesTable, userTable,
                 new[] { userIdColumn },
@@ -1015,6 +1432,32 @@ namespace BarrocIntens.Models
             RelationalModel.GetOrCreateForeignKeyConstraints(fK_Companies_User_UserIdFk).Add(fK_Companies_User_UserId);
             companiesTable.ForeignKeyConstraints.Add(fK_Companies_User_UserId);
             userTable.ReferencingForeignKeyConstraints.Add(fK_Companies_User_UserId);
+            var fK_ContractProducts_Contracts_ContractId = new ForeignKeyConstraint(
+                "FK_ContractProducts_Contracts_ContractId", contractProductsTable, contractsTable,
+                new[] { contractIdColumn },
+                contractsTable.FindUniqueConstraint("PK_Contracts")!, ReferentialAction.Cascade);
+            var fK_ContractProducts_Contracts_ContractIdFk = RelationalModel.GetForeignKey(this,
+                "BarrocIntens.Models.ContractProduct",
+                new[] { "ContractId" },
+                "BarrocIntens.Models.Contract",
+                new[] { "Id" });
+            fK_ContractProducts_Contracts_ContractId.MappedForeignKeys.Add(fK_ContractProducts_Contracts_ContractIdFk);
+            RelationalModel.GetOrCreateForeignKeyConstraints(fK_ContractProducts_Contracts_ContractIdFk).Add(fK_ContractProducts_Contracts_ContractId);
+            contractProductsTable.ForeignKeyConstraints.Add(fK_ContractProducts_Contracts_ContractId);
+            contractsTable.ReferencingForeignKeyConstraints.Add(fK_ContractProducts_Contracts_ContractId);
+            var fK_ContractProducts_Products_ProductId = new ForeignKeyConstraint(
+                "FK_ContractProducts_Products_ProductId", contractProductsTable, productsTable,
+                new[] { productIdColumn },
+                productsTable.FindUniqueConstraint("PK_Products")!, ReferentialAction.Cascade);
+            var fK_ContractProducts_Products_ProductIdFk = RelationalModel.GetForeignKey(this,
+                "BarrocIntens.Models.ContractProduct",
+                new[] { "ProductId" },
+                "BarrocIntens.Models.Product",
+                new[] { "Id" });
+            fK_ContractProducts_Products_ProductId.MappedForeignKeys.Add(fK_ContractProducts_Products_ProductIdFk);
+            RelationalModel.GetOrCreateForeignKeyConstraints(fK_ContractProducts_Products_ProductIdFk).Add(fK_ContractProducts_Products_ProductId);
+            contractProductsTable.ForeignKeyConstraints.Add(fK_ContractProducts_Products_ProductId);
+            productsTable.ReferencingForeignKeyConstraints.Add(fK_ContractProducts_Products_ProductId);
             var fK_Contracts_Companies_CompanyId = new ForeignKeyConstraint(
                 "FK_Contracts_Companies_CompanyId", contractsTable, companiesTable,
                 new[] { companyIdColumn },
@@ -1043,7 +1486,7 @@ namespace BarrocIntens.Models
             customInvoicesTable.ReferencingForeignKeyConstraints.Add(fK_CustomInvoiceProducts_CustomInvoices_CustomInvoiceId);
             var fK_CustomInvoiceProducts_Products_ProductId = new ForeignKeyConstraint(
                 "FK_CustomInvoiceProducts_Products_ProductId", customInvoiceProductsTable, productsTable,
-                new[] { productIdColumn },
+                new[] { productIdColumn0 },
                 productsTable.FindUniqueConstraint("PK_Products")!, ReferentialAction.Cascade);
             var fK_CustomInvoiceProducts_Products_ProductIdFk = RelationalModel.GetForeignKey(this,
                 "BarrocIntens.Models.CustomInvoiceProduct",
@@ -1082,7 +1525,7 @@ namespace BarrocIntens.Models
             expensesTable.ReferencingForeignKeyConstraints.Add(fK_ExpenseProducts_Expenses_ExpenseId);
             var fK_ExpenseProducts_Products_ProductId = new ForeignKeyConstraint(
                 "FK_ExpenseProducts_Products_ProductId", expenseProductsTable, productsTable,
-                new[] { productIdColumn0 },
+                new[] { productIdColumn1 },
                 productsTable.FindUniqueConstraint("PK_Products")!, ReferentialAction.Cascade);
             var fK_ExpenseProducts_Products_ProductIdFk = RelationalModel.GetForeignKey(this,
                 "BarrocIntens.Models.ExpenseProduct",
@@ -1106,22 +1549,61 @@ namespace BarrocIntens.Models
             RelationalModel.GetOrCreateForeignKeyConstraints(fK_Expenses_User_UserIdFk).Add(fK_Expenses_User_UserId);
             expensesTable.ForeignKeyConstraints.Add(fK_Expenses_User_UserId);
             userTable.ReferencingForeignKeyConstraints.Add(fK_Expenses_User_UserId);
-            var fK_MaintenaceAppointments_Companies_CompanyId = new ForeignKeyConstraint(
-                "FK_MaintenaceAppointments_Companies_CompanyId", maintenaceAppointmentsTable, companiesTable,
-                new[] { companyIdColumn1 },
-                companiesTable.FindUniqueConstraint("PK_Companies")!, ReferentialAction.Cascade);
-            var fK_MaintenaceAppointments_Companies_CompanyIdFk = RelationalModel.GetForeignKey(this,
+            var fK_MaintenaceAppointments_User_UserId = new ForeignKeyConstraint(
+                "FK_MaintenaceAppointments_User_UserId", maintenaceAppointmentsTable, userTable,
+                new[] { userIdColumn1 },
+                userTable.FindUniqueConstraint("PK_User")!, ReferentialAction.Cascade);
+            var fK_MaintenaceAppointments_User_UserIdFk = RelationalModel.GetForeignKey(this,
                 "BarrocIntens.Models.MaintenaceAppointment",
-                new[] { "CompanyId" },
-                "BarrocIntens.Models.Company",
+                new[] { "UserId" },
+                "BarrocIntens.Models.User",
                 new[] { "Id" });
-            fK_MaintenaceAppointments_Companies_CompanyId.MappedForeignKeys.Add(fK_MaintenaceAppointments_Companies_CompanyIdFk);
-            RelationalModel.GetOrCreateForeignKeyConstraints(fK_MaintenaceAppointments_Companies_CompanyIdFk).Add(fK_MaintenaceAppointments_Companies_CompanyId);
-            maintenaceAppointmentsTable.ForeignKeyConstraints.Add(fK_MaintenaceAppointments_Companies_CompanyId);
-            companiesTable.ReferencingForeignKeyConstraints.Add(fK_MaintenaceAppointments_Companies_CompanyId);
+            fK_MaintenaceAppointments_User_UserId.MappedForeignKeys.Add(fK_MaintenaceAppointments_User_UserIdFk);
+            RelationalModel.GetOrCreateForeignKeyConstraints(fK_MaintenaceAppointments_User_UserIdFk).Add(fK_MaintenaceAppointments_User_UserId);
+            maintenaceAppointmentsTable.ForeignKeyConstraints.Add(fK_MaintenaceAppointments_User_UserId);
+            userTable.ReferencingForeignKeyConstraints.Add(fK_MaintenaceAppointments_User_UserId);
+            var fK_MaintenaceAppointmentWorkOrders_MaintenaceAppointments_Maint = new ForeignKeyConstraint(
+                "FK_MaintenaceAppointmentWorkOrders_MaintenaceAppointments_Maint~", maintenaceAppointmentWorkOrdersTable, maintenaceAppointmentsTable,
+                new[] { maintenaceAppointmentIdColumn },
+                maintenaceAppointmentsTable.FindUniqueConstraint("PK_MaintenaceAppointments")!, ReferentialAction.Cascade);
+            var fK_MaintenaceAppointmentWorkOrders_MaintenaceAppointments_MaintFk = RelationalModel.GetForeignKey(this,
+                "BarrocIntens.Models.MaintenaceAppointmentWorkOrder",
+                new[] { "MaintenaceAppointmentId" },
+                "BarrocIntens.Models.MaintenaceAppointment",
+                new[] { "Id" });
+            fK_MaintenaceAppointmentWorkOrders_MaintenaceAppointments_Maint.MappedForeignKeys.Add(fK_MaintenaceAppointmentWorkOrders_MaintenaceAppointments_MaintFk);
+            RelationalModel.GetOrCreateForeignKeyConstraints(fK_MaintenaceAppointmentWorkOrders_MaintenaceAppointments_MaintFk).Add(fK_MaintenaceAppointmentWorkOrders_MaintenaceAppointments_Maint);
+            maintenaceAppointmentWorkOrdersTable.ForeignKeyConstraints.Add(fK_MaintenaceAppointmentWorkOrders_MaintenaceAppointments_Maint);
+            maintenaceAppointmentsTable.ReferencingForeignKeyConstraints.Add(fK_MaintenaceAppointmentWorkOrders_MaintenaceAppointments_Maint);
+            var fK_MaintenaceAppointmentWorkOrders_WorkOrders_WorkOrderId = new ForeignKeyConstraint(
+                "FK_MaintenaceAppointmentWorkOrders_WorkOrders_WorkOrderId", maintenaceAppointmentWorkOrdersTable, workOrdersTable,
+                new[] { workOrderIdColumn },
+                workOrdersTable.FindUniqueConstraint("PK_WorkOrders")!, ReferentialAction.Cascade);
+            var fK_MaintenaceAppointmentWorkOrders_WorkOrders_WorkOrderIdFk = RelationalModel.GetForeignKey(this,
+                "BarrocIntens.Models.MaintenaceAppointmentWorkOrder",
+                new[] { "WorkOrderId" },
+                "BarrocIntens.Models.WorkOrder",
+                new[] { "Id" });
+            fK_MaintenaceAppointmentWorkOrders_WorkOrders_WorkOrderId.MappedForeignKeys.Add(fK_MaintenaceAppointmentWorkOrders_WorkOrders_WorkOrderIdFk);
+            RelationalModel.GetOrCreateForeignKeyConstraints(fK_MaintenaceAppointmentWorkOrders_WorkOrders_WorkOrderIdFk).Add(fK_MaintenaceAppointmentWorkOrders_WorkOrders_WorkOrderId);
+            maintenaceAppointmentWorkOrdersTable.ForeignKeyConstraints.Add(fK_MaintenaceAppointmentWorkOrders_WorkOrders_WorkOrderId);
+            workOrdersTable.ReferencingForeignKeyConstraints.Add(fK_MaintenaceAppointmentWorkOrders_WorkOrders_WorkOrderId);
+            var fK_MaintenanceRequests_User_UserId = new ForeignKeyConstraint(
+                "FK_MaintenanceRequests_User_UserId", maintenanceRequestsTable, userTable,
+                new[] { userIdColumn2 },
+                userTable.FindUniqueConstraint("PK_User")!, ReferentialAction.Cascade);
+            var fK_MaintenanceRequests_User_UserIdFk = RelationalModel.GetForeignKey(this,
+                "BarrocIntens.Models.MaintenanceRequest",
+                new[] { "UserId" },
+                "BarrocIntens.Models.User",
+                new[] { "Id" });
+            fK_MaintenanceRequests_User_UserId.MappedForeignKeys.Add(fK_MaintenanceRequests_User_UserIdFk);
+            RelationalModel.GetOrCreateForeignKeyConstraints(fK_MaintenanceRequests_User_UserIdFk).Add(fK_MaintenanceRequests_User_UserId);
+            maintenanceRequestsTable.ForeignKeyConstraints.Add(fK_MaintenanceRequests_User_UserId);
+            userTable.ReferencingForeignKeyConstraints.Add(fK_MaintenanceRequests_User_UserId);
             var fK_Notes_Companies_CompanyId = new ForeignKeyConstraint(
                 "FK_Notes_Companies_CompanyId", notesTable, companiesTable,
-                new[] { companyIdColumn2 },
+                new[] { companyIdColumn1 },
                 companiesTable.FindUniqueConstraint("PK_Companies")!, ReferentialAction.Cascade);
             var fK_Notes_Companies_CompanyIdFk = RelationalModel.GetForeignKey(this,
                 "BarrocIntens.Models.Note",
@@ -1134,7 +1616,7 @@ namespace BarrocIntens.Models
             companiesTable.ReferencingForeignKeyConstraints.Add(fK_Notes_Companies_CompanyId);
             var fK_Notes_User_UserId = new ForeignKeyConstraint(
                 "FK_Notes_User_UserId", notesTable, userTable,
-                new[] { userIdColumn1 },
+                new[] { userIdColumn3 },
                 userTable.FindUniqueConstraint("PK_User")!, ReferentialAction.Cascade);
             var fK_Notes_User_UserIdFk = RelationalModel.GetForeignKey(this,
                 "BarrocIntens.Models.Note",
@@ -1171,22 +1653,9 @@ namespace BarrocIntens.Models
             RelationalModel.GetOrCreateForeignKeyConstraints(fK_Products_ProductCategories_ProductCategoryIdFk).Add(fK_Products_ProductCategories_ProductCategoryId);
             productsTable.ForeignKeyConstraints.Add(fK_Products_ProductCategories_ProductCategoryId);
             productCategoriesTable.ReferencingForeignKeyConstraints.Add(fK_Products_ProductCategories_ProductCategoryId);
-            var fK_Products_Quotes_QuoteId = new ForeignKeyConstraint(
-                "FK_Products_Quotes_QuoteId", productsTable, quotesTable,
-                new[] { quoteIdColumn },
-                quotesTable.FindUniqueConstraint("PK_Quotes")!, ReferentialAction.NoAction);
-            var fK_Products_Quotes_QuoteIdFk = RelationalModel.GetForeignKey(this,
-                "BarrocIntens.Models.Product",
-                new[] { "QuoteId" },
-                "BarrocIntens.Models.Quote",
-                new[] { "Id" });
-            fK_Products_Quotes_QuoteId.MappedForeignKeys.Add(fK_Products_Quotes_QuoteIdFk);
-            RelationalModel.GetOrCreateForeignKeyConstraints(fK_Products_Quotes_QuoteIdFk).Add(fK_Products_Quotes_QuoteId);
-            productsTable.ForeignKeyConstraints.Add(fK_Products_Quotes_QuoteId);
-            quotesTable.ReferencingForeignKeyConstraints.Add(fK_Products_Quotes_QuoteId);
             var fK_QuoteProducts_Products_ProductId = new ForeignKeyConstraint(
                 "FK_QuoteProducts_Products_ProductId", quoteProductsTable, productsTable,
-                new[] { productIdColumn1 },
+                new[] { productIdColumn2 },
                 productsTable.FindUniqueConstraint("PK_Products")!, ReferentialAction.Cascade);
             var fK_QuoteProducts_Products_ProductIdFk = RelationalModel.GetForeignKey(this,
                 "BarrocIntens.Models.QuoteProduct",
@@ -1199,7 +1668,7 @@ namespace BarrocIntens.Models
             productsTable.ReferencingForeignKeyConstraints.Add(fK_QuoteProducts_Products_ProductId);
             var fK_QuoteProducts_Quotes_QuoteId = new ForeignKeyConstraint(
                 "FK_QuoteProducts_Quotes_QuoteId", quoteProductsTable, quotesTable,
-                new[] { quoteIdColumn0 },
+                new[] { quoteIdColumn },
                 quotesTable.FindUniqueConstraint("PK_Quotes")!, ReferentialAction.Cascade);
             var fK_QuoteProducts_Quotes_QuoteIdFk = RelationalModel.GetForeignKey(this,
                 "BarrocIntens.Models.QuoteProduct",
@@ -1212,7 +1681,7 @@ namespace BarrocIntens.Models
             quotesTable.ReferencingForeignKeyConstraints.Add(fK_QuoteProducts_Quotes_QuoteId);
             var fK_Quotes_User_UserId = new ForeignKeyConstraint(
                 "FK_Quotes_User_UserId", quotesTable, userTable,
-                new[] { userIdColumn2 },
+                new[] { userIdColumn4 },
                 userTable.FindUniqueConstraint("PK_User")!, ReferentialAction.Cascade);
             var fK_Quotes_User_UserIdFk = RelationalModel.GetForeignKey(this,
                 "BarrocIntens.Models.Quote",
@@ -1236,6 +1705,45 @@ namespace BarrocIntens.Models
             RelationalModel.GetOrCreateForeignKeyConstraints(fK_User_Roles_RoleIdFk).Add(fK_User_Roles_RoleId);
             userTable.ForeignKeyConstraints.Add(fK_User_Roles_RoleId);
             rolesTable.ReferencingForeignKeyConstraints.Add(fK_User_Roles_RoleId);
+            var fK_WorkOrderHours_WorkOrders_WorkOrderId = new ForeignKeyConstraint(
+                "FK_WorkOrderHours_WorkOrders_WorkOrderId", workOrderHoursTable, workOrdersTable,
+                new[] { workOrderIdColumn0 },
+                workOrdersTable.FindUniqueConstraint("PK_WorkOrders")!, ReferentialAction.Cascade);
+            var fK_WorkOrderHours_WorkOrders_WorkOrderIdFk = RelationalModel.GetForeignKey(this,
+                "BarrocIntens.Models.WorkOrderHours",
+                new[] { "WorkOrderId" },
+                "BarrocIntens.Models.WorkOrder",
+                new[] { "Id" });
+            fK_WorkOrderHours_WorkOrders_WorkOrderId.MappedForeignKeys.Add(fK_WorkOrderHours_WorkOrders_WorkOrderIdFk);
+            RelationalModel.GetOrCreateForeignKeyConstraints(fK_WorkOrderHours_WorkOrders_WorkOrderIdFk).Add(fK_WorkOrderHours_WorkOrders_WorkOrderId);
+            workOrderHoursTable.ForeignKeyConstraints.Add(fK_WorkOrderHours_WorkOrders_WorkOrderId);
+            workOrdersTable.ReferencingForeignKeyConstraints.Add(fK_WorkOrderHours_WorkOrders_WorkOrderId);
+            var fK_WorkOrderMaterials_Products_ProductId = new ForeignKeyConstraint(
+                "FK_WorkOrderMaterials_Products_ProductId", workOrderMaterialsTable, productsTable,
+                new[] { productIdColumn3 },
+                productsTable.FindUniqueConstraint("PK_Products")!, ReferentialAction.Cascade);
+            var fK_WorkOrderMaterials_Products_ProductIdFk = RelationalModel.GetForeignKey(this,
+                "BarrocIntens.Models.WorkOrderMaterials",
+                new[] { "ProductId" },
+                "BarrocIntens.Models.Product",
+                new[] { "Id" });
+            fK_WorkOrderMaterials_Products_ProductId.MappedForeignKeys.Add(fK_WorkOrderMaterials_Products_ProductIdFk);
+            RelationalModel.GetOrCreateForeignKeyConstraints(fK_WorkOrderMaterials_Products_ProductIdFk).Add(fK_WorkOrderMaterials_Products_ProductId);
+            workOrderMaterialsTable.ForeignKeyConstraints.Add(fK_WorkOrderMaterials_Products_ProductId);
+            productsTable.ReferencingForeignKeyConstraints.Add(fK_WorkOrderMaterials_Products_ProductId);
+            var fK_WorkOrderMaterials_WorkOrders_WorkOrderId = new ForeignKeyConstraint(
+                "FK_WorkOrderMaterials_WorkOrders_WorkOrderId", workOrderMaterialsTable, workOrdersTable,
+                new[] { workOrderIdColumn1 },
+                workOrdersTable.FindUniqueConstraint("PK_WorkOrders")!, ReferentialAction.Cascade);
+            var fK_WorkOrderMaterials_WorkOrders_WorkOrderIdFk = RelationalModel.GetForeignKey(this,
+                "BarrocIntens.Models.WorkOrderMaterials",
+                new[] { "WorkOrderId" },
+                "BarrocIntens.Models.WorkOrder",
+                new[] { "Id" });
+            fK_WorkOrderMaterials_WorkOrders_WorkOrderId.MappedForeignKeys.Add(fK_WorkOrderMaterials_WorkOrders_WorkOrderIdFk);
+            RelationalModel.GetOrCreateForeignKeyConstraints(fK_WorkOrderMaterials_WorkOrders_WorkOrderIdFk).Add(fK_WorkOrderMaterials_WorkOrders_WorkOrderId);
+            workOrderMaterialsTable.ForeignKeyConstraints.Add(fK_WorkOrderMaterials_WorkOrders_WorkOrderId);
+            workOrdersTable.ReferencingForeignKeyConstraints.Add(fK_WorkOrderMaterials_WorkOrders_WorkOrderId);
             return relationalModel.MakeReadOnly();
         }
     }
