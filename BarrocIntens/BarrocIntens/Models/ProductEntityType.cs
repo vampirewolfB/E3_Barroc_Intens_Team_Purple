@@ -113,6 +113,28 @@ namespace BarrocIntens.Models
             imagePath.AddAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.None);
             imagePath.AddAnnotation("Relational:ColumnType", "varchar(255)");
 
+            var inStock = runtimeEntityType.AddProperty(
+                "InStock",
+                typeof(int),
+                propertyInfo: typeof(Product).GetProperty("InStock", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Product).GetField("<InStock>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                sentinel: 0);
+            inStock.TypeMapping = MySqlIntTypeMapping.Default.Clone(
+                comparer: new ValueComparer<int>(
+                    (int v1, int v2) => v1 == v2,
+                    (int v) => v,
+                    (int v) => v),
+                keyComparer: new ValueComparer<int>(
+                    (int v1, int v2) => v1 == v2,
+                    (int v) => v,
+                    (int v) => v),
+                providerValueComparer: new ValueComparer<int>(
+                    (int v1, int v2) => v1 == v2,
+                    (int v) => v,
+                    (int v) => v));
+            inStock.AddAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.None);
+            inStock.AddAnnotation("Relational:ColumnType", "int");
+
             var name = runtimeEntityType.AddProperty(
                 "Name",
                 typeof(string),
@@ -184,25 +206,6 @@ namespace BarrocIntens.Models
                     (int v) => v));
             productCategoryId.AddAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.None);
 
-            var quoteId = runtimeEntityType.AddProperty(
-                "QuoteId",
-                typeof(int?),
-                nullable: true);
-            quoteId.TypeMapping = MySqlIntTypeMapping.Default.Clone(
-                comparer: new ValueComparer<int?>(
-                    (Nullable<int> v1, Nullable<int> v2) => v1.HasValue && v2.HasValue && (int)v1 == (int)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<int> v) => v.HasValue ? (int)v : 0,
-                    (Nullable<int> v) => v.HasValue ? (Nullable<int>)(int)v : default(Nullable<int>)),
-                keyComparer: new ValueComparer<int?>(
-                    (Nullable<int> v1, Nullable<int> v2) => v1.HasValue && v2.HasValue && (int)v1 == (int)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<int> v) => v.HasValue ? (int)v : 0,
-                    (Nullable<int> v) => v.HasValue ? (Nullable<int>)(int)v : default(Nullable<int>)),
-                providerValueComparer: new ValueComparer<int?>(
-                    (Nullable<int> v1, Nullable<int> v2) => v1.HasValue && v2.HasValue && (int)v1 == (int)v2 || !v1.HasValue && !v2.HasValue,
-                    (Nullable<int> v) => v.HasValue ? (int)v : 0,
-                    (Nullable<int> v) => v.HasValue ? (Nullable<int>)(int)v : default(Nullable<int>)));
-            quoteId.AddAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.None);
-
             var key = runtimeEntityType.AddKey(
                 new[] { id });
             runtimeEntityType.SetPrimaryKey(key);
@@ -212,9 +215,6 @@ namespace BarrocIntens.Models
 
             var index0 = runtimeEntityType.AddIndex(
                 new[] { productCategoryId });
-
-            var index1 = runtimeEntityType.AddIndex(
-                new[] { quoteId });
 
             return runtimeEntityType;
         }
@@ -249,22 +249,6 @@ namespace BarrocIntens.Models
                 typeof(ProductCategory),
                 propertyInfo: typeof(Product).GetProperty("ProductCategory", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Product).GetField("<ProductCategory>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-
-            return runtimeForeignKey;
-        }
-
-        public static RuntimeForeignKey CreateForeignKey3(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
-        {
-            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("QuoteId") },
-                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
-                principalEntityType);
-
-            var products = principalEntityType.AddNavigation("Products",
-                runtimeForeignKey,
-                onDependent: false,
-                typeof(ICollection<Product>),
-                propertyInfo: typeof(Quote).GetProperty("Products", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(Quote).GetField("<Products>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
             return runtimeForeignKey;
         }

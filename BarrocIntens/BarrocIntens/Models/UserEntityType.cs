@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Storage.Json;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pomelo.EntityFrameworkCore.MySql.Storage.Internal;
 
 #pragma warning disable 219, 612, 618
@@ -68,6 +70,36 @@ namespace BarrocIntens.Models
                     size: 255));
             email.AddAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.None);
             email.AddAnnotation("Relational:ColumnType", "varchar(255)");
+
+            var firstLogin = runtimeEntityType.AddProperty(
+                "FirstLogin",
+                typeof(bool),
+                propertyInfo: typeof(User).GetProperty("FirstLogin", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(User).GetField("<FirstLogin>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+            firstLogin.TypeMapping = MySqlSByteTypeMapping.Default.Clone(
+                comparer: new ValueComparer<bool>(
+                    (bool v1, bool v2) => v1 == v2,
+                    (bool v) => v.GetHashCode(),
+                    (bool v) => v),
+                keyComparer: new ValueComparer<bool>(
+                    (bool v1, bool v2) => v1 == v2,
+                    (bool v) => v.GetHashCode(),
+                    (bool v) => v),
+                providerValueComparer: new ValueComparer<sbyte>(
+                    (sbyte v1, sbyte v2) => v1 == v2,
+                    (sbyte v) => (int)v,
+                    (sbyte v) => v),
+                converter: new ValueConverter<bool, sbyte>(
+                    (bool v) => (sbyte)(v ? 1 : 0),
+                    (sbyte v) => v == 1),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<bool, sbyte>(
+                    JsonSByteReaderWriter.Instance,
+                    new ValueConverter<bool, sbyte>(
+                        (bool v) => (sbyte)(v ? 1 : 0),
+                        (sbyte v) => v == 1)));
+            firstLogin.SetSentinelFromProviderValue((sbyte)0);
+            firstLogin.AddAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.None);
+            firstLogin.AddAnnotation("Relational:ColumnType", "tinyint");
 
             var name = runtimeEntityType.AddProperty(
                 "Name",

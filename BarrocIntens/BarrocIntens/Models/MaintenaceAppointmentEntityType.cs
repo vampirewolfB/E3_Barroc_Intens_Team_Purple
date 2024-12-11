@@ -45,34 +45,38 @@ namespace BarrocIntens.Models
                     (int v) => v));
             id.AddAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn);
 
-            var companyId = runtimeEntityType.AddProperty(
-                "CompanyId",
-                typeof(int),
-                propertyInfo: typeof(MaintenaceAppointment).GetProperty("CompanyId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(MaintenaceAppointment).GetField("<CompanyId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                sentinel: 0);
-            companyId.TypeMapping = MySqlIntTypeMapping.Default.Clone(
-                comparer: new ValueComparer<int>(
-                    (int v1, int v2) => v1 == v2,
-                    (int v) => v,
-                    (int v) => v),
-                keyComparer: new ValueComparer<int>(
-                    (int v1, int v2) => v1 == v2,
-                    (int v) => v,
-                    (int v) => v),
-                providerValueComparer: new ValueComparer<int>(
-                    (int v1, int v2) => v1 == v2,
-                    (int v) => v,
-                    (int v) => v));
-            companyId.AddAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.None);
+            var finishedDate = runtimeEntityType.AddProperty(
+                "FinishedDate",
+                typeof(DateTime?),
+                propertyInfo: typeof(MaintenaceAppointment).GetProperty("FinishedDate", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(MaintenaceAppointment).GetField("<FinishedDate>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
+            finishedDate.TypeMapping = MySqlDateTimeTypeMapping.Default.Clone(
+                comparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => v1.HasValue && v2.HasValue && (DateTime)v1 == (DateTime)v2 || !v1.HasValue && !v2.HasValue,
+                    (Nullable<DateTime> v) => v.HasValue ? ((DateTime)v).GetHashCode() : 0,
+                    (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)(DateTime)v : default(Nullable<DateTime>)),
+                keyComparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => v1.HasValue && v2.HasValue && (DateTime)v1 == (DateTime)v2 || !v1.HasValue && !v2.HasValue,
+                    (Nullable<DateTime> v) => v.HasValue ? ((DateTime)v).GetHashCode() : 0,
+                    (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)(DateTime)v : default(Nullable<DateTime>)),
+                providerValueComparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => v1.HasValue && v2.HasValue && (DateTime)v1 == (DateTime)v2 || !v1.HasValue && !v2.HasValue,
+                    (Nullable<DateTime> v) => v.HasValue ? ((DateTime)v).GetHashCode() : 0,
+                    (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)(DateTime)v : default(Nullable<DateTime>)),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "datetime(6)",
+                    size: 6));
+            finishedDate.AddAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.None);
+            finishedDate.AddAnnotation("Relational:ColumnType", "datetime(6)");
 
-            var dateAdded = runtimeEntityType.AddProperty(
-                "DateAdded",
+            var plannedDate = runtimeEntityType.AddProperty(
+                "PlannedDate",
                 typeof(DateTime),
-                propertyInfo: typeof(MaintenaceAppointment).GetProperty("DateAdded", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(MaintenaceAppointment).GetField("<DateAdded>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                propertyInfo: typeof(MaintenaceAppointment).GetProperty("PlannedDate", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(MaintenaceAppointment).GetField("<PlannedDate>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 sentinel: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
-            dateAdded.TypeMapping = MySqlDateTimeTypeMapping.Default.Clone(
+            plannedDate.TypeMapping = MySqlDateTimeTypeMapping.Default.Clone(
                 comparer: new ValueComparer<DateTime>(
                     (DateTime v1, DateTime v2) => v1.Equals(v2),
                     (DateTime v) => v.GetHashCode(),
@@ -88,8 +92,8 @@ namespace BarrocIntens.Models
                 mappingInfo: new RelationalTypeMappingInfo(
                     storeTypeName: "datetime(6)",
                     size: 6));
-            dateAdded.AddAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.None);
-            dateAdded.AddAnnotation("Relational:ColumnType", "datetime(6)");
+            plannedDate.AddAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.None);
+            plannedDate.AddAnnotation("Relational:ColumnType", "datetime(6)");
 
             var remark = runtimeEntityType.AddProperty(
                 "Remark",
@@ -115,37 +119,58 @@ namespace BarrocIntens.Models
             remark.AddAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.None);
             remark.AddAnnotation("Relational:ColumnType", "longtext");
 
+            var userId = runtimeEntityType.AddProperty(
+                "UserId",
+                typeof(int),
+                propertyInfo: typeof(MaintenaceAppointment).GetProperty("UserId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(MaintenaceAppointment).GetField("<UserId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                sentinel: 0);
+            userId.TypeMapping = MySqlIntTypeMapping.Default.Clone(
+                comparer: new ValueComparer<int>(
+                    (int v1, int v2) => v1 == v2,
+                    (int v) => v,
+                    (int v) => v),
+                keyComparer: new ValueComparer<int>(
+                    (int v1, int v2) => v1 == v2,
+                    (int v) => v,
+                    (int v) => v),
+                providerValueComparer: new ValueComparer<int>(
+                    (int v1, int v2) => v1 == v2,
+                    (int v) => v,
+                    (int v) => v));
+            userId.AddAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.None);
+
             var key = runtimeEntityType.AddKey(
                 new[] { id });
             runtimeEntityType.SetPrimaryKey(key);
 
             var index = runtimeEntityType.AddIndex(
-                new[] { companyId });
+                new[] { userId });
 
             return runtimeEntityType;
         }
 
         public static RuntimeForeignKey CreateForeignKey1(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
         {
-            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("CompanyId") },
+            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("UserId") },
                 principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
                 principalEntityType,
                 deleteBehavior: DeleteBehavior.Cascade,
                 required: true);
 
-            var company = declaringEntityType.AddNavigation("Company",
+            var user = declaringEntityType.AddNavigation("User",
                 runtimeForeignKey,
                 onDependent: true,
-                typeof(Company),
-                propertyInfo: typeof(MaintenaceAppointment).GetProperty("Company", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(MaintenaceAppointment).GetField("<Company>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+                typeof(User),
+                propertyInfo: typeof(MaintenaceAppointment).GetProperty("User", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(MaintenaceAppointment).GetField("<User>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
             var maintenaceAppointments = principalEntityType.AddNavigation("MaintenaceAppointments",
                 runtimeForeignKey,
                 onDependent: false,
                 typeof(ICollection<MaintenaceAppointment>),
-                propertyInfo: typeof(Company).GetProperty("MaintenaceAppointments", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(Company).GetField("<MaintenaceAppointments>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+                propertyInfo: typeof(User).GetProperty("MaintenaceAppointments", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(User).GetField("<MaintenaceAppointments>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
             return runtimeForeignKey;
         }

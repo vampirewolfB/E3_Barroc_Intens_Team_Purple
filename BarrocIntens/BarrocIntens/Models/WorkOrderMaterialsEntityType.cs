@@ -5,6 +5,7 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Storage;
 using Pomelo.EntityFrameworkCore.MySql.Storage.Internal;
 
 #pragma warning disable 219, 612, 618
@@ -12,20 +13,20 @@ using Pomelo.EntityFrameworkCore.MySql.Storage.Internal;
 
 namespace BarrocIntens.Models
 {
-    internal partial class ExpenseProductEntityType
+    internal partial class WorkOrderMaterialsEntityType
     {
         public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
-                "BarrocIntens.Models.ExpenseProduct",
-                typeof(ExpenseProduct),
+                "BarrocIntens.Models.WorkOrderMaterials",
+                typeof(WorkOrderMaterials),
                 baseEntityType);
 
             var id = runtimeEntityType.AddProperty(
                 "Id",
                 typeof(int),
-                propertyInfo: typeof(ExpenseProduct).GetProperty("Id", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(ExpenseProduct).GetField("<Id>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                propertyInfo: typeof(WorkOrderMaterials).GetProperty("Id", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(WorkOrderMaterials).GetField("<Id>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 valueGenerated: ValueGenerated.OnAdd,
                 afterSaveBehavior: PropertySaveBehavior.Throw,
                 sentinel: 0);
@@ -44,13 +45,13 @@ namespace BarrocIntens.Models
                     (int v) => v));
             id.AddAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn);
 
-            var expenseId = runtimeEntityType.AddProperty(
-                "ExpenseId",
+            var amount = runtimeEntityType.AddProperty(
+                "Amount",
                 typeof(int),
-                propertyInfo: typeof(ExpenseProduct).GetProperty("ExpenseId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(ExpenseProduct).GetField("<ExpenseId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                propertyInfo: typeof(WorkOrderMaterials).GetProperty("Amount", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(WorkOrderMaterials).GetField("<Amount>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 sentinel: 0);
-            expenseId.TypeMapping = MySqlIntTypeMapping.Default.Clone(
+            amount.TypeMapping = MySqlIntTypeMapping.Default.Clone(
                 comparer: new ValueComparer<int>(
                     (int v1, int v2) => v1 == v2,
                     (int v) => v,
@@ -63,13 +64,40 @@ namespace BarrocIntens.Models
                     (int v1, int v2) => v1 == v2,
                     (int v) => v,
                     (int v) => v));
-            expenseId.AddAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.None);
+            amount.AddAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.None);
+            amount.AddAnnotation("Relational:ColumnType", "int");
+
+            var pricePerMaterial = runtimeEntityType.AddProperty(
+                "PricePerMaterial",
+                typeof(decimal),
+                propertyInfo: typeof(WorkOrderMaterials).GetProperty("PricePerMaterial", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(WorkOrderMaterials).GetField("<PricePerMaterial>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                sentinel: 0m);
+            pricePerMaterial.TypeMapping = MySqlDecimalTypeMapping.Default.Clone(
+                comparer: new ValueComparer<decimal>(
+                    (decimal v1, decimal v2) => v1 == v2,
+                    (decimal v) => v.GetHashCode(),
+                    (decimal v) => v),
+                keyComparer: new ValueComparer<decimal>(
+                    (decimal v1, decimal v2) => v1 == v2,
+                    (decimal v) => v.GetHashCode(),
+                    (decimal v) => v),
+                providerValueComparer: new ValueComparer<decimal>(
+                    (decimal v1, decimal v2) => v1 == v2,
+                    (decimal v) => v.GetHashCode(),
+                    (decimal v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "decimal(8,2)",
+                    precision: 8,
+                    scale: 2));
+            pricePerMaterial.AddAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.None);
+            pricePerMaterial.AddAnnotation("Relational:ColumnType", "decimal(8,2)");
 
             var productId = runtimeEntityType.AddProperty(
                 "ProductId",
                 typeof(int),
-                propertyInfo: typeof(ExpenseProduct).GetProperty("ProductId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(ExpenseProduct).GetField("<ProductId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                propertyInfo: typeof(WorkOrderMaterials).GetProperty("ProductId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(WorkOrderMaterials).GetField("<ProductId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 sentinel: 0);
             productId.TypeMapping = MySqlIntTypeMapping.Default.Clone(
                 comparer: new ValueComparer<int>(
@@ -86,13 +114,13 @@ namespace BarrocIntens.Models
                     (int v) => v));
             productId.AddAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.None);
 
-            var quantity = runtimeEntityType.AddProperty(
-                "Quantity",
+            var workOrderId = runtimeEntityType.AddProperty(
+                "WorkOrderId",
                 typeof(int),
-                propertyInfo: typeof(ExpenseProduct).GetProperty("Quantity", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(ExpenseProduct).GetField("<Quantity>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                propertyInfo: typeof(WorkOrderMaterials).GetProperty("WorkOrderId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(WorkOrderMaterials).GetField("<WorkOrderId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 sentinel: 0);
-            quantity.TypeMapping = MySqlIntTypeMapping.Default.Clone(
+            workOrderId.TypeMapping = MySqlIntTypeMapping.Default.Clone(
                 comparer: new ValueComparer<int>(
                     (int v1, int v2) => v1 == v2,
                     (int v) => v,
@@ -105,48 +133,22 @@ namespace BarrocIntens.Models
                     (int v1, int v2) => v1 == v2,
                     (int v) => v,
                     (int v) => v));
-            quantity.AddAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.None);
-            quantity.AddAnnotation("Relational:ColumnType", "int");
+            workOrderId.AddAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.None);
 
             var key = runtimeEntityType.AddKey(
                 new[] { id });
             runtimeEntityType.SetPrimaryKey(key);
 
             var index = runtimeEntityType.AddIndex(
-                new[] { expenseId });
+                new[] { productId });
 
             var index0 = runtimeEntityType.AddIndex(
-                new[] { productId });
+                new[] { workOrderId });
 
             return runtimeEntityType;
         }
 
         public static RuntimeForeignKey CreateForeignKey1(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
-        {
-            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("ExpenseId") },
-                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
-                principalEntityType,
-                deleteBehavior: DeleteBehavior.Cascade,
-                required: true);
-
-            var expense = declaringEntityType.AddNavigation("Expense",
-                runtimeForeignKey,
-                onDependent: true,
-                typeof(Expense),
-                propertyInfo: typeof(ExpenseProduct).GetProperty("Expense", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(ExpenseProduct).GetField("<Expense>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-
-            var expenseProducts = principalEntityType.AddNavigation("ExpenseProducts",
-                runtimeForeignKey,
-                onDependent: false,
-                typeof(ICollection<ExpenseProduct>),
-                propertyInfo: typeof(Expense).GetProperty("ExpenseProducts", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(Expense).GetField("<ExpenseProducts>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-
-            return runtimeForeignKey;
-        }
-
-        public static RuntimeForeignKey CreateForeignKey2(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
         {
             var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("ProductId") },
                 principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
@@ -158,15 +160,33 @@ namespace BarrocIntens.Models
                 runtimeForeignKey,
                 onDependent: true,
                 typeof(Product),
-                propertyInfo: typeof(ExpenseProduct).GetProperty("Product", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(ExpenseProduct).GetField("<Product>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+                propertyInfo: typeof(WorkOrderMaterials).GetProperty("Product", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(WorkOrderMaterials).GetField("<Product>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
-            var expenseProducts = principalEntityType.AddNavigation("ExpenseProducts",
+            var workOrderMaterials = principalEntityType.AddNavigation("WorkOrderMaterials",
                 runtimeForeignKey,
                 onDependent: false,
-                typeof(ICollection<ExpenseProduct>),
-                propertyInfo: typeof(Product).GetProperty("ExpenseProducts", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(Product).GetField("<ExpenseProducts>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+                typeof(ICollection<WorkOrderMaterials>),
+                propertyInfo: typeof(Product).GetProperty("WorkOrderMaterials", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Product).GetField("<WorkOrderMaterials>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
+            return runtimeForeignKey;
+        }
+
+        public static RuntimeForeignKey CreateForeignKey2(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
+        {
+            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("WorkOrderId") },
+                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
+                principalEntityType,
+                deleteBehavior: DeleteBehavior.Cascade,
+                required: true);
+
+            var workOrder = declaringEntityType.AddNavigation("WorkOrder",
+                runtimeForeignKey,
+                onDependent: true,
+                typeof(WorkOrder),
+                propertyInfo: typeof(WorkOrderMaterials).GetProperty("WorkOrder", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(WorkOrderMaterials).GetField("<WorkOrder>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
             return runtimeForeignKey;
         }
@@ -176,7 +196,7 @@ namespace BarrocIntens.Models
             runtimeEntityType.AddAnnotation("Relational:FunctionName", null);
             runtimeEntityType.AddAnnotation("Relational:Schema", null);
             runtimeEntityType.AddAnnotation("Relational:SqlQuery", null);
-            runtimeEntityType.AddAnnotation("Relational:TableName", "ExpenseProducts");
+            runtimeEntityType.AddAnnotation("Relational:TableName", "WorkOrderMaterials");
             runtimeEntityType.AddAnnotation("Relational:ViewName", null);
             runtimeEntityType.AddAnnotation("Relational:ViewSchema", null);
 

@@ -28,5 +28,7 @@ namespace BarrocIntens.Models
 
         public Company Company { get; set; }
         public int CompanyId { get; set; }
+ 
+        public ICollection<ContractProduct> ContractProducts { get; set; }
     }
 }
