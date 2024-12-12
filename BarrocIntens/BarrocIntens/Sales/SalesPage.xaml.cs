@@ -70,6 +70,20 @@ namespace BarrocIntens.Sales
                     ContentFrame.Navigate(typeof(CustomerCreatePage));
                 }
             }
+            else if (selectedItem == Notes)
+            {
+                if (ContentFrame.CurrentSourcePageType != typeof(NotesPage))
+                {
+                    ContentFrame.Navigate(typeof(NotesPage));
+                }
+            }
+            else if (selectedItem == NoteCreate)
+            {
+                if (ContentFrame.CurrentSourcePageType != typeof(NoteCreatePage))
+                {
+                    ContentFrame.Navigate(typeof(NoteCreatePage));
+                }
+            }
         }
 
         // Sets the navigationview correctly even if on page that's not in the list there.
