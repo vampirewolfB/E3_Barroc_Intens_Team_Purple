@@ -35,6 +35,8 @@
 	<None Remove="LoginPage.xaml" />
     <None Remove="LogoPage.xaml" />
     <None Remove="Sales\CustomerCreatePage.xaml" />
+    <None Remove="Sales\NoteCreatePage.xaml" />
+    <None Remove="Sales\NotesPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -92,6 +94,12 @@
     <None Update="Assets\Logo6_klein.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Page Update="Sales\NoteCreatePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Sales\NotesPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Finance\LeaseContractsEditPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
