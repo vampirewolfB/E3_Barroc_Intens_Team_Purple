@@ -72,10 +72,9 @@ namespace BarrocIntens
             }
 
             // Ophalen van juiste gebruiker.
-            User user;
             using (AppDbContext dbContext = new AppDbContext())
             {
-                user = dbContext.User
+                User.LoggedInUser = dbContext.User
                     .Where(u => u.Email == EmailTextBox.Text.ToString())
                     .Include(u => u.Role)
                     .AsNoTracking()
@@ -83,13 +82,13 @@ namespace BarrocIntens
             }
 
             // Check of de gebruiker bestaat en het wachtwoord correct is.
-            if (user is null)
+            if (User.LoggedInUser is null)
             {
                 ErrorTextBox.Text = "Email of wachtwoord incorect.";
                 ErrorTextBox.Visibility = Visibility.Visible;
                 return;
             }
-            if (!BCrypt.Net.BCrypt.EnhancedVerify(PasswordTextBox.Password.ToString(), user.Password))
+            if (!BCrypt.Net.BCrypt.EnhancedVerify(PasswordTextBox.Password.ToString(), User.LoggedInUser.Password))
             {
                 ErrorTextBox.Text = "Email of wachtwoord incorect.";
                 ErrorTextBox.Visibility = Visibility.Visible;
@@ -97,7 +96,7 @@ namespace BarrocIntens
             }
 
             // Doorsturen van de gebruiker naar de juiste dashboard
-            switch (user.Role.Name.ToLower())
+            switch (User.LoggedInUser.Role.Name.ToLower())
             {
                 case "finance":
                     this.Frame.Navigate(typeof(FinancePage));

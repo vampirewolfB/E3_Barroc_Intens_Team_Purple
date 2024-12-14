@@ -10,6 +10,7 @@ namespace BarrocIntens.Models
 {
     internal class User
     {
+        public static User LoggedInUser { get; set; }
         public int Id { get; set; }
 
         [Column(TypeName = "varchar(45)")]

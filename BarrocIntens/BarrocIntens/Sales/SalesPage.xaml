@@ -63,7 +63,7 @@
                     x:Name="Customers"
                     Content="Customers"
                     Foreground="Black"
-                    Icon="Emoji"
+                    Icon="OtherUser"
                     Tag="Customers">
                     <NavigationViewItem.MenuItems>
                         <NavigationViewItem
@@ -71,6 +71,20 @@
                             Content="Create Customer"
                             Foreground="Black"
                             Tag="CustomerCreate" />
+                    </NavigationViewItem.MenuItems>
+                </NavigationViewItem>
+                <NavigationViewItem
+                    x:Name="Notes"
+                    Content="Notes"
+                    Foreground="Black"
+                    Icon="Edit"
+                    Tag="Notes">
+                    <NavigationViewItem.MenuItems>
+                        <NavigationViewItem
+                            x:Name="NoteCreate"
+                            Content="Create Note"
+                            Foreground="Black"
+                            Tag="Notecreate" />
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
