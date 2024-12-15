@@ -1,4 +1,6 @@
+using BarrocIntens.Customer;
 using BarrocIntens.Finance;
+using BarrocIntens.Models;
 using BarrocIntens.Purchase;
 using BarrocIntens.Sales;
 using BarrocIntens.Utility;
@@ -87,6 +89,7 @@ namespace BarrocIntens
                     rootFrame.Navigate(typeof(MaintenancePage));
                     break;
                 case "customer":
+                    rootFrame.Navigate(typeof(CustomerPage));
                     break;
                 default:
                     break;

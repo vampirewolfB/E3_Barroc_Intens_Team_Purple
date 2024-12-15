@@ -22,6 +22,8 @@
     <Content Remove="Assets\Logo6_klein.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Customer\CustomerFirstLogin.xaml" />
+    <None Remove="Customer\CustomerPage.xaml" />
     <None Remove="Finance\FinancePage.xaml" />
     <None Remove="Finance\LeaseContractCreatePage.xaml" />
     <None Remove="Finance\InvoicesPage.xaml" />
@@ -94,6 +96,9 @@
     <None Update="Assets\Logo6_klein.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Page Update="Customer\CustomerFirstLogin.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Sales\NoteCreatePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -106,6 +111,9 @@
     <None Update="Utility\Emails\RegisterEmailTemplate.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+        <Page Update="Customer\CustomerPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Sales\CustomerCreatePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
