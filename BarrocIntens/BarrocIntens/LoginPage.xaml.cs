@@ -1,3 +1,4 @@
+using BarrocIntens.Customer;
 using BarrocIntens.Finance;
 using BarrocIntens.Models;
 using BarrocIntens.Purchase;
@@ -111,8 +112,12 @@ namespace BarrocIntens
                     this.Frame.Navigate(typeof(MaintenancePage));
                     break;
                 case "customer":
-                    ErrorTextBox.Text = "Er is een probleem opgetreden probeer opnieuw.";
-                    ErrorTextBox.Visibility = Visibility.Visible;
+                    if (User.LoggedInUser.FirstLogin)
+                    {
+                        this.Frame.Navigate(typeof(CustomerFirstLogin));
+                        break;
+                    }
+                    this.Frame.Navigate(typeof(CustomerPage));
                     break;
                 default:
                     ErrorTextBox.Text = "Er is een probleem opgetreden probeer opnieuw.";
