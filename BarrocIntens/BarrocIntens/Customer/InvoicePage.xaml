@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="BarrocIntens.Customer.InvoicePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BarrocIntens.Customer"
+    xmlns:models="using:BarrocIntens.Models"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid RowDefinitions="Auto, *">
+        <TextBlock
+            Grid.Row="0"
+            Margin="0,0,10,0"
+            Style="{StaticResource TitleTextBlockStyle}"
+            Text="Invoice Show" />
+        <StackPanel Grid.Row="1" Orientation="Vertical">
+            <StackPanel.Resources>
+                <Style TargetType="StackPanel">
+                    <Setter Property="Margin" Value="0,10,0,0" />
+                    <Setter Property="Orientation" Value="Horizontal" />
+                </Style>
+            </StackPanel.Resources>
+            <StackPanel>
+                <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="Company name:" />
+                <TextBlock Margin="5,0" Text="{x:Bind invoice.Company.Name}" />
+            </StackPanel>
+            <StackPanel>
+                <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="Created on:" />
+                <TextBlock Margin="5,0" Text="{x:Bind invoice.Date}" />
+            </StackPanel>
+            <StackPanel x:Name="paidAtStackPanel">
+                <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="Paid At:" />
+                <TextBlock
+                    x:Name="paidAtTextBlock"
+                    Margin="5,0"
+                    Text="{x:Bind invoice.PaidAt}" />
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+                <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="Invoice lines:" />
+                <ListView x:Name="InvoiceLinesListView" IsItemClickEnabled="False">
+                    <ListView.Header>
+                        <Grid Padding="16,12" ColumnSpacing="16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="200" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                Grid.Column="0"
+                                Style="{StaticResource BodyTextBlockStyle}"
+                                Text="Product Name" />
+                            <TextBlock
+                                Grid.Column="1"
+                                Style="{StaticResource BodyTextBlockStyle}"
+                                Text="Price per" />
+                            <TextBlock
+                                Grid.Column="2"
+                                Style="{StaticResource BodyTextBlockStyle}"
+                                Text="Amount" />
+                            <TextBlock
+                                Grid.Column="3"
+                                Style="{StaticResource BodyTextBlockStyle}"
+                                Text="Total" />
+                        </Grid>
+                    </ListView.Header>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="models:CustomInvoiceProduct">
+                            <Border BorderBrush="#ffd700" BorderThickness="0,0,0,1">
+                                <Grid ColumnSpacing="16">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="200" />
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="100" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock
+                                        Grid.Column="0"
+                                        Text="{x:Bind Product.Name}"
+                                        TextWrapping="WrapWholeWords" />
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Text="{x:Bind PricePerProduct}"
+                                        TextWrapping="WrapWholeWords" />
+                                    <TextBlock
+                                        Grid.Column="2"
+                                        Text="{x:Bind Amount}"
+                                        TextWrapping="WrapWholeWords" />
+                                    <TextBlock
+                                        Grid.Column="3"
+                                        Text="{x:Bind TotalAmount(PricePerProduct, Amount), Mode=OneWay}"
+                                        TextWrapping="WrapWholeWords" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.Footer>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="200" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
+                                Style="{StaticResource BodyStrongTextBlockStyle}"
+                                Text="Total amount:"
+                                TextAlignment="Center" />
+                            <TextBlock
+                                x:Name="totalAmountTextBlock"
+                                Grid.Column="4"
+                                Grid.ColumnSpan="2"
+                                TextAlignment="Center" />
+                        </Grid>
+                    </ListView.Footer>
+                </ListView>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+
+</Page>
