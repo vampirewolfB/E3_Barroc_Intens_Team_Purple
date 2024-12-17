@@ -63,7 +63,7 @@ namespace BarrocIntens.Purchase
         private void OrderButton_Click(object sender, RoutedEventArgs e)
         {
             //User.LoggedInUser.Id
-            Expense expense = new Expense {Date = DateTime.Now, UserId = 122 };
+            Expense expense = new Expense {Date = DateTime.Now, UserId = User.LoggedInUser.Id };
             List<ExpenseProduct> expenseProducts = new List<ExpenseProduct>();
             using (AppDbContext db = new AppDbContext())
             {
