@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
@@ -22,6 +22,8 @@
     <Content Remove="Assets\Logo6_klein.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Customer\ContractDetailPage.xaml" />
+    <None Remove="Customer\ContractOverViewPage.xaml" />
     <None Remove="Customer\CustomerFirstLogin.xaml" />
     <None Remove="Customer\CustomerPage.xaml" />
     <None Remove="Finance\FinancePage.xaml" />
@@ -96,6 +98,12 @@
     <None Update="Assets\Logo6_klein.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Page Update="Customer\ContractDetailPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Customer\ContractOverViewPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Customer\CustomerFirstLogin.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

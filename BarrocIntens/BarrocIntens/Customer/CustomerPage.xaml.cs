@@ -44,6 +44,10 @@ namespace BarrocIntens.Customer
                     ContentFrame.Navigate(typeof(LogoPage));
                 }
             }
+            if (selectedItem == Contracts)
+            {
+                ContentFrame.Navigate(typeof(ContractOverViewPage));
+            }
         }
 
         private void ContentFrame_Navigated(object sender, NavigationEventArgs e)
