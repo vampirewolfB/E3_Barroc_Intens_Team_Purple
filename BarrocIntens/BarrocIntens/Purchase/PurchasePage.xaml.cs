@@ -31,7 +31,10 @@ namespace BarrocIntens.Purchase
 
         private void NavigationChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
-
+            if ((NavigationViewItem)navigation.SelectedItem == ProductOverview)
+            {
+                ContentFrame.Navigate(typeof(ProductOverviewPage));
+            }
         }
     }
 }

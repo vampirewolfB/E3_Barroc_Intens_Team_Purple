@@ -45,7 +45,7 @@
                 <NavigationViewItem
                  Foreground="#212121"
                  Icon="Shop"
-                 Tag="MYOverview">
+                 x:Name="ProductOverview">
                     <TextBlock Text="Product overview" TextWrapping="Wrap" />
                 </NavigationViewItem>
             </NavigationView.MenuItems>
