@@ -47,8 +47,11 @@ namespace BarrocIntens.Purchase
         private void CategoryBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ProductCategory productCategory = (ProductCategory)CategoryBox.SelectedItem;
-            productsView.ItemsSource = products
+            if (productCategory != null)
+            {
+                productsView.ItemsSource = products
                 .Where(p => p.ProductCategoryId == productCategory.Id);
+            }            
         }
 
         private void ResetFilter_Click(object sender, RoutedEventArgs e)
@@ -56,6 +59,7 @@ namespace BarrocIntens.Purchase
             productsView.ItemsSource = products;
             using (AppDbContext db = new AppDbContext())
             {
+                CategoryBox.ItemsSource = null;
                 CategoryBox.ItemsSource = db.ProductCategories.ToList();
             }
         }
