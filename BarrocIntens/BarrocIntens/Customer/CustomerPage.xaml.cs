@@ -40,6 +40,7 @@ namespace BarrocIntens.Customer
                 if (company is null)
                 {
                     Invoices.Visibility = Visibility.Collapsed;
+                    Contracts.Visibility = Visibility.Collapsed;
                 }
             }
         }
@@ -55,9 +56,13 @@ namespace BarrocIntens.Customer
                     ContentFrame.Navigate(typeof(LogoPage));
                 }
             }
-            if (selectedItem == Contracts)
+            else if (selectedItem == Contracts)
             {
-                ContentFrame.Navigate(typeof(ContractOverViewPage));
+                if (ContentFrame.CurrentSourcePageType != typeof(ContractOverViewPage))
+                {
+                    ContentFrame.Navigate(typeof(ContractOverViewPage));
+                }
+            }
             else if (selectedItem == Invoices)
             {
                 if (ContentFrame.CurrentSourcePageType != typeof(InvoicesPage))
@@ -72,6 +77,14 @@ namespace BarrocIntens.Customer
             if (ContentFrame.CurrentSourcePageType == typeof(LogoPage))
             {
                 NavigationViewControl.SelectedItem = Home;
+            }
+            else if (ContentFrame.CurrentSourcePageType == typeof(ContractOverViewPage))
+            {
+                NavigationViewControl.SelectedItem = Contracts;
+            }
+            else if (ContentFrame.CurrentSourcePageType == typeof(ContractDetailPage))
+            {
+                NavigationViewControl.SelectedItem = null;
             }
             else if (ContentFrame.CurrentSourcePageType == typeof(InvoicesPage))
             {

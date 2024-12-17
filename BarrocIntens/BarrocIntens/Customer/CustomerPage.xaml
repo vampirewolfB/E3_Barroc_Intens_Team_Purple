@@ -48,7 +48,8 @@
                 <NavigationViewItem x:Name="Contracts"
                                     Content="Contracts"
                                     Foreground="Black"
-                                    Icon="Library"/>
+                                    Icon="Library"
+                                    Tag="Contracts"/>
                 <NavigationViewItem x:Name="Invoices"
                                     Content="Invoices"
                                     Foreground="Black"
