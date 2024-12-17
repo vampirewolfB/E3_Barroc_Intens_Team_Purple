@@ -1,3 +1,5 @@
+using BarrocIntens.Models;
+using BarrocIntens.Utility.Database;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -31,6 +33,15 @@ namespace BarrocIntens.Customer
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             ContentFrame.Navigate(typeof(LogoPage));
+
+            using (AppDbContext dbContext = new AppDbContext())
+            {
+                Company company = dbContext.Companies.Where(c => c.UserId == User.LoggedInUser.Id).FirstOrDefault();
+                if (company is null)
+                {
+                    Invoices.Visibility = Visibility.Collapsed;
+                }
+            }
         }
 
         //Customer navigationview control
@@ -47,6 +58,12 @@ namespace BarrocIntens.Customer
             if (selectedItem == Contracts)
             {
                 ContentFrame.Navigate(typeof(ContractOverViewPage));
+            else if (selectedItem == Invoices)
+            {
+                if (ContentFrame.CurrentSourcePageType != typeof(InvoicesPage))
+                {
+                    ContentFrame.Navigate(typeof(InvoicesPage));
+                }
             }
         }
 
@@ -55,6 +72,14 @@ namespace BarrocIntens.Customer
             if (ContentFrame.CurrentSourcePageType == typeof(LogoPage))
             {
                 NavigationViewControl.SelectedItem = Home;
+            }
+            else if (ContentFrame.CurrentSourcePageType == typeof(InvoicesPage))
+            {
+                NavigationViewControl.SelectedItem = Invoices;
+            }
+            else if (ContentFrame.CurrentSourcePageType == typeof(InvoicePage))
+            {
+                NavigationViewControl.SelectedItem = null;
             }
         }
     }

@@ -49,6 +49,11 @@
                                     Content="Contracts"
                                     Foreground="Black"
                                     Icon="Library"/>
+                <NavigationViewItem x:Name="Invoices"
+                                    Content="Invoices"
+                                    Foreground="Black"
+                                    Icon="OpenFile"
+                                    Tag="Invoices"/>
             </NavigationView.MenuItems>
         </NavigationView>
     </Grid>
