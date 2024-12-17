@@ -45,6 +45,11 @@
                                      Foreground="Black"
                                      Icon="Home"
                                      Tag="Home" />
+                <NavigationViewItem x:Name="Invoices"
+                                    Content="Invoices"
+                                    Foreground="Black"
+                                    Icon="OpenFile"
+                                    Tag="Invoices"/>
             </NavigationView.MenuItems>
         </NavigationView>
     </Grid>

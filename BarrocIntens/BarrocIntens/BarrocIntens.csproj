@@ -24,6 +24,8 @@
   <ItemGroup>
     <None Remove="Customer\CustomerFirstLogin.xaml" />
     <None Remove="Customer\CustomerPage.xaml" />
+    <None Remove="Customer\InvoicePage.xaml" />
+    <None Remove="Customer\InvoicesPage.xaml" />
     <None Remove="Finance\FinancePage.xaml" />
     <None Remove="Finance\LeaseContractCreatePage.xaml" />
     <None Remove="Finance\InvoicesPage.xaml" />
@@ -98,6 +100,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Page Update="Purchase\ProductOverviewPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Customer\InvoicePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Customer\InvoicesPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="Customer\CustomerFirstLogin.xaml">
