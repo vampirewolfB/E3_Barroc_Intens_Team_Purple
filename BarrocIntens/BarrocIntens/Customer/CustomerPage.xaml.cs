@@ -36,7 +36,7 @@ namespace BarrocIntens.Customer
 
             using (AppDbContext dbContext = new AppDbContext())
             {
-                Company company = dbContext.Companies.Where(c => c.UserId == User.LoggedInUser.Id).FirstOrDefault();
+                Company company = dbContext.Companies.FirstOrDefault(c => c.UserId == 122);
                 if (company is null)
                 {
                     Invoices.Visibility = Visibility.Collapsed;
@@ -82,10 +82,10 @@ namespace BarrocIntens.Customer
             {
                 NavigationViewControl.SelectedItem = Contracts;
             }
-            else if (ContentFrame.CurrentSourcePageType == typeof(ContractDetailPage))
-            {
-                NavigationViewControl.SelectedItem = null;
-            }
+            //else if (ContentFrame.CurrentSourcePageType == typeof(ContractDetailPage))
+            //{
+            //    NavigationViewControl.SelectedItem = null;
+            //}
             else if (ContentFrame.CurrentSourcePageType == typeof(InvoicesPage))
             {
                 NavigationViewControl.SelectedItem = Invoices;

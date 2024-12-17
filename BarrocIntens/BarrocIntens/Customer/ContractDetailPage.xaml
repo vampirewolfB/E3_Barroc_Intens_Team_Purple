@@ -11,11 +11,16 @@
     Background="#212121"
     x:Name="ChosenContract">
 
+    <Page.Resources>
+        <local:TotalPriceConverter x:Key="TotalPriceConverter"/>
+    </Page.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20*"/>
             <RowDefinition Height="20*"/>
-            <RowDefinition Height="60*"/>
+            <RowDefinition Height="50*"/>
+            <RowDefinition Height="10*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0"
                     Orientation="Horizontal"
@@ -76,6 +81,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="30*"/>
                     <ColumnDefinition Width="20*"/>
+                    <ColumnDefinition Width="20*"/>
                     <ColumnDefinition Width="30*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0"
@@ -93,6 +99,11 @@
                    FontWeight="Bold"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="3"
+                   Text="SubTotal (€)"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
             </Grid>
 
             <ListView ItemsSource="{x:Bind Contract.ContractProducts}">
@@ -106,7 +117,8 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="30*" />
                                 <ColumnDefinition Width="20*" />
-                                <ColumnDefinition Width="30*" />
+                                <ColumnDefinition Width="20*" />
+                                <ColumnDefinition Width="30*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"
                                HorizontalAlignment="Center"
@@ -123,10 +135,46 @@
                                 <TextBlock VerticalAlignment="Center" Text="€" />
                                 <TextBlock VerticalAlignment="Center" Text="{x:Bind LeassedPrice}" />
                             </StackPanel>
+                            <StackPanel Grid.Column="3" 
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                                <TextBlock VerticalAlignment="Center" 
+                                           Text="€" />
+                                <TextBlock VerticalAlignment="Center" 
+                                           Text="{Binding Converter={StaticResource TotalPriceConverter}, Mode=OneWay}" 
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+        </StackPanel>
+        <StackPanel Grid.Row="3"
+            Orientation="Vertical"
+            Margin="20,10,20,0"
+            HorizontalAlignment="Right">
+            <Grid Padding="10" 
+                  BorderThickness="0,1,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"
+                   Text="Total Price:"
+                   FontWeight="Bold"
+                   VerticalAlignment="Center"
+                   Margin="0,0,10,0" />
+                <TextBlock Grid.Column="1"
+                   Text="€"
+                   VerticalAlignment="Center"
+                   Margin="0,0,2,0" />
+                <TextBlock Grid.Column="2"
+                   x:Name="totalprice"
+                   VerticalAlignment="Center"
+                   FontWeight="SemiBold" />
+            </Grid>
         </StackPanel>
     </Grid>
 </Page>

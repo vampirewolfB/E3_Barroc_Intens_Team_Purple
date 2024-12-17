@@ -25,6 +25,7 @@ namespace BarrocIntens.Customer
     public sealed partial class ContractDetailPage : Page
     {
         internal Contract Contract { get; private set; }
+        
         public ContractDetailPage()
         {
             this.InitializeComponent();
@@ -36,8 +37,14 @@ namespace BarrocIntens.Customer
             if(e.Parameter is Contract contract)
             {
                 Contract = contract;
+                ChosenContract.DataContext = this;
             }
-            ChosenContract.DataContext = this;
+            decimal TotalPrice = 0;
+            foreach (ContractProduct product in Contract.ContractProducts)
+            {
+                TotalPrice += product.LeassedPrice * product.Amount;
+            }
+            totalprice.Text = TotalPrice.ToString();
         }
     }
 }
