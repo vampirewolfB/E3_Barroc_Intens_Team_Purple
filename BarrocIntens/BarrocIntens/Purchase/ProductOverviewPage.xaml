@@ -46,67 +46,95 @@
                 <RowDefinition Height="10*"/>
                 <RowDefinition Height="90*"/>
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0"
-                  Width="740">
+            <!-- Header Grid -->
+            <Grid Grid.Row="0" 
+                  Width="740"
+                  Margin="0,0,0,4"
+                  Padding="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="20*"/>
-                    <ColumnDefinition Width="30*"/>
+                    <ColumnDefinition Width="25*"/>
                     <ColumnDefinition Width="20*"/>
                     <ColumnDefinition Width="15*"/>
-                    <ColumnDefinition Width="15*"/>
+                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="10*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Name" 
-                           Grid.Column="0"/>
+                   Grid.Column="0"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
                 <TextBlock Text="Description"
-                           Grid.Column="1" 
-                           TextWrapping="Wrap"/>
+                   Grid.Column="1" 
+                   TextWrapping="Wrap"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
                 <TextBlock Text="Category"
-                           Grid.Column="2"/>
+                   Grid.Column="2"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
                 <TextBlock Text="In stock"
-                           Grid.Column="3"/>
+                   Grid.Column="3"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
                 <TextBlock Text="Restock by"
-                           Grid.Column="4"/>
+                   Grid.Column="5"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
             </Grid>
+
+            <!-- ListView with Table Rows -->
             <ListView x:Name="productsView"
-                      Grid.Row="1"
-                      SelectionMode="None"
-                      IsItemClickEnabled="False">
+              Grid.Row="1"
+              SelectionMode="None"
+              IsItemClickEnabled="False">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="xlocal:Product">
                         <Grid BorderBrush="#ffd700"
-                                  BorderThickness="0,0,0,1"
-                                  Width="740"
-                                  Margin="0,0,0,4"
-                                  Padding="5">
+                      BorderThickness="0,0,0,1"
+                      Width="740"
+                      Margin="0,0,0,4"
+                      Padding="5">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="15*"/>
                                 <ColumnDefinition Width="20*"/>
                                 <ColumnDefinition Width="25*"/>
                                 <ColumnDefinition Width="20*"/>
+                                <ColumnDefinition Width="15*"/>
                                 <ColumnDefinition Width="10*"/>
                                 <ColumnDefinition Width="10*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="{x:Bind InStock, Converter={StaticResource StockToMessageConverter}}" 
-                                       Foreground="Red"
-                                       Grid.Column="0"
-                                       VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="0"
+                               Text="{x:Bind Name}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
                             <TextBlock Grid.Column="1"
-                                   Text="{x:Bind Name}"
-                                   VerticalAlignment="Center"/>
+                               Text="{x:Bind Description}"
+                               TextWrapping="Wrap"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
                             <TextBlock Grid.Column="2"
-                                   Text="{x:Bind Description}"
-                                   TextWrapping="Wrap"
-                                   VerticalAlignment="Center"/>
+                               Text="{x:Bind ProductCategory.Name}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
                             <TextBlock Grid.Column="3"
-                                   Text="{x:Bind ProductCategory.Name}"
-                                   VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="4"
-                                   Text="{x:Bind InStock}"
-                                   VerticalAlignment="Center"/>
+                               Text="{x:Bind InStock}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                            <TextBlock Text="{x:Bind InStock, Converter={StaticResource StockToMessageConverter}}" 
+                               Foreground="Red"
+                               Grid.Column="4"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
                             <TextBox x:Name="amountToBuy"
-                                 Tag="{x:Bind Id}"
-                                 Grid.Column="5"
-                                 VerticalAlignment="Center"/>
+                             Tag="{x:Bind Id}"
+                             Grid.Column="5"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"
+                             Width="50"/>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>

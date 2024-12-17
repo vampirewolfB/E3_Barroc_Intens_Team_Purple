@@ -54,11 +54,16 @@ namespace BarrocIntens.Purchase
         private void ResetFilter_Click(object sender, RoutedEventArgs e)
         {
             productsView.ItemsSource = products;
+            using (AppDbContext db = new AppDbContext())
+            {
+                CategoryBox.ItemsSource = db.ProductCategories.ToList();
+            }
         }
 
         private void OrderButton_Click(object sender, RoutedEventArgs e)
         {
-            Expense expense = new Expense {Date = DateTime.Now, UserId = UserId = User.LoggedInUser.Id };
+            //User.LoggedInUser.Id
+            Expense expense = new Expense {Date = DateTime.Now, UserId = 122 };
             List<ExpenseProduct> expenseProducts = new List<ExpenseProduct>();
             using (AppDbContext db = new AppDbContext())
             {
