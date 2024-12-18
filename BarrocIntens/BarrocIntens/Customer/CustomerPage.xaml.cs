@@ -36,7 +36,7 @@ namespace BarrocIntens.Customer
 
             using (AppDbContext dbContext = new AppDbContext())
             {
-                Company company = dbContext.Companies.FirstOrDefault(c => c.UserId == 122);
+                Company company = dbContext.Companies.FirstOrDefault(c => c.UserId == User.LoggedInUser.Id);
                 if (company is null)
                 {
                     Invoices.Visibility = Visibility.Collapsed;

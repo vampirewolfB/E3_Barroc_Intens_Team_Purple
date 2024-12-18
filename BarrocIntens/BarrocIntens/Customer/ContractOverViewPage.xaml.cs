@@ -38,7 +38,7 @@ namespace BarrocIntens.Customer
                 .Include(c => c.ContractProducts)
                 .ThenInclude(cop => cop.Product)
                 .Include(c => c.Company)
-                .Where(c => c.Company.UserId == User.LoggedInUser)
+                .Where(c => c.Company.UserId == User.LoggedInUser.Id)
                 .ToList();
 
                 // Initialize the ObservableCollection
