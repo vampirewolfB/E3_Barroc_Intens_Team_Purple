@@ -10,40 +10,38 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
 
-    <Grid
-        Width="620"
-        Height="520"
-        Padding="20"
-        HorizontalAlignment="Center"
-        VerticalAlignment="Center"
-        BorderBrush="#ffd700"
-        BorderThickness="0,0,1,1"
-        CornerRadius="15">
+    <Grid Width="658"
+          Height="620"
+          Padding="20"
+          HorizontalAlignment="Center"
+          VerticalAlignment="Center"
+          BorderBrush="#ffd700"
+          BorderThickness="0,0,1,1"
+          CornerRadius="15">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="20*" />
-            <RowDefinition Height="10*" />
-            <RowDefinition Height="20*" />
-            <RowDefinition Height="15*" />
-            <RowDefinition Height="15*" />
-            <RowDefinition Height="10*" />
+            <RowDefinition Height="6*" />
+            <RowDefinition Height="8*" />
+            <RowDefinition Height="8*" />
+            <RowDefinition Height="35*" />
+            <RowDefinition Height="8*" />
         </Grid.RowDefinitions>
 
-        <Image
-            Grid.Row="0"
-            Width="200"
-            HorizontalAlignment="Center"
-            Source="/Assets/Logo6_klein.png" />
+        <Image Grid.Row="0"
+               Width="200"
+               HorizontalAlignment="Center"
+               Source="/Assets/Logo6_klein.png" />
 
-        <StackPanel Grid.Row="1" Spacing="4">
-            <AutoSuggestBox
-                x:Name="CompanyAutoSuggestBox"
-                Width="400"
-                HorizontalAlignment="Left"
-                PlaceholderText="Search companies..."
-                QueryIcon="Find"
-                SuggestionChosen="CompanyAutoSuggestBox_SuggestionChosen"
-                TextChanged="CompanyAutoSuggestBox_TextChanged">
+        <StackPanel Grid.Row="1" 
+                    Spacing="4">
+            <AutoSuggestBox x:Name="CompanyAutoSuggestBox"
+                            Width="400"
+                            HorizontalAlignment="Left"
+                            PlaceholderText="Search companies..."
+                            QueryIcon="Find"
+                            SuggestionChosen="CompanyAutoSuggestBox_SuggestionChosen"
+                            TextChanged="CompanyAutoSuggestBox_TextChanged">
                 <AutoSuggestBox.ItemTemplate>
                     <DataTemplate x:DataType="xlocal:Company">
                         <StackPanel>
@@ -52,39 +50,101 @@
                     </DataTemplate>
                 </AutoSuggestBox.ItemTemplate>
             </AutoSuggestBox>
-            <TextBlock
-                x:Name="CompanyErrorTextBlock"
-                FontSize="12"
-                Foreground="Red"
-                Text="Please select a company."
-                Visibility="Collapsed" />
+            <TextBlock x:Name="CompanyErrorTextBlock"
+                       FontSize="12"
+                       Foreground="Red"
+                       Text="Please select a company."
+                       Visibility="Collapsed" />
         </StackPanel>
 
-        <StackPanel x:Name="LeaseTypePanel" Grid.Row="2">
-            <RadioButton
-                Margin="0,5,0,0"
-                Content="Perodic"
-                GroupName="Options" />
-            <RadioButton
-                Margin="0,5,0,0"
-                Content="Monthly"
-                GroupName="Options" />
-            <TextBlock
-                x:Name="LeaseTypeErrorTextBlock"
-                Margin="0,5,0,0"
-                FontSize="12"
-                Foreground="Red"
-                Text="Please select a lease type."
-                Visibility="Collapsed" />
+        <StackPanel x:Name="LeaseTypePanel" 
+                    Grid.Row="2" 
+                    Orientation="Horizontal">
+            <RadioButton Content="Perodic"
+                         GroupName="Options" />
+            <RadioButton Content="Monthly"
+                         GroupName="Options" />
+            <TextBlock x:Name="LeaseTypeErrorTextBlock"
+                       Margin="0,5,0,0"
+                       FontSize="12"
+                       Foreground="Red"
+                       Text="Please select a lease type."
+                       Visibility="Collapsed" />
         </StackPanel>
 
-        <StackPanel Grid.Row="3">
-            <DatePicker x:Name="StartDatePicker" Header="Pick a start date" />
+        <StackPanel Grid.Row="3" 
+                    Orientation="Horizontal">
+            <DatePicker x:Name="StartDatePicker" 
+                        Header="Pick a start date" 
+                        Margin="0,0,25,0" />
+            <DatePicker x:Name="EndDatePicker" 
+                        Header="Pick a end date" />
         </StackPanel>
 
-        <StackPanel Grid.Row="4">
-            <DatePicker x:Name="EndDatePicker" Header="Pick a end date" />
-        </StackPanel>
+        <Grid Grid.Row="4" 
+              MaxHeight="300">
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20*" />
+                <RowDefinition Height="80*" />
+            </Grid.RowDefinitions>
+            
+            <StackPanel Grid.Row="0"
+                        Padding="3"
+                        VerticalAlignment="Center"
+                        Background="#ffd700"
+                        CornerRadius="5"
+                        Orientation="Vertical">
+                <TextBlock VerticalAlignment="Center"
+                           Foreground="#212121"
+                           Text="Products:" />
+                <TextBlock x:Name="productError"
+                           Foreground="Red"
+                           Text="Please choose products to be bought."
+                           Visibility="Collapsed" />
+            </StackPanel>
+            
+            <ListView x:Name="productsListView"
+                      Grid.Row="1"
+                      IsMultiSelectCheckBoxEnabled="True"
+                      SelectionMode="Multiple">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="xlocal:Product">
+                        <Grid Margin="0,0,0,3"
+                              Padding="2"
+                              BorderBrush="#ffd700"
+                              BorderThickness="0,0,1,1"
+                              CornerRadius="5">
+                            
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="30*" />
+                                <ColumnDefinition Width="30*" />
+                                <ColumnDefinition Width="20*" />
+                            </Grid.ColumnDefinitions>
+                            
+                            <TextBlock Grid.Column="0"
+                                       VerticalAlignment="Center"
+                                       Text="{x:Bind Name}" />
+                            
+                            <StackPanel Grid.Column="1"
+                                        Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" 
+                                           Text="€" />
+                                <TextBlock VerticalAlignment="Center" 
+                                           Text="{x:Bind Price}" />
+                            </StackPanel>
+
+                            <TextBox Grid.Column="2"
+                                     HorizontalAlignment="Right"
+                                     VerticalAlignment="Center"
+                                     BeforeTextChanging="Quantity_BeforeTextChanging"
+                                     Tag="{x:Bind Id}" />
+                            
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
 
         <StackPanel Grid.Row="6">
             <Button
