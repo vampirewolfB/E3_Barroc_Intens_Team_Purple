@@ -36,10 +36,11 @@ namespace BarrocIntens.Customer
 
             using (AppDbContext dbContext = new AppDbContext())
             {
-                Company company = dbContext.Companies.Where(c => c.UserId == User.LoggedInUser.Id).FirstOrDefault();
+                Company company = dbContext.Companies.FirstOrDefault(c => c.UserId == User.LoggedInUser.Id);
                 if (company is null)
                 {
                     Invoices.Visibility = Visibility.Collapsed;
+                    Contracts.Visibility = Visibility.Collapsed;
                 }
             }
         }
@@ -53,6 +54,13 @@ namespace BarrocIntens.Customer
                 if (ContentFrame.CurrentSourcePageType != typeof(LogoPage))
                 {
                     ContentFrame.Navigate(typeof(LogoPage));
+                }
+            }
+            else if (selectedItem == Contracts)
+            {
+                if (ContentFrame.CurrentSourcePageType != typeof(ContractOverViewPage))
+                {
+                    ContentFrame.Navigate(typeof(ContractOverViewPage));
                 }
             }
             else if (selectedItem == Invoices)
@@ -70,6 +78,14 @@ namespace BarrocIntens.Customer
             {
                 NavigationViewControl.SelectedItem = Home;
             }
+            else if (ContentFrame.CurrentSourcePageType == typeof(ContractOverViewPage))
+            {
+                NavigationViewControl.SelectedItem = Contracts;
+            }
+            //else if (ContentFrame.CurrentSourcePageType == typeof(ContractDetailPage))
+            //{
+            //    NavigationViewControl.SelectedItem = null;
+            //}
             else if (ContentFrame.CurrentSourcePageType == typeof(InvoicesPage))
             {
                 NavigationViewControl.SelectedItem = Invoices;

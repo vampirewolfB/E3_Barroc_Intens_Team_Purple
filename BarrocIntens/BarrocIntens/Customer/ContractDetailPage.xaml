@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="BarrocIntens.Customer.ContractDetailPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BarrocIntens.Customer"
+    xmlns:xlocal="using:BarrocIntens.Models"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="#212121"
+    x:Name="ChosenContract">
+
+    <Page.Resources>
+        <local:TotalPriceConverter x:Key="TotalPriceConverter"/>
+    </Page.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="50*"/>
+            <RowDefinition Height="10*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0"
+                    Orientation="Horizontal"
+                    BorderBrush="#ffd700"
+                    BorderThickness="0,0,0,1"
+                    Padding="8"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+            <TextBlock Text="{x:Bind Contract.StartDate}"
+                       FontSize="18"
+                       VerticalAlignment="Center"/>
+            <TextBlock Text="-"
+                       Margin="6,0,6,0"
+                       FontSize="18"
+                       VerticalAlignment="Center"/>
+            <TextBlock Text="{x:Bind Contract.EndDate}"
+                       FontSize="18"
+                       VerticalAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1"
+            Orientation="Horizontal"
+            Spacing="40"
+            HorizontalAlignment="Center"
+            Padding="20">
+            <!-- Left Side: Company Details -->
+            <StackPanel Orientation="Vertical"
+                HorizontalAlignment="Left"
+                Padding="10"
+                BorderBrush="#ffd700"
+                BorderThickness="0,0,0,1">
+                <TextBlock Text="Company Details"
+                   FontSize="16"
+                   FontWeight="Bold"
+                   Margin="0,0,0,10"/>
+                <TextBlock Text="{x:Bind Contract.Company.Name}"
+                   Margin="0,5,0,0"/>
+                <TextBlock Text="{x:Bind Contract.Company.Phone}"
+                   Margin="0,2,0,0"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical"
+                HorizontalAlignment="Right"
+                Padding="10"
+                BorderBrush="#ffd700"
+                BorderThickness="0,0,0,1">
+                <TextBlock Text="Contract Type"
+                   FontSize="16"
+                   FontWeight="Bold"
+                   Margin="0,0,0,10"
+                   HorizontalAlignment="Center"/>
+                <TextBlock Text="{x:Bind Contract.Type}"
+                   HorizontalAlignment="Center"
+                   Margin="0,5,0,0"/>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Grid.Row="2">
+            <Grid Margin="0,0,0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30*"/>
+                    <ColumnDefinition Width="20*"/>
+                    <ColumnDefinition Width="20*"/>
+                    <ColumnDefinition Width="30*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"
+                   Text="Product Name"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="1"
+                   Text="Amount"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="2"
+                   Text="Leased Price (€)"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="3"
+                   Text="SubTotal (€)"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+            </Grid>
+
+            <ListView ItemsSource="{x:Bind Contract.ContractProducts}">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="xlocal:ContractProduct">
+                        <Grid Margin="0,0,0,3"
+                              Padding="5"
+                              BorderBrush="#ffd700"
+                              BorderThickness="0,0,0,1"
+                              CornerRadius="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="30*" />
+                                <ColumnDefinition Width="20*" />
+                                <ColumnDefinition Width="20*" />
+                                <ColumnDefinition Width="30*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Text="{x:Bind Product.Name}" />
+                            <TextBlock Grid.Column="1"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Text="{x:Bind Amount}" />
+                            <StackPanel Grid.Column="2" 
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                                <TextBlock VerticalAlignment="Center" Text="€" />
+                                <TextBlock VerticalAlignment="Center" Text="{x:Bind LeassedPrice}" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="3" 
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                                <TextBlock VerticalAlignment="Center" 
+                                           Text="€" />
+                                <TextBlock VerticalAlignment="Center" 
+                                           Text="{Binding Converter={StaticResource TotalPriceConverter}, Mode=OneWay}" 
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
+        <StackPanel Grid.Row="3"
+            Orientation="Vertical"
+            Margin="20,10,20,0"
+            HorizontalAlignment="Right">
+            <Grid Padding="10" 
+                  BorderThickness="0,1,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"
+                   Text="Total Price:"
+                   FontWeight="Bold"
+                   VerticalAlignment="Center"
+                   Margin="0,0,10,0" />
+                <TextBlock Grid.Column="1"
+                   Text="€"
+                   VerticalAlignment="Center"
+                   Margin="0,0,2,0" />
+                <TextBlock Grid.Column="2"
+                   x:Name="totalprice"
+                   VerticalAlignment="Center"
+                   FontWeight="SemiBold" />
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Page>
